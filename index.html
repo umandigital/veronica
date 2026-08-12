@@ -569,7 +569,7 @@ a{color:inherit}
    ===================================================================== */
 .steps{display:grid; gap:var(--s3); counter-reset:step; margin-top:var(--s5)}
 .step{
-  position:relative; background:var(--marfim); border:1px solid var(--linha); border-radius:var(--r-lg);
+  position:relative; background:#fff; border:1px solid var(--linha); border-radius:var(--r-lg);
   padding:var(--s4) var(--s3) var(--s4) var(--s3); box-shadow:var(--sh-sm);
   transition:box-shadow .3s ease, transform .4s var(--ease);
 }
@@ -592,28 +592,41 @@ a{color:inherit}
 }
 
 /* =====================================================================
-   6. CUIDADOS
+   6. CUIDADOS — fundo escuro, cartões em grade
    ===================================================================== */
-.care-grid{display:grid; gap:var(--s5)}
-.care-grid h2{font-size:clamp(1.9rem,6vw,2.9rem); margin-top:var(--s2); text-wrap:balance}
-.care-list{display:grid; gap:var(--s2); margin-top:var(--s4)}
-.care-list li{
-  display:flex; gap:var(--s2); align-items:flex-start; padding:var(--s3);
-  background:var(--marfim); border:1px solid var(--linha); border-radius:var(--r-md);
-  color:var(--grafite); transition:transform .35s var(--ease), box-shadow .3s ease, border-color .3s ease;
+.section--cuidados{position:relative; overflow:hidden; background:var(--bordo); color:var(--champanhe); isolation:isolate}
+.cuidados-bg{
+  position:absolute; inset:0; z-index:-1;
+  background:radial-gradient(90% 80% at 78% 12%, #7A1A64 0%, #5A1124 52%, #3a0b18 100%);
 }
-.care-list li:hover{transform:translateX(6px); box-shadow:var(--sh-sm); border-color:var(--ouro)}
-.care-list .ico{flex:none; width:26px; height:26px; margin-top:3px}
-.care-list .ico svg{width:100%; height:100%; fill:none; stroke:var(--ouro); stroke-width:1.4}
+.section--cuidados h2{color:#fff}
+.section--cuidados .lead--light{color:var(--champanhe); opacity:.92}
+.section--cuidados .sec-head{margin-bottom:var(--s5)}
+
+.care-grid{display:grid; gap:var(--s2); margin:0; padding:0; list-style:none}
+@media (min-width:700px){ .care-grid{grid-template-columns:repeat(2,1fr); gap:var(--s3)} }
+
+.care-card{
+  display:flex; flex-direction:column; gap:var(--s2); align-items:flex-start;
+  padding:var(--s4) var(--s3);
+  background:rgba(251,247,240,.06); border:1px solid var(--linha); border-radius:var(--r-lg);
+  backdrop-filter:blur(2px);
+  transition:background .3s ease, border-color .3s ease, transform .4s var(--ease);
+}
+.care-card:hover{background:rgba(251,247,240,.11); border-color:var(--ouro); transform:translateY(-3px)}
+.care-card p{color:#fff; font-size:1.02rem; line-height:1.6; max-width:34ch}
+.care-card .ico{
+  width:46px; height:46px; flex:none; border-radius:50%;
+  border:1px solid var(--linha); background:rgba(224,160,32,.10);
+  display:inline-flex; align-items:center; justify-content:center;
+}
+.care-card .ico svg{width:23px; height:23px; fill:none; stroke:var(--ouro); stroke-width:1.4}
+
 .care-close{
-  margin-top:var(--s5); font-family:"Cormorant Garamond",Georgia,serif; font-style:italic;
-  font-size:clamp(1.2rem,3.6vw,1.6rem); color:var(--roxo); line-height:1.4; text-wrap:balance;
-  border-left:2px solid var(--ouro); padding-left:var(--s3);
+  margin-top:var(--s5); text-align:center; max-width:52ch; margin-inline:auto;
+  font-family:"Cormorant Garamond",Georgia,serif; font-style:italic;
+  font-size:clamp(1.25rem,3.6vw,1.75rem); line-height:1.45; color:var(--champanhe); text-wrap:balance;
 }
-.care-figure{position:relative; border-radius:var(--r-lg); overflow:hidden; box-shadow:var(--sh-lg); aspect-ratio:1/1; background:linear-gradient(135deg,#7A1A64,#3a0b18)}
-.care-figure img{width:100%; height:100%; object-fit:cover}
-.care-figure .frame-line{position:absolute; inset:12px; border:1px solid var(--linha); border-radius:calc(var(--r-lg) - 6px)}
-@media (min-width:1024px){ .care-grid{grid-template-columns:6fr 5fr; gap:var(--s6); align-items:center} }
 
 /* =====================================================================
    7. FOOTER
@@ -943,7 +956,7 @@ a{color:inherit}
   <!-- =================================================================
        5. COMO FUNCIONA
        ================================================================= -->
-  <section class="section section--areia" id="como-funciona" aria-labelledby="como-title">
+  <section class="section section--marfim" id="como-funciona" aria-labelledby="como-title">
     <div class="wrap">
       <div class="howto-grid">
         <div class="sec-head" style="margin-bottom:0">
@@ -965,42 +978,36 @@ a{color:inherit}
   <!-- =================================================================
        6. CUIDADOS COM A PEÇA
        ================================================================= -->
-  <section class="section section--marfim" id="cuidados" aria-labelledby="cuidados-title">
+  <section class="section section--cuidados on-dark" id="cuidados" aria-labelledby="cuidados-title">
+    <div class="cuidados-bg" aria-hidden="true"></div>
     <div class="wrap">
-      <div class="care-grid">
-        <div>
-          <span class="eyebrow reveal">Cuidados com a peça</span>
-          <h2 id="cuidados-title" class="reveal" style="--d:80ms">Para que sua semi jóia dure tanto quanto a lembrança</h2>
-          <hr class="rule rule-draw" aria-hidden="true">
-          <p class="lead reveal" style="--d:160ms">Semi jóias pedem um cuidado simples, mas que faz toda diferença. Algumas dicas para manter o brilho por muito mais tempo:</p>
-
-          <ul class="care-list">
-            <li class="reveal-left" style="--d:0ms">
-              <span class="ico" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M4 4l16 16M9 3h6l1 4H8l1-4zM8 7h8l1 12a2 2 0 0 1-2 2h-6a2 2 0 0 1-2-2L8 7z" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
-              <span>Evite contato com perfume, álcool e cremes diretamente na peça</span>
-            </li>
-            <li class="reveal-left" style="--d:90ms">
-              <span class="ico" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M3 17c2 1.5 4 1.5 6 0s4-1.5 6 0 4 1.5 6 0M6 13V6a3 3 0 0 1 6 0v1M9 10h8" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
-              <span>Retire antes de nadar, tomar banho ou dormir</span>
-            </li>
-            <li class="reveal-left" style="--d:180ms">
-              <span class="ico" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M4 8h16v11a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V8zM4 8l2-4h12l2 4M12 12v5" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
-              <span>Guarde em local seco, longe de luz e umidade — se possível, em saquinho individual</span>
-            </li>
-            <li class="reveal-left" style="--d:270ms">
-              <span class="ico" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M12 3l1.8 4.2L18 9l-4.2 1.8L12 15l-1.8-4.2L6 9l4.2-1.8L12 3zM18 15l.9 2.1L21 18l-2.1.9L18 21l-.9-2.1L15 18l2.1-.9L18 15z" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
-              <span>Limpe com um pano seco e macio após o uso</span>
-            </li>
-          </ul>
-
-          <p class="care-close reveal" style="--d:120ms">Pequenos cuidados, grandes significados — do jeito que a Semi Jóias pensa em cada detalhe.</p>
-        </div>
-
-        <figure class="care-figure reveal-scale" style="margin:0">
-          <img id="fotoCuidados" src="" alt="Semi jóias guardadas com cuidado, preservando o brilho do banho dourado" loading="lazy" decoding="async" width="900" height="900">
-          <span class="frame-line" aria-hidden="true"></span>
-        </figure>
+      <div class="sec-head sec-head--center">
+        <span class="eyebrow eyebrow--light reveal">Cuidados com a peça</span>
+        <h2 id="cuidados-title" class="reveal" style="--d:80ms">Para que sua semi jóia dure tanto quanto a lembrança</h2>
+        <hr class="rule rule-draw rule--center" aria-hidden="true">
+        <p class="lead lead--light reveal" style="--d:160ms">Semi jóias pedem um cuidado simples, mas que faz toda diferença. Algumas dicas para manter o brilho por muito mais tempo:</p>
       </div>
+
+      <ul class="care-grid">
+        <li class="care-card reveal" style="--d:0ms">
+          <span class="ico" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M4 4l16 16M9 3h6l1 4H8l1-4zM8 7h8l1 12a2 2 0 0 1-2 2h-6a2 2 0 0 1-2-2L8 7z" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+          <p>Evite contato com perfume, álcool e cremes diretamente na peça</p>
+        </li>
+        <li class="care-card reveal" style="--d:90ms">
+          <span class="ico" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M3 17c2 1.5 4 1.5 6 0s4-1.5 6 0 4 1.5 6 0M6 13V6a3 3 0 0 1 6 0v1M9 10h8" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+          <p>Retire antes de nadar, tomar banho ou dormir</p>
+        </li>
+        <li class="care-card reveal" style="--d:180ms">
+          <span class="ico" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M4 8h16v11a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V8zM4 8l2-4h12l2 4M12 12v5" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+          <p>Guarde em local seco, longe de luz e umidade — se possível, em saquinho individual</p>
+        </li>
+        <li class="care-card reveal" style="--d:270ms">
+          <span class="ico" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M12 3l1.8 4.2L18 9l-4.2 1.8L12 15l-1.8-4.2L6 9l4.2-1.8L12 3zM18 15l.9 2.1L21 18l-2.1.9L18 21l-.9-2.1L15 18l2.1-.9L18 15z" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+          <p>Limpe com um pano seco e macio após o uso</p>
+        </li>
+      </ul>
+
+      <p class="care-close reveal" style="--d:120ms">Pequenos cuidados, grandes significados — do jeito que a Semi Jóias pensa em cada detalhe.</p>
     </div>
   </section>
 
@@ -1130,7 +1137,6 @@ a{color:inherit}
       mensagem: 'Olá Verônica! Quero pedir: [Nome da peça] — Quantidade: [X]. Vim pelo site 💎',
       mensagemGeral: 'Olá Verônica! Vim pelo site 💎',
       fotoVeronica: '',
-      fotoCuidados: '',
       /* Topo do site: fundo animado da marca, vídeo em looping ou carrossel */
       heroTipo: 'animado',      /* 'animado' | 'video' | 'carrossel' */
       heroVideo: '',
@@ -1772,7 +1778,6 @@ a{color:inherit}
     $('#linkInstagram').setAttribute('href', c.instagram || 'https://instagram.com/');
 
     $('#fotoVeronica').setAttribute('src', c.fotoVeronica || placeholder('veronica-retrato', ''));
-    $('#fotoCuidados').setAttribute('src', c.fotoCuidados || placeholder('cuidados-peca', ''));
 
     aplicarHero(c);
     aplicarBanda(c);
@@ -2903,7 +2908,6 @@ a{color:inherit}
         '<input id="cfgMsgGeral" value="' + esc(c.mensagemGeral) + '">' +
         '<p class="adm-help">Usada quando o cliente clica no WhatsApp sem escolher uma peça.</p></div>' +
       campoImagem('cfgFotoV', c.fotoVeronica, 'Foto de Verônica (dobra "Quem é Verônica")') +
-      campoImagem('cfgFotoC', c.fotoCuidados, 'Foto da dobra de cuidados') +
 
       '<h3 style="margin-top:var(--s2)">Topo do site</h3>' +
       '<div class="field"><label for="cfgHeroTipo">O que aparece no fundo do topo</label>' +
@@ -2995,11 +2999,7 @@ a{color:inherit}
     $('#cfgFotoV-file').addEventListener('change', function (ev) {
       lerImagem(ev.target.files[0], function (d) { capturaCfg(); store.config.fotoVeronica = d; persistir('Foto atualizada.'); renderAdminConfig(); });
     });
-    $('#cfgFotoC-file').addEventListener('change', function (ev) {
-      lerImagem(ev.target.files[0], function (d) { capturaCfg(); store.config.fotoCuidados = d; persistir('Foto atualizada.'); renderAdminConfig(); });
-    });
     if ($('#cfgFotoV-clear')) $('#cfgFotoV-clear').addEventListener('click', function () { capturaCfg(); store.config.fotoVeronica = ''; persistir('Foto removida.'); renderAdminConfig(); });
-    if ($('#cfgFotoC-clear')) $('#cfgFotoC-clear').addEventListener('click', function () { capturaCfg(); store.config.fotoCuidados = ''; persistir('Foto removida.'); renderAdminConfig(); });
 
     /* Logos, poster e demais imagens de configuração */
     [['cfgPoster', 'heroVideoPoster'], ['cfgLogo', 'logoMarca'], ['cfgUman', 'logoUman']].forEach(function (par) {
