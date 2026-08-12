@@ -58,7 +58,7 @@
 
   /* ---- LAYOUT ---- */
   --wrap:1080px;
-  --header-h:64px;
+  --header-h:72px;
   --tap:44px;              /* área mínima de toque */
   --ease:cubic-bezier(.16,1,.3,1);
 }
@@ -235,7 +235,7 @@ a{color:inherit}
 .nav-drawer .btn{margin-top:var(--s3); width:100%}
 
 @media (min-width:768px){
-  :root{--header-h:76px}
+  :root{--header-h:88px}
   .brand svg{width:32px; height:32px}
   .brand-name{font-size:1.35rem}
 }
@@ -541,17 +541,23 @@ a{color:inherit}
   transition:opacity .25s ease, transform .25s var(--ease);
 }
 .signature-mark:hover{opacity:1; transform:translateY(-2px)}
-.signature-mark img{height:28px; width:auto; max-width:180px; object-fit:contain}
+.signature-mark img{height:44px; width:auto; max-width:230px; object-fit:contain}
 /* Wordmark tipográfico usado enquanto o arquivo do logo não é enviado */
 .signature-word{
   font-family:"Jost",sans-serif; font-weight:500; font-size:1.05rem; letter-spacing:.42em;
   text-transform:uppercase; color:var(--champanhe); padding-left:.42em;
 }
 
-/* Logos enviados pelo painel substituem os monogramas padrão */
-.brand img.brand-logo{height:34px; width:auto; max-width:190px; object-fit:contain}
-@media (min-width:768px){ .brand img.brand-logo{height:40px; max-width:230px} }
-.site-footer img.footer-logo{height:60px; width:auto; max-width:260px; object-fit:contain; margin:0 auto var(--s2)}
+/* Logos enviados pelo painel substituem os monogramas padrão.
+   O logo compõe símbolo e assinatura empilhados, então precisa de altura
+   maior que um wordmark horizontal para a caligrafia continuar legível. */
+.brand img.brand-logo{height:52px; width:auto; max-width:210px; object-fit:contain}
+@media (min-width:768px){ .brand img.brand-logo{height:66px; max-width:260px} }
+/* Ouro sobre o hero; ametista quando o header vira sólido */
+.brand img.brand-logo--escuro{display:none}
+.is-solid .brand img.brand-logo--claro{display:none}
+.is-solid .brand img.brand-logo--escuro{display:block}
+.site-footer img.footer-logo{height:auto; width:min(280px,72vw); object-fit:contain; margin:0 auto var(--s3)}
 
 .footer-note{margin-top:var(--s5); padding-top:var(--s3); border-top:1px solid rgba(235,214,164,.2); font-size:.78rem; opacity:.85; display:flex; flex-direction:column; gap:var(--s1); align-items:center}
 .footer-note a{color:var(--champanhe); text-decoration:underline; text-underline-offset:3px; min-height:var(--tap); display:inline-flex; align-items:center}
@@ -912,7 +918,7 @@ a{color:inherit}
       <span class="signature-label">Criado por</span>
       <a class="signature-mark" id="linkUman" href="https://umandigital.com.br" target="_blank" rel="noopener noreferrer"
          aria-label="Criado por UMAN — abrir site do estúdio em nova aba">
-        <img id="logoUman" src="" alt="UMAN" loading="lazy" decoding="async" height="28">
+        <img id="logoUman" src="" alt="UMAN Digital" loading="lazy" decoding="async" height="44">
       </a>
     </div>
 
@@ -1529,7 +1535,7 @@ a{color:inherit}
      2) arquivo versionado em assets/ — basta commitar com o nome esperado;
      3) monograma do design system / wordmark tipográfico.
      Extensões testadas na ordem: .svg, .png, .webp, .jpg */
-  var ASSETS = { marca: '', uman: '' };
+  var ASSETS = { marca: '', marcaEscura: '', uman: '' };
   var EXTENSOES = ['svg', 'png', 'webp', 'jpg'];
 
   function procurarAsset(nome, chave, aoAchar) {
@@ -1546,6 +1552,9 @@ a{color:inherit}
 
   function detectarAssets() {
     procurarAsset('logo-veronica', 'marca', function () { aplicarLogos(store.config); });
+    /* variante para fundo claro: o logo em ouro perde contraste sobre o marfim
+       do header rolado, então entra a versão em ametista quando existir */
+    procurarAsset('logo-veronica-escuro', 'marcaEscura', function () { aplicarLogos(store.config); });
     procurarAsset('logo-uman', 'uman', function () { aplicarLogos(store.config); });
   }
 
@@ -1560,19 +1569,36 @@ a{color:inherit}
 
   function aplicarLogosResolvidos(c) {
     var brand = $('#brandLink');
-    var brandImg = $('.brand-logo', brand);
+    /* Duas peças no header: a de ouro sobre o hero, a de ametista quando o
+       header fica sólido. O alt fica vazio de propósito — quem nomeia o link
+       é o aria-label, evitando leitura duplicada. */
     if (c.logoMarca) {
-      if (!brandImg) {
-        brandImg = new Image();
-        brandImg.className = 'brand-logo';
-        brandImg.alt = 'Verônica Vargas Semijoias';
-        brand.insertBefore(brandImg, brand.firstChild);
+      var claro = $('.brand-logo--claro', brand);
+      if (!claro) {
+        claro = new Image();
+        claro.className = 'brand-logo brand-logo--claro';
+        claro.alt = '';
+        /* acima da dobra: carrega de imediato, adiar penalizaria a marca */
+        claro.loading = 'eager'; claro.fetchPriority = 'high';
+        brand.insertBefore(claro, brand.firstChild);
       }
-      if (brandImg.getAttribute('src') !== c.logoMarca) brandImg.src = c.logoMarca;
+      if (claro.getAttribute('src') !== c.logoMarca) claro.src = c.logoMarca;
+
+      var escuro = $('.brand-logo--escuro', brand);
+      var fonteEscura = ASSETS.marcaEscura || c.logoMarca;
+      if (!escuro) {
+        escuro = new Image();
+        escuro.className = 'brand-logo brand-logo--escuro';
+        escuro.alt = '';
+        escuro.loading = 'eager';
+        brand.insertBefore(escuro, claro.nextSibling);
+      }
+      if (escuro.getAttribute('src') !== fonteEscura) escuro.src = fonteEscura;
+
       $('.brand-mark', brand).style.display = 'none';
       $('.brand-name', brand).style.display = 'none';
     } else {
-      if (brandImg) brandImg.parentNode.removeChild(brandImg);
+      $$('.brand-logo', brand).forEach(function (i) { i.parentNode.removeChild(i); });
       $('.brand-mark', brand).style.display = '';
       $('.brand-name', brand).style.display = '';
     }

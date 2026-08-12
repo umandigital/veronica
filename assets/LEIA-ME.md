@@ -29,6 +29,20 @@ Configurações → Marca e assinatura, no painel administrativo, aceita upload
 direto. Com o Supabase conectado, o arquivo vai para o bucket `midia`; sem
 conexão, fica no navegador.
 
+## O que já está aqui
+
+| Arquivo | Origem |
+|---|---|
+| `logo-veronica.png` | Extraído do JPG enviado: fundo roxo removido, arte em ouro sobre transparência |
+| `logo-veronica-escuro.png` | Mesma arte em ametista `#7A1A64`, para o header quando fica sólido sobre o marfim |
+| `logo-uman.png` | Enviado, já com transparência; redimensionado para 760px |
+| `originais/logo-veronica.jpg` | Arquivo original (CMYK, 2484px, 957 KB), guardado como material-fonte |
+
+O logo em ouro tem só 2:1 de contraste sobre o marfim, daí a variante em
+ametista — o site troca as duas conforme o header rola. Se tiver o logo
+vetorial (`.svg` ou `.ai`/`.pdf`), envie: substitui os PNGs com nitidez
+melhor em qualquer tela e arquivo menor.
+
 ## Enquanto os arquivos não chegam
 
 O header e o rodapé usam o monograma em SVG inline (aproximação do símbolo
