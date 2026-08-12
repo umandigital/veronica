@@ -326,6 +326,9 @@ a{color:inherit}
 @media (min-width:768px){ .section{padding:var(--s7) 0} }
 .section--areia{background:var(--areia)}
 .section--marfim{background:var(--marfim)}
+/* A dobra de promoção fica entre duas seções claras: os filetes dourados a
+   delimitam sem precisar de mais uma troca de fundo. */
+.section--promo{background:var(--areia); border-block:1px solid var(--linha)}
 .sec-head{margin-bottom:var(--s5)}
 .sec-head h2{font-size:clamp(1.9rem,6vw,2.9rem); margin-top:var(--s2); text-wrap:balance}
 .sec-head .lead{margin-top:var(--s3)}
@@ -463,6 +466,20 @@ a{color:inherit}
 }
 .chip:hover{border-color:var(--ouro); color:var(--roxo)}
 .chip[aria-pressed="true"]{background:var(--roxo); color:#fff; border-color:var(--roxo)}
+
+/* ---- troca de filtro: a grade recua e os cards voltam escalonados ---- */
+.prod-grid{transition:opacity .22s ease, transform .22s ease}
+.prod-grid.is-trocando{opacity:0; transform:translateY(8px); pointer-events:none}
+.prod.entra{animation:entraCard .6s var(--ease) both; animation-delay:var(--d,0ms)}
+@keyframes entraCard{
+  from{opacity:0; transform:translateY(20px) scale(.97); filter:blur(5px)}
+  to{opacity:1; transform:none; filter:none}
+}
+@media (prefers-reduced-motion:reduce){
+  .prod-grid{transition:none}
+  .prod-grid.is-trocando{opacity:1; transform:none}
+  .prod.entra{animation:none}
+}
 
 /* =====================================================================
    5. COMO FUNCIONA
@@ -688,7 +705,7 @@ a{color:inherit}
       <ul>
         <li><a href="#quem-e-veronica">Quem é Veronica</a></li>
         <li><a href="#categorias">Categorias</a></li>
-        <li><a href="#destaques">Destaques</a></li>
+        <li><a href="#promocoes">Promoções</a></li>
         <li><a href="#como-funciona">Como funciona</a></li>
         <li><a href="#cuidados">Cuidados</a></li>
       </ul>
@@ -705,7 +722,7 @@ a{color:inherit}
     <ul>
       <li><a href="#quem-e-veronica">Quem é Veronica</a></li>
       <li><a href="#categorias">Categorias</a></li>
-      <li><a href="#destaques">Destaques</a></li>
+      <li><a href="#promocoes">Promoções</a></li>
       <li><a href="#como-funciona">Como funciona</a></li>
       <li><a href="#cuidados">Cuidados</a></li>
     </ul>
@@ -797,7 +814,7 @@ a{color:inherit}
   <section class="section section--areia" id="categorias" aria-labelledby="cat-title">
     <div class="wrap">
       <div class="sec-head sec-head--center">
-        <span class="eyebrow reveal">Catálogo</span>
+        <span class="eyebrow reveal">Coleções</span>
         <h2 id="cat-title" class="reveal" style="--d:80ms">Encontre a peça certa para o momento certo</h2>
         <hr class="rule rule-draw rule--center" aria-hidden="true">
       </div>
@@ -806,20 +823,35 @@ a{color:inherit}
   </section>
 
   <!-- =================================================================
-       4. PRODUTOS EM PROMOÇÃO
+       3b. CATÁLOGO — destino de quem clica numa categoria
        ================================================================= -->
-  <section class="section section--marfim" id="destaques" aria-labelledby="destaques-title">
+  <section class="section section--marfim" id="catalogo" aria-labelledby="catalogo-title">
     <div class="wrap">
       <div class="sec-head sec-head--center">
-        <span class="eyebrow reveal">Seleção da Veronica</span>
-        <h2 id="destaques-title" class="reveal" style="--d:80ms">Peças em destaque</h2>
-        <p class="lead reveal" style="--d:160ms">Condição especial, por tempo limitado.</p>
+        <span class="eyebrow reveal">Catálogo</span>
+        <h2 id="catalogo-title" class="reveal" style="--d:80ms">Todas as peças</h2>
         <hr class="rule rule-draw rule--center" aria-hidden="true">
       </div>
 
-      <div class="filters" id="filters" role="group" aria-label="Filtrar peças por categoria"></div>
-      <div class="prod-grid" id="prodGrid"></div>
-      <p class="sr-only" id="prodStatus" role="status" aria-live="polite"></p>
+      <div class="filters" id="filtrosCatalogo" role="group" aria-label="Filtrar o catálogo por categoria"></div>
+      <div class="prod-grid" id="gridCatalogo"></div>
+      <p class="sr-only" id="statusCatalogo" role="status" aria-live="polite"></p>
+    </div>
+  </section>
+
+  <!-- =================================================================
+       4. PEÇAS EM PROMOÇÃO — seleção feita no painel
+       ================================================================= -->
+  <section class="section section--promo" id="promocoes" aria-labelledby="promo-title">
+    <div class="wrap">
+      <div class="sec-head sec-head--center">
+        <h2 id="promo-title" class="reveal">Peças em Promoção</h2>
+        <hr class="rule rule-draw rule--center" aria-hidden="true">
+      </div>
+
+      <div class="filters" id="filtrosPromo" role="group" aria-label="Filtrar promoções por categoria"></div>
+      <div class="prod-grid" id="gridPromo"></div>
+      <p class="sr-only" id="statusPromo" role="status" aria-live="polite"></p>
     </div>
   </section>
 
@@ -1044,14 +1076,14 @@ a{color:inherit}
       { id: 'c6', nome: 'Conjuntos', eyebrow: 'Coleção', altura: 'media', imagem: '', visivel: true }
     ],
     produtos: [
-      { id: 'p1', nome: 'Conjunto Gota Esmeralda', categoria: 'c6', preco: 289,  precoDe: 389, imagens: [], destaque: true,  visivel: true },
-      { id: 'p2', nome: 'Colar Ponto de Luz',      categoria: 'c2', preco: 179,  precoDe: 229, imagens: [], destaque: true,  visivel: true },
-      { id: 'p3', nome: 'Brinco Ear Cuff Cristal', categoria: 'c3', preco: 129,  precoDe: 0,   imagens: [], destaque: true,  visivel: true },
-      { id: 'p4', nome: 'Anel Solitário Zircônia', categoria: 'c1', preco: 149,  precoDe: 199, imagens: [], destaque: true,  visivel: true },
-      { id: 'p5', nome: 'Pulseira Elos Dourados',  categoria: 'c4', preco: 199,  precoDe: 0,   imagens: [], destaque: true,  visivel: true },
-      { id: 'p6', nome: 'Broche Camélia Vintage',  categoria: 'c5', preco: 239,  precoDe: 319, imagens: [], destaque: true,  visivel: true },
-      { id: 'p7', nome: 'Colar Choker Veneziana',  categoria: 'c2', preco: 159,  precoDe: 0,   imagens: [], destaque: false, visivel: true },
-      { id: 'p8', nome: 'Anel Aparador Filete',    categoria: 'c1', preco: 99,   precoDe: 0,   imagens: [], destaque: false, visivel: true }
+      { id: 'p1', nome: 'Conjunto Gota Esmeralda', categoria: 'c6', preco: 289, precoDe: 389, imagens: [], promocao: true,  visivel: true },
+      { id: 'p2', nome: 'Colar Ponto de Luz',      categoria: 'c2', preco: 179, precoDe: 229, imagens: [], promocao: true,  visivel: true },
+      { id: 'p3', nome: 'Brinco Ear Cuff Cristal', categoria: 'c3', preco: 129, precoDe: 0,   imagens: [], promocao: false, visivel: true },
+      { id: 'p4', nome: 'Anel Solitário Zircônia', categoria: 'c1', preco: 149, precoDe: 199, imagens: [], promocao: true,  visivel: true },
+      { id: 'p5', nome: 'Pulseira Elos Dourados',  categoria: 'c4', preco: 199, precoDe: 0,   imagens: [], promocao: false, visivel: true },
+      { id: 'p6', nome: 'Broche Camélia Vintage',  categoria: 'c5', preco: 239, precoDe: 319, imagens: [], promocao: true,  visivel: true },
+      { id: 'p7', nome: 'Colar Choker Veneziana',  categoria: 'c2', preco: 159, precoDe: 0,   imagens: [], promocao: false, visivel: true },
+      { id: 'p8', nome: 'Anel Aparador Filete',    categoria: 'c1', preco: 99,  precoDe: 0,   imagens: [], promocao: false, visivel: true }
     ]
   };
 
@@ -1075,7 +1107,7 @@ a{color:inherit}
       return {
         config:     Object.assign(clone(SEED.config), salva),
         categorias: Array.isArray(data.categorias) ? data.categorias : clone(SEED.categorias),
-        produtos:   Array.isArray(data.produtos)   ? data.produtos   : clone(SEED.produtos),
+        produtos:   Array.isArray(data.produtos)   ? data.produtos.map(migrarProduto) : clone(SEED.produtos),
         usuarios:   Array.isArray(data.usuarios) && data.usuarios.length ? data.usuarios : clone(SEED.usuarios)
       };
     } catch (e) { return clone(SEED); }
@@ -1089,6 +1121,15 @@ a{color:inherit}
       toast('Não foi possível salvar: armazenamento cheio. Remova imagens pesadas.');
       return false;
     }
+  }
+
+  /* Cadastros feitos antes da dobra de promoções usavam `destaque` */
+  function migrarProduto(p) {
+    if (p && p.promocao === undefined && p.destaque !== undefined) {
+      p.promocao = !!p.destaque;
+      delete p.destaque;
+    }
+    return p;
   }
 
   function clone(o) { return JSON.parse(JSON.stringify(o)); }
@@ -1229,7 +1270,8 @@ a{color:inherit}
             return {
               id: p.id, nome: p.nome, categoria: p.categoria, preco: Number(p.preco),
               precoDe: Number(p.preco_de || 0), imagens: p.imagens || [],
-              destaque: p.destaque, visivel: p.visivel
+              /* a coluna do banco chama-se `destaque`; aqui o conceito é promoção */
+              promocao: !!p.destaque, visivel: p.visivel
             };
           }),
           config: (r[2] && r[2][0] && r[2][0].valor) || null
@@ -1245,7 +1287,7 @@ a{color:inherit}
       var prods = store.produtos.map(function (p, i) {
         return {
           id: p.id, nome: p.nome, categoria: p.categoria || null, preco: p.preco,
-          preco_de: p.precoDe || 0, imagens: p.imagens || [], destaque: !!p.destaque,
+          preco_de: p.precoDe || 0, imagens: p.imagens || [], destaque: emPromocao(p),
           visivel: p.visivel !== false, ordem: i
         };
       });
@@ -1374,8 +1416,8 @@ a{color:inherit}
       var qtd = store.produtos.filter(function (p) { return p.categoria === c.id && p.visivel !== false; }).length;
       return '' +
         '<li class="reveal-scale" style="--d:' + (i * 90) + 'ms">' +
-          '<a class="cat cat--' + esc(c.altura || 'media') + '" href="#destaques" data-cat="' + esc(c.id) + '" ' +
-             'aria-label="Ver peças da categoria ' + esc(c.nome) + ' no catálogo">' +
+          '<a class="cat cat--' + esc(c.altura || 'media') + '" href="#catalogo" data-cat="' + esc(c.id) + '" ' +
+             'aria-label="Ver as peças da categoria ' + esc(c.nome) + ' no catálogo">' +
             '<img src="' + esc(img) + '" alt="Peças da categoria ' + esc(c.nome) + '" loading="lazy" decoding="async" width="600" height="750">' +
             '<span class="veil" aria-hidden="true"></span>' +
             '<span class="frame" aria-hidden="true"></span>' +
@@ -1388,8 +1430,11 @@ a{color:inherit}
         '</li>';
     }).join('');
 
+    /* o href já rola até o catálogo; aqui só aplicamos o filtro da categoria */
     $$('.cat', grid).forEach(function (a) {
-      a.addEventListener('click', function () { setFiltro(a.getAttribute('data-cat')); });
+      a.addEventListener('click', function () {
+        setFiltro('catalogo', a.getAttribute('data-cat'), true);
+      });
     });
 
     observe(grid);
@@ -1398,91 +1443,162 @@ a{color:inherit}
   /* ===================================================================
      RENDER — FILTROS + PRODUTOS
      =================================================================== */
-  var filtroAtual = 'destaque';
+  /* Duas vitrines independentes sobre o mesmo grid de cards:
+     o catálogo (tudo, filtrável) e a dobra de promoções (só o que a
+     administradora marcou). Cada uma guarda seu próprio filtro. */
+  var TODAS = 'todas';
 
-  function renderFiltros() {
-    var box = $('#filters');
-    var itens = [{ id: 'destaque', nome: 'Em destaque' }].concat(
+  var vitrines = {
+    catalogo: {
+      filtro: TODAS,
+      filtros: '#filtrosCatalogo', grid: '#gridCatalogo', status: '#statusCatalogo', titulo: '#catalogo-title',
+      vazio: 'Nenhuma peça nesta categoria por enquanto. Fale com Veronica pelo WhatsApp — ela ajuda a encontrar.',
+      base: function () { return store.produtos.filter(visivel); }
+    },
+    promo: {
+      filtro: TODAS,
+      filtros: '#filtrosPromo', grid: '#gridPromo', status: '#statusPromo',
+      vazio: 'Nenhuma peça em promoção no momento. Volte em breve — as condições mudam com frequência.',
+      /* promoção exige o par de valores: sem valor original não há o que riscar */
+      base: function () {
+        return store.produtos.filter(function (p) {
+          return visivel(p) && emPromocao(p) && p.precoDe > p.preco;
+        });
+      }
+    }
+  };
+
+  function visivel(p) { return p.visivel !== false; }
+
+  /* `destaque` era o nome antigo do campo; segue aceito para não perder
+     o que já estava cadastrado. */
+  function emPromocao(p) { return p.promocao !== undefined ? !!p.promocao : !!p.destaque; }
+
+  function renderFiltros(chave) {
+    var v = vitrines[chave];
+    var box = $(v.filtros);
+    if (!box) return;
+    var itens = [{ id: TODAS, nome: 'Todas' }].concat(
       store.categorias.filter(function (c) { return c.visivel !== false; })
     );
     box.innerHTML = itens.map(function (c) {
       return '<button class="chip" type="button" data-f="' + esc(c.id) + '" aria-pressed="' +
-             (c.id === filtroAtual) + '">' + esc(c.nome) + '</button>';
+             (c.id === v.filtro) + '">' + esc(c.nome) + '</button>';
     }).join('');
     $$('.chip', box).forEach(function (b) {
-      b.addEventListener('click', function () { setFiltro(b.getAttribute('data-f')); });
+      b.addEventListener('click', function () { setFiltro(chave, b.getAttribute('data-f')); });
     });
   }
 
-  function setFiltro(id) {
-    filtroAtual = id;
-    $$('#filters .chip').forEach(function (b) {
+  function setFiltro(chave, id, forcar) {
+    var v = vitrines[chave];
+    if (v.filtro === id && !forcar) return;
+    v.filtro = id;
+
+    var box = $(v.filtros);
+    if (box) $$('.chip', box).forEach(function (b) {
       b.setAttribute('aria-pressed', String(b.getAttribute('data-f') === id));
     });
-    renderProdutos();
+
+    var grid = $(v.grid);
+    if (reduceMotion || !grid) { renderVitrine(chave); return; }
+
+    /* a grade recua, troca o conteúdo fora da vista e devolve os cards escalonados */
+    grid.classList.add('is-trocando');
+    setTimeout(function () {
+      renderVitrine(chave, true);
+      grid.classList.remove('is-trocando');
+    }, 200);
   }
 
-  function listaVisivel() {
-    var vis = store.produtos.filter(function (p) { return p.visivel !== false; });
-    if (filtroAtual === 'destaque') return vis.filter(function (p) { return p.destaque; });
-    return vis.filter(function (p) { return p.categoria === filtroAtual; });
+  function tituloCatalogo() {
+    var el = $('#catalogo-title');
+    if (!el) return;
+    var f = vitrines.catalogo.filtro;
+    el.textContent = f === TODAS ? 'Todas as peças' : (categoriaNome(f) || 'Todas as peças');
   }
 
-  function renderProdutos() {
-    var grid = $('#prodGrid');
-    var lista = listaVisivel();
+  function renderVitrine(chave, animar) {
+    var v = vitrines[chave];
+    var grid = $(v.grid);
+    if (!grid) return;
+
+    var lista = v.base().filter(function (p) {
+      return v.filtro === TODAS || p.categoria === v.filtro;
+    });
+
+    if (chave === 'catalogo') tituloCatalogo();
 
     if (!lista.length) {
-      grid.innerHTML = '<p class="empty-state">Nenhuma peça cadastrada nesta categoria por enquanto. Fale com Veronica pelo WhatsApp — ela ajuda a encontrar.</p>';
-      $('#prodStatus').textContent = 'Nenhuma peça encontrada.';
+      grid.innerHTML = '<p class="empty-state">' + esc(v.vazio) + '</p>';
+      $(v.status).textContent = 'Nenhuma peça encontrada.';
       return;
     }
 
     grid.innerHTML = lista.map(function (p, i) {
-      var imgs = (p.imagens && p.imagens.length ? p.imagens : [placeholder(p.id + p.nome, '')]).slice(0, 4);
-      var off = desconto(p);
-      var thumbs = imgs.length > 1
-        ? '<div class="thumbs" role="group" aria-label="Fotos de ' + esc(p.nome) + '">' +
-            imgs.map(function (src, k) {
-              return '<button class="t" type="button" data-i="' + k + '" aria-current="' + (k === 0) + '" ' +
-                     'aria-label="Ver foto ' + (k + 1) + ' de ' + esc(p.nome) + '">' +
-                     '<img src="' + esc(src) + '" alt="" loading="lazy" decoding="async" width="120" height="120"></button>';
-            }).join('') +
-          '</div>'
-        : '';
-
-      return '' +
-      '<article class="prod reveal" style="--d:' + Math.min(i * 90, 450) + 'ms" data-p="' + esc(p.id) + '">' +
-        '<div class="hero-img">' +
-          '<img class="js-main" src="' + esc(imgs[0]) + '" alt="' + esc(p.nome) + ' — semi jóia da Verônica Vargas Semijoias" loading="lazy" decoding="async" width="600" height="600">' +
-          (off ? '<span class="badge">−' + off + '%</span>' : '') +
-        '</div>' +
-        thumbs +
-        '<div class="body">' +
-          '<p class="cat-tag">' + esc(categoriaNome(p.categoria)) + '</p>' +
-          '<h3>' + esc(p.nome) + '</h3>' +
-          '<p class="price">' + (p.precoDe > p.preco ? '<s>' + fmtBRL(p.precoDe) + '</s> ' : '') + fmtBRL(p.preco) + '</p>' +
-          '<div class="row">' +
-            '<div class="qty">' +
-              '<button type="button" class="js-minus" aria-label="Diminuir quantidade de ' + esc(p.nome) + '">–</button>' +
-              '<output class="js-qty" aria-live="polite" aria-label="Quantidade de ' + esc(p.nome) + '">1</output>' +
-              '<button type="button" class="js-plus" aria-label="Aumentar quantidade de ' + esc(p.nome) + '">+</button>' +
-            '</div>' +
-          '</div>' +
-          '<div class="row row--end">' +
-            '<a class="btn btn-wa js-wa" href="' + esc(waHref(p.nome, 1)) + '" target="_blank" rel="noopener noreferrer" ' +
-               'aria-label="Pedir ' + esc(p.nome) + ' pelo WhatsApp">' +
-              '<svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M12 2a10 10 0 0 0-8.6 15l-1.4 5 5.1-1.3A10 10 0 1 0 12 2Zm5.6 14.2c-.2.6-1.4 1.2-1.9 1.2-.5.1-1.1.1-1.8-.1-.4-.1-1-.3-1.6-.6-2.9-1.3-4.8-4.2-4.9-4.4-.1-.2-1.2-1.5-1.2-2.9 0-1.3.7-2 1-2.3.2-.3.5-.3.7-.3h.5c.2 0 .4 0 .6.5l.8 1.9c.1.2.1.3 0 .5l-.4.6c-.2.2-.3.4-.1.6.2.4.9 1.4 1.9 2.3 1.2 1.1 2.2 1.4 2.5 1.5.2.1.4.1.5-.1l.7-.9c.2-.2.3-.2.6-.1l1.8.9c.3.1.4.2.5.3.1.2.1.8-.1 1.4Z"/></svg>' +
-              'Pedir pelo WhatsApp' +
-            '</a>' +
-          '</div>' +
-        '</div>' +
-      '</article>';
+      return cardProduto(p, i, animar);
     }).join('');
 
     $$('.prod', grid).forEach(bindProduto);
-    $('#prodStatus').textContent = lista.length + (lista.length > 1 ? ' peças exibidas.' : ' peça exibida.');
-    observe(grid);
+    $(v.status).textContent = lista.length + (lista.length > 1 ? ' peças exibidas.' : ' peça exibida.');
+    if (!animar) observe(grid);
+  }
+
+  function renderProdutos() {
+    renderVitrine('catalogo');
+    renderVitrine('promo');
+  }
+
+  function renderFiltrosTodos() {
+    renderFiltros('catalogo');
+    renderFiltros('promo');
+  }
+
+  function cardProduto(p, i, animar) {
+    var imgs = (p.imagens && p.imagens.length ? p.imagens : [placeholder(p.id + p.nome, '')]).slice(0, 4);
+    var off = desconto(p);
+    var atraso = Math.min(i * (animar ? 55 : 90), animar ? 440 : 450);
+    var classe = animar ? 'prod entra' : 'prod reveal';
+
+    var thumbs = imgs.length > 1
+      ? '<div class="thumbs" role="group" aria-label="Fotos de ' + esc(p.nome) + '">' +
+          imgs.map(function (src, k) {
+            return '<button class="t" type="button" data-i="' + k + '" aria-current="' + (k === 0) + '" ' +
+                   'aria-label="Ver foto ' + (k + 1) + ' de ' + esc(p.nome) + '">' +
+                   '<img src="' + esc(src) + '" alt="" loading="lazy" decoding="async" width="120" height="120"></button>';
+          }).join('') +
+        '</div>'
+      : '';
+
+    return '' +
+    '<article class="' + classe + '" style="--d:' + atraso + 'ms" data-p="' + esc(p.id) + '">' +
+      '<div class="hero-img">' +
+        '<img class="js-main" src="' + esc(imgs[0]) + '" alt="' + esc(p.nome) + ' — semi jóia da Verônica Vargas Semijoias" loading="lazy" decoding="async" width="600" height="600">' +
+        (off ? '<span class="badge">−' + off + '%</span>' : '') +
+      '</div>' +
+      thumbs +
+      '<div class="body">' +
+        '<p class="cat-tag">' + esc(categoriaNome(p.categoria)) + '</p>' +
+        '<h3>' + esc(p.nome) + '</h3>' +
+        '<p class="price">' + (p.precoDe > p.preco
+            ? '<s aria-label="Valor original">' + fmtBRL(p.precoDe) + '</s> '
+            : '') + fmtBRL(p.preco) + '</p>' +
+        '<div class="row">' +
+          '<div class="qty">' +
+            '<button type="button" class="js-minus" aria-label="Diminuir quantidade de ' + esc(p.nome) + '">–</button>' +
+            '<output class="js-qty" aria-live="polite" aria-label="Quantidade de ' + esc(p.nome) + '">1</output>' +
+            '<button type="button" class="js-plus" aria-label="Aumentar quantidade de ' + esc(p.nome) + '">+</button>' +
+          '</div>' +
+        '</div>' +
+        '<div class="row row--end">' +
+          '<a class="btn btn-wa js-wa" href="' + esc(waHref(p.nome, 1)) + '" target="_blank" rel="noopener noreferrer" ' +
+             'aria-label="Pedir ' + esc(p.nome) + ' pelo WhatsApp">' +
+            '<svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M12 2a10 10 0 0 0-8.6 15l-1.4 5 5.1-1.3A10 10 0 1 0 12 2Zm5.6 14.2c-.2.6-1.4 1.2-1.9 1.2-.5.1-1.1.1-1.8-.1-.4-.1-1-.3-1.6-.6-2.9-1.3-4.8-4.2-4.9-4.4-.1-.2-1.2-1.5-1.2-2.9 0-1.3.7-2 1-2.3.2-.3.5-.3.7-.3h.5c.2 0 .4 0 .6.5l.8 1.9c.1.2.1.3 0 .5l-.4.6c-.2.2-.3.4-.1.6.2.4.9 1.4 1.9 2.3 1.2 1.1 2.2 1.4 2.5 1.5.2.1.4.1.5-.1l.7-.9c.2-.2.3-.2.6-.1l1.8.9c.3.1.4.2.5.3.1.2.1.8-.1 1.4Z"/></svg>' +
+            'Pedir pelo WhatsApp' +
+          '</a>' +
+        '</div>' +
+      '</div>' +
+    '</article>';
   }
 
   function bindProduto(card) {
@@ -1922,7 +2038,7 @@ a{color:inherit}
   /* Salva local (cache imediato) e, se conectado, sincroniza com o Supabase. */
   function persistir(msg) {
     if (!save()) return;
-    renderCategorias(); renderFiltros(); renderProdutos(); aplicarConfig();
+    renderCategorias(); renderFiltrosTodos(); renderProdutos(); aplicarConfig();
     if (msg) toast(msg);
 
     if (DB.ativo() && DB.sessao) {
@@ -1949,7 +2065,7 @@ a{color:inherit}
         store.config = Object.assign(clone(SEED.config), r.config, { supabaseUrl: url, supabaseKey: key });
       }
       save();
-      renderCategorias(); renderFiltros(); renderProdutos(); aplicarConfig();
+      renderCategorias(); renderFiltrosTodos(); renderProdutos(); aplicarConfig();
       return true;
     });
   }
@@ -2137,7 +2253,7 @@ a{color:inherit}
       (e ? formProduto(e) : '') +
       '<div class="adm-toolbar">' +
         '<div><span class="eyebrow">Produtos</span>' +
-        '<p class="adm-help">Marque "Peça em destaque" para exibir na dobra <em>Peças em destaque</em> da home.</p></div>' +
+        '<p class="adm-help">Marque <em>Peça em promoção</em> para exibir na dobra <em>Peças em Promoção</em>, com o valor original riscado.</p></div>' +
         (e ? '' : '<button class="btn btn-primary btn-sm" type="button" id="novoProd">+ Novo produto</button>') +
       '</div>' +
       '<div class="adm-list">' +
@@ -2149,14 +2265,18 @@ a{color:inherit}
             '<div class="info"><strong>' + esc(p.nome) + '</strong>' +
               '<span>' + esc(categoriaNome(p.categoria) || 'Sem categoria') + ' · ' + fmtBRL(p.preco) +
               (off ? ' <span class="adm-badge adm-badge--gold">−' + off + '%</span>' : '') +
-              (p.destaque ? ' <span class="adm-badge adm-badge--on">Destaque</span>' : '') +
+              (emPromocao(p)
+                ? (p.precoDe > p.preco
+                    ? ' <span class="adm-badge adm-badge--on">Promoção</span>'
+                    : ' <span class="adm-badge adm-badge--gold">Promoção sem valor original</span>')
+                : '') +
               (p.visivel === false ? ' <span class="adm-badge">Oculto</span>' : '') +
               '</span></div>' +
             '<div class="acts">' +
               '<button class="adm-btn" type="button" data-pact="edit" data-id="' + esc(p.id) + '">Editar</button>' +
               '<button class="adm-btn" type="button" data-pact="up" data-id="' + esc(p.id) + '" ' + (i === 0 ? 'disabled' : '') + ' aria-label="Mover ' + esc(p.nome) + ' para cima">↑</button>' +
               '<button class="adm-btn" type="button" data-pact="down" data-id="' + esc(p.id) + '" ' + (i === store.produtos.length - 1 ? 'disabled' : '') + ' aria-label="Mover ' + esc(p.nome) + ' para baixo">↓</button>' +
-              '<button class="adm-btn" type="button" data-pact="dest" data-id="' + esc(p.id) + '">' + (p.destaque ? 'Tirar destaque' : 'Destacar') + '</button>' +
+              '<button class="adm-btn" type="button" data-pact="promo" data-id="' + esc(p.id) + '">' + (emPromocao(p) ? 'Tirar promoção' : 'Pôr em promoção') + '</button>' +
               '<button class="adm-btn" type="button" data-pact="vis" data-id="' + esc(p.id) + '">' + (p.visivel !== false ? 'Ocultar' : 'Mostrar') + '</button>' +
               '<button class="adm-btn adm-btn--danger" type="button" data-pact="del" data-id="' + esc(p.id) + '">Excluir</button>' +
             '</div></div>';
@@ -2167,7 +2287,7 @@ a{color:inherit}
       $('#novoProd').addEventListener('click', function () {
         admin.rascunhoProd = {
           id: '', nome: '', categoria: (store.categorias[0] || {}).id || '',
-          preco: 0, precoDe: 0, imagens: [], destaque: false, visivel: true
+          preco: 0, precoDe: 0, imagens: [], promocao: false, visivel: true
         };
         renderAdminProdutos();
       });
@@ -2205,8 +2325,12 @@ a{color:inherit}
           }).join('') + '</select></div>' +
       '</div>' +
       '<div class="adm-row adm-row--2">' +
-        '<div class="field"><label for="pPreco">Valor (R$)</label><input id="pPreco" type="number" min="0" step="0.01" required value="' + (p.preco || '') + '"></div>' +
-        '<div class="field"><label for="pPrecoDe">Valor original — opcional, gera o badge de desconto</label><input id="pPrecoDe" type="number" min="0" step="0.01" value="' + (p.precoDe || '') + '"></div>' +
+        '<div class="field"><label for="pPreco">Valor de venda (R$)</label>' +
+          '<input id="pPreco" type="number" min="0" step="0.01" required value="' + (p.preco || '') + '">' +
+          '<p class="adm-help">O valor que o cliente paga.</p></div>' +
+        '<div class="field"><label for="pPrecoDe">Valor original (R$)</label>' +
+          '<input id="pPrecoDe" type="number" min="0" step="0.01" value="' + (p.precoDe || '') + '">' +
+          '<p class="adm-help">Aparece riscado ao lado do valor de venda e gera a etiqueta de desconto. Obrigatório para peças em promoção.</p></div>' +
       '</div>' +
       '<div class="field"><label>Fotos — 1 principal + até 3 secundárias</label>' +
         '<div class="img-slots">' + slots + '</div>' +
@@ -2214,9 +2338,10 @@ a{color:inherit}
         '<input type="file" id="pFile" accept="image/*" class="sr-only">' +
       '</div>' +
       '<div class="adm-row adm-row--2">' +
-        '<label class="adm-check"><input type="checkbox" id="pDest"' + (p.destaque ? ' checked' : '') + '> Peça em destaque na home</label>' +
+        '<label class="adm-check"><input type="checkbox" id="pPromo"' + (p.promocao ? ' checked' : '') + '> Peça em promoção</label>' +
         '<label class="adm-check"><input type="checkbox" id="pVis"' + (p.visivel !== false ? ' checked' : '') + '> Visível no catálogo</label>' +
       '</div>' +
+      '<p class="adm-help">Marcada como promoção, a peça aparece na dobra <em>Peças em Promoção</em> da home, com o valor original riscado. Sem a marcação, ela continua no catálogo normalmente.</p>' +
       '<div class="adm-actions">' +
         '<button class="btn btn-primary btn-sm" type="submit">Salvar</button>' +
         '<button class="btn btn-ghost btn-sm" type="button" id="prodCancel">Cancelar</button>' +
@@ -2260,6 +2385,10 @@ a{color:inherit}
       if (!r.nome.trim()) { toast('Informe o nome da peça.'); return; }
       if (!(r.preco > 0)) { toast('Informe um valor válido.'); return; }
       if (r.precoDe && r.precoDe <= r.preco) r.precoDe = 0;
+      if (r.promocao && !r.precoDe) {
+        toast('Para entrar em promoção, informe um valor original maior que o valor de venda.');
+        return;
+      }
       if (r.id) {
         store.produtos = store.produtos.map(function (p) { return p.id === r.id ? Object.assign({}, p, r) : p; });
       } else {
@@ -2277,7 +2406,7 @@ a{color:inherit}
     r.categoria = $('#pCat').value;
     r.preco = parseFloat($('#pPreco').value) || 0;
     r.precoDe = parseFloat($('#pPrecoDe').value) || 0;
-    r.destaque = $('#pDest').checked;
+    r.promocao = $('#pPromo').checked;
     r.visivel = $('#pVis').checked;
   }
 
@@ -2287,7 +2416,14 @@ a{color:inherit}
     var p = store.produtos[i];
 
     if (act === 'edit') { admin.rascunhoProd = clone(p); renderAdminProdutos(); $('.admin-body').scrollTop = 0; return; }
-    if (act === 'dest') { p.destaque = !p.destaque; }
+    if (act === 'promo') {
+      if (!emPromocao(p) && !(p.precoDe > p.preco)) {
+        toast('Informe o valor original em "Editar" antes de pôr em promoção.');
+        return;
+      }
+      p.promocao = !emPromocao(p);
+      delete p.destaque;
+    }
     if (act === 'vis') { p.visivel = p.visivel === false; }
     if (act === 'up' && i > 0) { store.produtos.splice(i - 1, 0, store.produtos.splice(i, 1)[0]); }
     if (act === 'down' && i < store.produtos.length - 1) { store.produtos.splice(i + 1, 0, store.produtos.splice(i, 1)[0]); }
@@ -2662,7 +2798,7 @@ a{color:inherit}
 
     aplicarConfig();
     renderCategorias();
-    renderFiltros();
+    renderFiltrosTodos();
     renderProdutos();
 
     initHeader();
