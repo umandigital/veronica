@@ -8,12 +8,14 @@
 --        senha:  a senha combinada
 --        marque "Auto Confirm User"
 --   3. Rode o bloco final deste arquivo para promover esse usuário a admin.
---   4. No site: Área administrativa → Configurações → Supabase,
---      preencha a URL do projeto e a chave anon (Settings → API).
+--   4. A URL do projeto e a chave publishable já vêm preenchidas no site
+--      (Área administrativa → Configurações → Supabase). Só troque se o
+--      projeto mudar. Use sempre a chave anon/publishable — NUNCA a
+--      service_role/secret, que ignora o RLS e não pode ir para o navegador.
 --
 -- Modelo de acesso: leitura pública (o catálogo é público), escrita apenas
--- para usuários autenticados. A chave anon é publicável — quem protege a
--- escrita é o RLS abaixo, não o segredo da chave.
+-- para usuários autenticados. A chave anon/publishable é publicável — quem
+-- protege a escrita é o RLS abaixo, não o segredo da chave.
 -- =====================================================================
 
 -- ---------------------------------------------------------------------
