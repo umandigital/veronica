@@ -1,0 +1,134 @@
+SEMI JÓIAS - COPY DO SITE
+===========================
+
+
+1. HERO (vídeo em loop)
+------------------------
+Título:
+"Tem coisas que a gente não explica.
+A gente demonstra."
+
+— ♡ —
+
+"Pequenos detalhes. Grandes significados."
+
+CTA: Ver catálogo
+Botão fixo: WhatsApp
+
+
+2. DOBRA "QUEM É VERONICA"
+---------------------------
+Título:
+"Por trás de cada peça, uma pessoa que escolhe junto com você."
+
+Corpo:
+"Sou Veronica, e escolho cada semi jóia pensando em quem vai usar — não em
+vender mais uma peça. Depois de [X anos] no mercado, entendi que joia boa
+não é só sobre design: é sobre te atender do jeito que você precisa, no
+horário que você tem. Foi assim que nasceu a Semi Jóias [+ sobrenome, se
+for usar]."
+
+[Foto de Veronica]
+
+
+3. DOBRA DE CATEGORIAS
+------------------------
+Título:
+"Encontre a peça certa para o momento certo"
+
+Categorias:
+- Anéis
+- Colares
+- Brincos
+- Pulseiras
+- Broches
+- Conjuntos
+
+(Ao clicar em uma categoria, o usuário entra direto no catálogo filtrado
+por aquela categoria — sem página de detalhe intermediária)
+
+
+4. DOBRA DE PRODUTOS EM PROMOÇÃO
+----------------------------------
+Título:
+"Peças em destaque"
+
+Subtítulo:
+"Condição especial, por tempo limitado."
+
+(Grid de cards de produto no mesmo padrão do catálogo, com badge de
+desconto. Seleção feita pela administradora no painel admin.)
+
+
+5. DOBRA "COMO FUNCIONA"
+---------------------------
+Título:
+"Comprar sem correria, mesmo sem tempo."
+
+Corpo:
+"Sabemos como é: o dia corre, o compromisso chega e o presente fica pra
+depois — ou nem sai. Por isso o atendimento aqui é direto com Veronica,
+sem horário comercial travando sua decisão. Você escolhe a peça no
+catálogo, define a quantidade e manda pelo WhatsApp — a gente resolve o
+resto."
+
+Passos:
+1. Escolha a peça e a quantidade no catálogo
+2. Envie o pedido pelo WhatsApp (mensagem já vai pronta)
+3. Combine pagamento e entrega direto com Veronica
+
+
+6. DOBRA DE CUIDADOS COM A PEÇA
+----------------------------------
+Título:
+"Para que sua semi jóia dure tanto quanto a lembrança"
+
+Corpo:
+"Semi jóias pedem um cuidado simples, mas que faz toda diferença. Algumas
+dicas para manter o brilho por muito mais tempo:"
+
+- Evite contato com perfume, álcool e cremes diretamente na peça
+- Retire antes de nadar, tomar banho ou dormir
+- Guarde em local seco, longe de luz e umidade — se possível, em saquinho
+  individual
+- Limpe com um pano seco e macio após o uso
+
+"Pequenos cuidados, grandes significados — do jeito que a Semi Jóias
+pensa em cada detalhe."
+
+
+7. FOOTER
+-----------
+- Instagram
+- WhatsApp
+- "Atendimento direto com Veronica"
+
+
+===========================
+CATÁLOGO - FORMATO DE CARD DE PRODUTO
+===========================
+
+Cada produto é exibido em um card, sem página de detalhe. O card contém:
+
+- Foto em destaque (principal, maior)
+- Até 3 fotos secundárias (miniaturas clicáveis para trocar a foto em
+  destaque, ou carrossel simples) — total de até 4 fotos por produto
+- Nome da peça
+- Valor
+- Seletor de quantidade (+/-)
+- Botão "Pedir pelo WhatsApp"
+
+Mensagem pré-formatada enviada ao WhatsApp Business da Veronica:
+
+"Olá Veronica! Quero pedir: [Nome da peça] — Quantidade: [X]. Vim pelo
+site 💎"
+
+
+===========================
+CONCEITO DA MARCA
+===========================
+
+"Semi Jóias nasceu da ideia de que joia de alto padrão não precisa ser
+distante. Cada peça é escolhida por Veronica, para quem quer atenção de
+verdade — não uma vitrine automática. Aqui, comprar um presente ou se
+presentear é simples, direto e no seu tempo."

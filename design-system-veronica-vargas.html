@@ -1,0 +1,352 @@
+<!-- Design System — Verônica Vargas Semijoias -->
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Design System — Verônica Vargas Semijoias</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500;1,600&family=Jost:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    /* ---- PRIMÁRIA ---- */
+    --roxo:#7A1A64;         /* Ametista — cor-mãe da marca (logo) */
+    --ouro:#E0A020;         /* Ouro Vargas — acento, filetes, destaques (logo) */
+
+    /* ---- SECUNDÁRIA ---- */
+    --bordo:#5A1124;        /* Vinho — profundidade, hero, rodapé */
+    --champanhe:#EBD6A4;    /* Champanhe — dourado suave sobre fundos escuros */
+
+    /* ---- SUPORTE / NEUTROS ---- */
+    --marfim:#FBF7F0;       /* Fundo principal das páginas */
+    --areia:#F0E8DA;        /* Fundo de seção alternada */
+    --grafite:#23121C;      /* Texto — quase-preto com veio arroxeado */
+    --nevoa:#8A7A80;        /* Texto secundário / legendas */
+    --linha:rgba(224,160,32,.35); /* Filete dourado (hairline) */
+
+    /* ---- RAIO ---- */
+    --r-xs:3px; --r-sm:6px; --r-md:10px; --r-lg:16px; --r-pill:999px;
+
+    /* ---- SOMBRA (quente, baixa, sem preto duro) ---- */
+    --sh-sm:0 1px 2px rgba(90,17,36,.06), 0 2px 6px rgba(90,17,36,.05);
+    --sh-md:0 6px 18px rgba(90,17,36,.10), 0 2px 6px rgba(90,17,36,.06);
+    --sh-lg:0 18px 48px rgba(90,17,36,.14);
+
+    /* ---- ESPAÇAMENTO (base 8) ---- */
+    --s1:8px; --s2:16px; --s3:24px; --s4:32px; --s5:48px; --s6:64px; --s7:96px;
+  }
+
+  *{box-sizing:border-box}
+  body{
+    margin:0; background:var(--marfim); color:var(--grafite);
+    font-family:"Jost",system-ui,sans-serif; font-weight:300;
+    line-height:1.7; -webkit-font-smoothing:antialiased;
+  }
+  .wrap{max-width:1080px; margin:0 auto; padding:0 var(--s3)}
+
+  /* ---------- TIPOGRAFIA ---------- */
+  h1,h2,h3,h4{font-family:"Cormorant Garamond",serif; font-weight:500; color:var(--grafite); margin:0}
+  .eyebrow{
+    font-family:"Jost"; font-weight:500; font-size:.72rem; letter-spacing:.28em;
+    text-transform:uppercase; color:var(--ouro);
+  }
+  .script{font-family:"Cormorant Garamond",serif; font-style:italic; font-weight:500; color:var(--ouro)}
+
+  /* ---------- CABEÇALHO DO DOC ---------- */
+  .cover{background:var(--roxo); color:#fff; padding:var(--s7) 0 var(--s6)}
+  .cover .mark{width:64px;height:64px;margin-bottom:var(--s3)}
+  .cover h1{color:#fff; font-size:clamp(2.6rem,6vw,4.4rem); line-height:1.02; font-weight:500}
+  .cover .script{font-size:clamp(2.6rem,5vw,3.8rem); display:block; line-height:1.05}
+  .cover p{color:var(--champanhe); max-width:46ch; margin-top:var(--s3); font-weight:300}
+  .cover .rule{width:56px;height:1px;background:var(--ouro);margin:var(--s4) 0}
+
+  section{padding:var(--s7) 0; border-bottom:1px solid var(--linha)}
+  .sec-head{display:flex;align-items:baseline;gap:var(--s3);margin-bottom:var(--s5)}
+  .sec-head .num{font-family:"Cormorant Garamond";font-size:1.1rem;color:var(--ouro)}
+  .sec-head h2{font-size:clamp(1.9rem,4vw,2.9rem)}
+  .sec-lead{color:var(--nevoa);max-width:60ch;margin-top:calc(var(--s2)*-1) 0 0;margin-bottom:var(--s5)}
+
+  /* ---------- CORES ---------- */
+  .swatches{display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:var(--s3)}
+  .sw{border:1px solid var(--linha);border-radius:var(--r-md);overflow:hidden;background:#fff;box-shadow:var(--sh-sm)}
+  .sw .chip{height:118px}
+  .sw .meta{padding:var(--s2) var(--s2) var(--s3)}
+  .sw .name{font-family:"Cormorant Garamond";font-size:1.35rem;font-weight:600;line-height:1.1}
+  .sw .hex{font-size:.8rem;letter-spacing:.08em;color:var(--nevoa);text-transform:uppercase;margin-top:4px}
+  .sw .use{font-size:.82rem;color:var(--nevoa);margin-top:var(--s1);line-height:1.5}
+  .group-label{font-family:"Jost";font-weight:500;font-size:.72rem;letter-spacing:.28em;text-transform:uppercase;color:var(--nevoa);margin:var(--s5) 0 var(--s3)}
+  .group-label:first-of-type{margin-top:0}
+
+  /* ---------- TIPOGRAFIA (demo) ---------- */
+  .type-row{display:grid;grid-template-columns:150px 1fr;gap:var(--s4);padding:var(--s3) 0;border-top:1px solid var(--linha);align-items:baseline}
+  .type-row:first-child{border-top:none}
+  .type-spec{font-size:.78rem;color:var(--nevoa);letter-spacing:.04em}
+  .type-spec b{display:block;color:var(--grafite);font-weight:500;font-family:"Jost";text-transform:uppercase;letter-spacing:.16em;font-size:.68rem;margin-bottom:2px}
+  .t-h1{font-family:"Cormorant Garamond";font-size:3.6rem;font-weight:500;line-height:1.02}
+  .t-h2{font-family:"Cormorant Garamond";font-size:2.6rem;font-weight:500;line-height:1.08}
+  .t-h3{font-family:"Cormorant Garamond";font-size:1.7rem;font-weight:600;line-height:1.2}
+  .t-sub{font-family:"Cormorant Garamond";font-style:italic;font-size:1.5rem;font-weight:400;color:var(--roxo)}
+  .t-body{font-size:1rem;font-weight:300;max-width:60ch}
+  .t-small{font-size:.85rem;color:var(--nevoa)}
+  .t-eyebrow{font-family:"Jost";font-weight:500;font-size:.72rem;letter-spacing:.28em;text-transform:uppercase;color:var(--ouro)}
+
+  /* ---------- BOTÕES ---------- */
+  .btns{display:flex;flex-wrap:wrap;gap:var(--s3);align-items:center}
+  .btn{font-family:"Jost";font-weight:500;font-size:.82rem;letter-spacing:.14em;text-transform:uppercase;
+       padding:14px 30px;border-radius:var(--r-pill);border:1px solid transparent;cursor:pointer;
+       transition:.25s ease;display:inline-flex;align-items:center;gap:10px;text-decoration:none}
+  .btn-primary{background:var(--roxo);color:#fff}
+  .btn-primary:hover{background:var(--bordo)}
+  .btn-gold{background:var(--ouro);color:var(--bordo)}
+  .btn-gold:hover{background:#c98d16}
+  .btn-outline{background:transparent;color:var(--roxo);border-color:var(--roxo)}
+  .btn-outline:hover{background:var(--roxo);color:#fff}
+  .btn-ghost{background:transparent;color:var(--grafite);border-color:var(--linha)}
+  .btn-ghost:hover{border-color:var(--ouro);color:var(--roxo)}
+  .btn-wa{background:var(--roxo);color:#fff}
+  .btn-wa:hover{background:var(--bordo)}
+  .btn-wa svg{width:16px;height:16px;fill:var(--ouro)}
+  .btn-note{font-size:.8rem;color:var(--nevoa);margin-top:var(--s3);max-width:60ch}
+
+  /* ---------- INPUTS / SELETOR DE QUANTIDADE ---------- */
+  .fields{display:flex;flex-wrap:wrap;gap:var(--s5);align-items:flex-end}
+  .field{display:flex;flex-direction:column;gap:8px;min-width:240px}
+  .field label{font-family:"Jost";font-weight:500;font-size:.72rem;letter-spacing:.16em;text-transform:uppercase;color:var(--nevoa)}
+  .field input{font-family:"Jost";font-weight:300;font-size:.95rem;padding:12px 14px;border:1px solid var(--linha);
+       border-radius:var(--r-sm);background:#fff;color:var(--grafite);outline:none;transition:.2s}
+  .field input:focus{border-color:var(--ouro);box-shadow:0 0 0 3px rgba(224,160,32,.16)}
+  .qty{display:inline-flex;align-items:center;border:1px solid var(--linha);border-radius:var(--r-pill);background:#fff;overflow:hidden;width:max-content}
+  .qty button{width:44px;height:44px;border:none;background:transparent;font-size:1.2rem;color:var(--roxo);cursor:pointer;transition:.2s}
+  .qty button:hover{background:var(--areia)}
+  .qty span{min-width:44px;text-align:center;font-family:"Jost";font-weight:500}
+
+  /* ---------- CARD DE CATEGORIA ---------- */
+  .grid-3{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:var(--s3)}
+  .cat{position:relative;border-radius:var(--r-lg);overflow:hidden;aspect-ratio:3/4;box-shadow:var(--sh-md);cursor:pointer}
+  .cat .ph{position:absolute;inset:0}
+  .cat .veil{position:absolute;inset:0;background:linear-gradient(180deg,rgba(90,17,36,0) 35%,rgba(41,8,20,.82) 100%)}
+  .cat .frame{position:absolute;inset:12px;border:1px solid var(--linha);border-radius:calc(var(--r-lg) - 6px);pointer-events:none}
+  .cat .lbl{position:absolute;left:0;right:0;bottom:22px;text-align:center;color:#fff}
+  .cat .lbl .eyebrow{color:var(--champanhe);display:block;margin-bottom:4px}
+  .cat .lbl h3{font-family:"Cormorant Garamond";color:#fff;font-size:1.7rem;font-weight:500}
+  .cat:hover .frame{inset:9px}
+  .cat{transition:.3s}
+  .cat:hover{box-shadow:var(--sh-lg)}
+
+  /* ---------- CARD DE PRODUTO ---------- */
+  .prod{max-width:340px;background:#fff;border:1px solid var(--linha);border-radius:var(--r-lg);overflow:hidden;box-shadow:var(--sh-md)}
+  .prod .hero-img{position:relative;aspect-ratio:1/1}
+  .prod .hero-img .ph{position:absolute;inset:0}
+  .prod .badge{position:absolute;top:14px;left:14px;background:var(--ouro);color:var(--bordo);font-family:"Jost";
+       font-weight:600;font-size:.68rem;letter-spacing:.12em;text-transform:uppercase;padding:6px 12px;border-radius:var(--r-pill)}
+  .prod .thumbs{display:flex;gap:8px;padding:12px 16px 0}
+  .prod .thumbs .t{flex:1;aspect-ratio:1/1;border-radius:var(--r-sm);border:1px solid var(--linha);cursor:pointer;transition:.2s}
+  .prod .thumbs .t.active{outline:2px solid var(--ouro);outline-offset:1px;border-color:transparent}
+  .prod .body{padding:16px}
+  .prod .body h3{font-family:"Cormorant Garamond";font-size:1.5rem;font-weight:600;line-height:1.15}
+  .prod .price{font-family:"Jost";font-weight:500;font-size:1.15rem;color:var(--roxo);margin-top:6px}
+  .prod .price s{color:var(--nevoa);font-weight:300;font-size:.9rem;margin-right:8px}
+  .prod .row{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-top:16px}
+  .prod .btn-wa{flex:1;justify-content:center;padding:12px 16px;font-size:.74rem}
+
+  /* ---------- TOKENS: RAIO / SOMBRA / ESPAÇO ---------- */
+  .tok-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:var(--s3)}
+  .tok{border:1px solid var(--linha);border-radius:var(--r-md);padding:var(--s3);background:#fff;text-align:center}
+  .tok .demo{height:64px;background:var(--areia);margin-bottom:var(--s2);display:flex;align-items:center;justify-content:center}
+  .tok .demo.rad{background:var(--roxo)}
+  .tok .demo.sh{background:#fff;box-shadow:var(--sh-md);border:none}
+  .tok .demo.sp{background:transparent}
+  .tok .demo.sp i{display:block;background:var(--ouro);height:100%}
+  .tok .k{font-family:"Jost";font-weight:500;font-size:.8rem}
+  .tok .v{font-size:.75rem;color:var(--nevoa);margin-top:2px}
+
+  .foot{background:var(--bordo);color:var(--champanhe);padding:var(--s6) 0;text-align:center}
+  .foot .script{font-size:2.4rem;display:block;margin-bottom:var(--s1)}
+  .foot p{font-size:.85rem;opacity:.8;max-width:52ch;margin:var(--s2) auto 0}
+
+  @media(max-width:640px){
+    .type-row{grid-template-columns:1fr;gap:8px}
+    .t-h1{font-size:2.6rem}.t-h2{font-size:2rem}
+  }
+</style>
+
+<!-- ============ CAPA ============ -->
+<div class="cover">
+  <div class="wrap">
+    <svg class="mark" viewBox="0 0 100 120" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+      <path d="M50 6 L62 26 L50 44 L38 26 Z" fill="#E0A020"/>
+      <path d="M20 34 Q50 44 50 78 Q50 44 80 34 L80 50 Q50 60 50 92 Q50 60 20 50 Z" fill="#E0A020"/>
+      <path d="M34 52 Q50 60 50 86 Q50 60 66 52 L66 66 Q50 74 50 100 Q50 74 34 66 Z" fill="#E0A020"/>
+    </svg>
+    <span class="eyebrow" style="color:var(--champanhe)">Design System · v1</span>
+    <h1>Verônica Vargas<br><span class="script">Semijoias</span></h1>
+    <div class="rule"></div>
+    <p>Base visual do site institucional e de vendas. Extraída do logo e da linguagem da marca — pensada para conduzir do institucional ao pedido no WhatsApp sem ruído.</p>
+  </div>
+</div>
+
+<!-- ============ CORES ============ -->
+<section>
+  <div class="wrap">
+    <div class="sec-head"><span class="num">01</span><h2>Cores</h2></div>
+    <p class="sec-lead">Roxo ametista e ouro são o coração da marca — vêm direto do logo. O vinho dá profundidade (hero, rodapé) e os neutros quentes carregam o conteúdo institucional com respiro.</p>
+
+    <div class="group-label">Primária</div>
+    <div class="swatches">
+      <div class="sw"><div class="chip" style="background:#7A1A64"></div><div class="meta"><div class="name">Ametista</div><div class="hex">#7A1A64</div><div class="use">Cor-mãe. Fundos de marca, títulos de seção, botão principal.</div></div></div>
+      <div class="sw"><div class="chip" style="background:#E0A020"></div><div class="meta"><div class="name">Ouro Vargas</div><div class="hex">#E0A020</div><div class="use">Acento. Filetes, eyebrows, badges e detalhes de destaque.</div></div></div>
+    </div>
+
+    <div class="group-label">Secundária</div>
+    <div class="swatches">
+      <div class="sw"><div class="chip" style="background:#5A1124"></div><div class="meta"><div class="name">Vinho</div><div class="hex">#5A1124</div><div class="use">Profundidade. Overlay do hero em vídeo e rodapé.</div></div></div>
+      <div class="sw"><div class="chip" style="background:#EBD6A4"></div><div class="meta"><div class="name">Champanhe</div><div class="hex">#EBD6A4</div><div class="use">Dourado suave para texto e detalhes sobre fundo escuro.</div></div></div>
+    </div>
+
+    <div class="group-label">Suporte / Neutros</div>
+    <div class="swatches">
+      <div class="sw"><div class="chip" style="background:#FBF7F0"></div><div class="meta"><div class="name">Marfim</div><div class="hex">#FBF7F0</div><div class="use">Fundo principal das páginas.</div></div></div>
+      <div class="sw"><div class="chip" style="background:#F0E8DA"></div><div class="meta"><div class="name">Areia</div><div class="hex">#F0E8DA</div><div class="use">Fundo de seção alternada, thumbs, estados hover.</div></div></div>
+      <div class="sw"><div class="chip" style="background:#23121C"></div><div class="meta"><div class="name">Grafite</div><div class="hex">#23121C</div><div class="use">Texto principal — quase-preto com veio arroxeado.</div></div></div>
+      <div class="sw"><div class="chip" style="background:#8A7A80"></div><div class="meta"><div class="name">Névoa</div><div class="hex">#8A7A80</div><div class="use">Texto secundário, legendas e apoios.</div></div></div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ TIPOGRAFIA ============ -->
+<section style="background:var(--areia)">
+  <div class="wrap">
+    <div class="sec-head"><span class="num">02</span><h2>Tipografia</h2></div>
+    <p class="sec-lead">Duas famílias, disciplina total. <b>Cormorant Garamond</b> (serifa de alto contraste) dá o tom requintado dos títulos — e seu <i>itálico</i> serve de floreio de assinatura, ecoando o traço do logo. <b>Jost</b> (sans geométrica) garante leitura limpa no institucional e nos preços. O logo em script entra como imagem, sem virar fonte de texto.</p>
+
+    <div class="type-row"><div class="type-spec"><b>Eyebrow</b>Jost · 500 · 0.72rem · caixa alta · tracking 0.28em</div><div class="t-eyebrow">Encontre a peça certa</div></div>
+    <div class="type-row"><div class="type-spec"><b>H1 · Hero</b>Cormorant · 500 · clamp 2.6–3.6rem</div><div class="t-h1">Tem coisas que a gente não explica</div></div>
+    <div class="type-row"><div class="type-spec"><b>H1 · Itálico</b>Cormorant · itálico · destaque</div><div class="t-sub" style="font-size:2.4rem">A gente demonstra.</div></div>
+    <div class="type-row"><div class="type-spec"><b>H2 · Seção</b>Cormorant · 500 · 2.6rem</div><div class="t-h2">Por trás de cada peça</div></div>
+    <div class="type-row"><div class="type-spec"><b>H3 · Card</b>Cormorant · 600 · 1.7rem</div><div class="t-h3">Colar Gota Esmeralda</div></div>
+    <div class="type-row"><div class="type-spec"><b>Subtítulo</b>Cormorant · itálico · 1.5rem</div><div class="t-sub">Pequenos detalhes. Grandes significados.</div></div>
+    <div class="type-row"><div class="type-spec"><b>Corpo</b>Jost · 300 · 1rem · linha 1.7</div><div class="t-body">Escolho cada semijoia pensando em quem vai usar — não em vender mais uma peça. Aqui, comprar um presente ou se presentear é simples, direto e no seu tempo.</div></div>
+    <div class="type-row"><div class="type-spec"><b>Preço / UI</b>Jost · 500 · 1.15rem</div><div class="t-body" style="font-family:'Jost';font-weight:500;font-size:1.15rem;color:var(--roxo)">R$ 289,00</div></div>
+    <div class="type-row"><div class="type-spec"><b>Legenda</b>Jost · 300 · 0.85rem · névoa</div><div class="t-small">Peças em condição especial, por tempo limitado.</div></div>
+    <div class="type-row"><div class="type-spec"><b>Assinatura</b>Cormorant · itálico · floreio</div><div class="script" style="font-size:2.6rem">Verônica Vargas</div></div>
+  </div>
+</section>
+
+<!-- ============ BOTÕES ============ -->
+<section>
+  <div class="wrap">
+    <div class="sec-head"><span class="num">03</span><h2>Botões</h2></div>
+    <p class="sec-lead">Formato pílula, caixa alta e tracking largo — elegante e clicável. Um CTA principal por bloco; os demais recuam para não competir.</p>
+    <div class="btns">
+      <a class="btn btn-primary">Ver catálogo</a>
+      <a class="btn btn-gold">Ver promoções</a>
+      <a class="btn btn-outline">Sobre a marca</a>
+      <a class="btn btn-ghost">Ver mais</a>
+      <a class="btn btn-wa"><svg viewBox="0 0 24 24"><path d="M12 2a10 10 0 0 0-8.6 15l-1.4 5 5.1-1.3A10 10 0 1 0 12 2Zm5.6 14.2c-.2.6-1.4 1.2-1.9 1.2-.5.1-1.1.1-1.8-.1-.4-.1-1-.3-1.6-.6-2.9-1.3-4.8-4.2-4.9-4.4-.1-.2-1.2-1.5-1.2-2.9 0-1.3.7-2 1-2.3.2-.3.5-.3.7-.3h.5c.2 0 .4 0 .6.5l.8 1.9c.1.2.1.3 0 .5l-.4.6c-.2.2-.3.4-.1.6.2.4.9 1.4 1.9 2.3 1.2 1.1 2.2 1.4 2.5 1.5.2.1.4.1.5-.1l.7-.9c.2-.2.3-.2.6-.1l1.8.9c.3.1.4.2.5.3.1.2.1.8-.1 1.4Z"/></svg>Pedir pelo WhatsApp</a>
+    </div>
+    <p class="btn-note">O botão do WhatsApp mantém o roxo da marca com o ícone em ouro — reconhecível como ação de pedido, mas sem quebrar a paleta com o verde padrão. Estado <i>hover</i>: escurece para o vinho.</p>
+  </div>
+</section>
+
+<!-- ============ INPUTS ============ -->
+<section style="background:var(--areia)">
+  <div class="wrap">
+    <div class="sec-head"><span class="num">04</span><h2>Campos & Seletor de quantidade</h2></div>
+    <p class="sec-lead">O seletor de quantidade é o único "formulário" da venda — precisa ser óbvio ao toque. Foco sempre marcado em ouro para acessibilidade.</p>
+    <div class="fields">
+      <div class="field">
+        <label>Buscar peça</label>
+        <input type="text" placeholder="Ex.: colar, brinco de cristal…">
+      </div>
+      <div class="field">
+        <label>Quantidade</label>
+        <div class="qty"><button aria-label="Diminuir">–</button><span>1</span><button aria-label="Aumentar">+</button></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ CARD DE CATEGORIA ============ -->
+<section>
+  <div class="wrap">
+    <div class="sec-head"><span class="num">05</span><h2>Card de categoria</h2></div>
+    <p class="sec-lead">Formato retrato com moldura de filete dourado e véu vinho na base — a foto respira, o rótulo em serifa fica legível. Ao clicar, entra no catálogo já filtrado. (Imagens abaixo são placeholders.)</p>
+    <div class="grid-3">
+      <div class="cat"><div class="ph" style="background:linear-gradient(135deg,#7A1A64,#5A1124)"></div><div class="veil"></div><div class="frame"></div><div class="lbl"><span class="eyebrow">Coleção</span><h3>Colares</h3></div></div>
+      <div class="cat"><div class="ph" style="background:linear-gradient(135deg,#8f2a72,#7A1A64)"></div><div class="veil"></div><div class="frame"></div><div class="lbl"><span class="eyebrow">Coleção</span><h3>Brincos</h3></div></div>
+      <div class="cat"><div class="ph" style="background:linear-gradient(135deg,#5A1124,#3a0b18)"></div><div class="veil"></div><div class="frame"></div><div class="lbl"><span class="eyebrow">Coleção</span><h3>Broches</h3></div></div>
+    </div>
+    <p class="btn-note">Categorias: Anéis · Colares · Brincos · Pulseiras · Broches · Conjuntos.</p>
+  </div>
+</section>
+
+<!-- ============ CARD DE PRODUTO ============ -->
+<section style="background:var(--areia)">
+  <div class="wrap">
+    <div class="sec-head"><span class="num">06</span><h2>Card de produto</h2></div>
+    <p class="sec-lead">Toda a compra acontece aqui — sem página de detalhe. Foto em destaque, até 3 miniaturas para trocar a principal, nome, valor, seletor de quantidade e o botão que abre o WhatsApp com a mensagem pronta.</p>
+    <div class="prod">
+      <div class="hero-img">
+        <div class="ph" style="background:radial-gradient(circle at 50% 40%,#8f2a72,#5A1124)"></div>
+        <span class="badge">−25%</span>
+      </div>
+      <div class="thumbs">
+        <div class="t active" style="background:radial-gradient(circle at 50% 40%,#8f2a72,#5A1124)"></div>
+        <div class="t" style="background:linear-gradient(135deg,#7A1A64,#3a0b18)"></div>
+        <div class="t" style="background:linear-gradient(135deg,#E0A020,#5A1124)"></div>
+        <div class="t" style="background:linear-gradient(135deg,#EBD6A4,#7A1A64)"></div>
+      </div>
+      <div class="body">
+        <h3>Conjunto Gota Esmeralda</h3>
+        <div class="price"><s>R$ 389,00</s> R$ 289,00</div>
+        <div class="row">
+          <div class="qty"><button aria-label="Diminuir">–</button><span>1</span><button aria-label="Aumentar">+</button></div>
+        </div>
+        <div class="row">
+          <a class="btn btn-wa"><svg viewBox="0 0 24 24"><path d="M12 2a10 10 0 0 0-8.6 15l-1.4 5 5.1-1.3A10 10 0 1 0 12 2Zm5.6 14.2c-.2.6-1.4 1.2-1.9 1.2-.5.1-1.1.1-1.8-.1-.4-.1-1-.3-1.6-.6-2.9-1.3-4.8-4.2-4.9-4.4-.1-.2-1.2-1.5-1.2-2.9 0-1.3.7-2 1-2.3.2-.3.5-.3.7-.3h.5c.2 0 .4 0 .6.5l.8 1.9c.1.2.1.3 0 .5l-.4.6c-.2.2-.3.4-.1.6.2.4.9 1.4 1.9 2.3 1.2 1.1 2.2 1.4 2.5 1.5.2.1.4.1.5-.1l.7-.9c.2-.2.3-.2.6-.1l1.8.9c.3.1.4.2.5.3.1.2.1.8-.1 1.4Z"/></svg>Pedir pelo WhatsApp</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ TOKENS ============ -->
+<section>
+  <div class="wrap">
+    <div class="sec-head"><span class="num">07</span><h2>Raio · Sombra · Espaço</h2></div>
+    <p class="sec-lead">Raios contidos (nada de bolhas), sombras quentes e baixas com tom de vinho — nunca preto duro — e uma grade de espaçamento base 8 que sustenta o respiro do layout.</p>
+
+    <div class="group-label">Arredondamento</div>
+    <div class="tok-grid">
+      <div class="tok"><div class="demo rad" style="border-radius:3px"></div><div class="k">xs</div><div class="v">3px · tags</div></div>
+      <div class="tok"><div class="demo rad" style="border-radius:6px"></div><div class="k">sm</div><div class="v">6px · inputs</div></div>
+      <div class="tok"><div class="demo rad" style="border-radius:10px"></div><div class="k">md</div><div class="v">10px · swatch</div></div>
+      <div class="tok"><div class="demo rad" style="border-radius:16px"></div><div class="k">lg</div><div class="v">16px · cards</div></div>
+      <div class="tok"><div class="demo rad" style="border-radius:999px"></div><div class="k">pill</div><div class="v">botões · qtd</div></div>
+    </div>
+
+    <div class="group-label">Sombra</div>
+    <div class="tok-grid">
+      <div class="tok"><div class="demo sh" style="box-shadow:var(--sh-sm)"></div><div class="k">sm</div><div class="v">apoios sutis</div></div>
+      <div class="tok"><div class="demo sh" style="box-shadow:var(--sh-md)"></div><div class="k">md</div><div class="v">cards</div></div>
+      <div class="tok"><div class="demo sh" style="box-shadow:var(--sh-lg)"></div><div class="k">lg</div><div class="v">hover / destaque</div></div>
+    </div>
+
+    <div class="group-label">Espaçamento (base 8)</div>
+    <div class="tok-grid">
+      <div class="tok"><div class="demo sp"><i style="width:8px"></i></div><div class="k">s1</div><div class="v">8px</div></div>
+      <div class="tok"><div class="demo sp"><i style="width:16px"></i></div><div class="k">s2</div><div class="v">16px</div></div>
+      <div class="tok"><div class="demo sp"><i style="width:24px"></i></div><div class="k">s3</div><div class="v">24px</div></div>
+      <div class="tok"><div class="demo sp"><i style="width:32px"></i></div><div class="k">s4</div><div class="v">32px</div></div>
+      <div class="tok"><div class="demo sp"><i style="width:48px"></i></div><div class="k">s5</div><div class="v">48px</div></div>
+      <div class="tok"><div class="demo sp"><i style="width:64px"></i></div><div class="k">s6/s7</div><div class="v">64–96px · seções</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ RODAPÉ ============ -->
+<div class="foot">
+  <div class="wrap">
+    <span class="script">Verônica Vargas</span>
+    <span class="eyebrow" style="color:var(--ouro)">Atendimento direto com Verônica</span>
+    <p>Base do Design System · Fonte da paleta e tipografia para o site institucional e de vendas. Próximo passo: aplicar sobre a estrutura de dobras já definida.</p>
+  </div>
+</div>
