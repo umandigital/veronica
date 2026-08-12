@@ -151,16 +151,31 @@ create policy "midia gestao autenticada"
   on storage.objects for update to authenticated using (bucket_id = 'midia');
 
 -- ---------------------------------------------------------------------
--- 5. CONTEÚDO INICIAL — as 6 categorias da copy
+-- 5. CATEGORIAS DE PRODUTO
 -- ---------------------------------------------------------------------
-insert into public.categorias (id, nome, eyebrow, altura, visivel, ordem) values
-  ('c1','Anéis',    'Coleção','media',true,0),
-  ('c2','Colares',  'Coleção','alta', true,1),
-  ('c3','Brincos',  'Coleção','curta',true,2),
-  ('c4','Pulseiras','Coleção','alta', true,3),
-  ('c5','Broches',  'Coleção','curta',true,4),
-  ('c6','Conjuntos','Coleção','media',true,5)
+insert into public.categorias (id, nome, altura, visivel, ordem) values
+  ('c1','Anéis',      'media', true, 0),
+  ('c2','Brincos',    'alta',  true, 1),
+  ('c3','Colares',    'curta', true, 2),
+  ('c4','Pulseiras',  'alta',  true, 3),
+  ('c5','Braceletes', 'curta', true, 4),
+  ('c6','Broches',    'media', true, 5)
 on conflict (id) do nothing;
+
+-- Quem rodou uma versão anterior deste arquivo ficou com outra lista de
+-- categorias; este bloco acerta nome e ordem sem tocar em imagens ou
+-- visibilidade já ajustadas no painel.
+--
+-- ATENÇÃO: c2 e c3 trocaram de nome entre si (Colares e Brincos) e c5
+-- deixou de ser Broches. Se você já tinha subido fotos de categoria, elas
+-- seguem presas ao id antigo e podem acabar na categoria errada — confira
+-- em Categorias, no painel, e troque as imagens que ficarem trocadas.
+update public.categorias set nome = v.nome, altura = v.altura, ordem = v.ordem
+  from (values
+    ('c1','Anéis','media',0), ('c2','Brincos','alta',1), ('c3','Colares','curta',2),
+    ('c4','Pulseiras','alta',3), ('c5','Braceletes','curta',4), ('c6','Broches','media',5)
+  ) as v(id, nome, altura, ordem)
+ where public.categorias.id = v.id;
 
 insert into public.config (id, valor) values (1, '{}'::jsonb)
 on conflict (id) do nothing;

@@ -413,7 +413,7 @@ a{color:inherit}
 /* =====================================================================
    3. CATEGORIAS — cards assimétricos
    ===================================================================== */
-.cat-grid{display:grid; grid-template-columns:repeat(2,1fr); gap:var(--s2); align-items:start}
+.cat-grid{display:grid; grid-template-columns:repeat(2,1fr); gap:var(--s2); align-items:start; list-style:none; margin:0; padding:0}
 .cat{
   position:relative; display:block; width:100%; border:0; padding:0; text-align:left;
   border-radius:var(--r-lg); overflow:hidden; box-shadow:var(--sh-md); cursor:pointer;
@@ -433,21 +433,48 @@ a{color:inherit}
 .cat .count{position:absolute; top:14px; right:14px; background:rgba(41,8,20,.62); border:1px solid var(--linha); color:var(--champanhe);
   font-size:.62rem; letter-spacing:.14em; text-transform:uppercase; padding:5px 10px; border-radius:var(--r-pill)}
 
-/* Assimetria — alturas e deslocamentos por posição */
-.cat--curta{--ar:4/4.2}
-.cat--media{--ar:3/4}
-.cat--alta{--ar:3/4.9}
+/* Assimetria por altura de card, sem deslocamento vertical: os cards
+   variam de proporção mas continuam alinhados no topo de cada linha,
+   o que evita os vãos que o translateY abria entre as colunas. */
+.cat--curta{--ar:1/1.12}
+.cat--media{--ar:1/1.32}
+.cat--alta{--ar:1/1.52}
+
 @media (min-width:768px){
   .cat-grid{grid-template-columns:repeat(3,1fr); gap:var(--s3)}
-  .cat-grid > *:nth-child(3n+2){transform:translateY(var(--s5))}
-  .cat-grid > *:nth-child(3n+3){transform:translateY(calc(var(--s3) * -1))}
-  .cat-grid > *:nth-child(3n+2):hover{transform:translateY(calc(var(--s5) - 4px))}
-  .cat-grid > *:nth-child(3n+3):hover{transform:translateY(calc(var(--s3) * -1 - 4px))}
-  .cat-grid{padding-bottom:var(--s5)}
+  /* leve escalonamento entre colunas, bem menor que a diferença de altura */
+  .cat-grid > *:nth-child(3n+2){margin-top:var(--s3)}
+  .cat-grid > *:nth-child(3n+3){margin-top:calc(var(--s3) * 2)}
 }
-@media (min-width:1024px){
-  .cat--curta{--ar:4/3.9}
-  .cat--alta{--ar:3/5.2}
+@media (min-width:1024px){ .cat-grid{gap:var(--s4)} }
+
+/* ---- entrada dos cards ---- */
+.cat-anima{opacity:0; transform:translateY(34px) scale(.94); filter:blur(6px)}
+.cat-anima.is-in{
+  opacity:1; transform:none; filter:none;
+  transition:opacity .8s var(--ease), transform .9s var(--ease), filter .8s var(--ease);
+  transition-delay:var(--d,0ms);
+}
+/* a moldura dourada se desenha depois que o card assenta */
+.cat-anima .frame{opacity:0; transform:scale(1.06); transition:opacity .6s ease, transform .7s var(--ease)}
+.cat-anima.is-in .frame{opacity:1; transform:none; transition-delay:calc(var(--d,0ms) + 320ms)}
+.cat-anima .lbl{opacity:0; transform:translateY(12px); transition:opacity .6s ease, transform .7s var(--ease)}
+.cat-anima.is-in .lbl{opacity:1; transform:none; transition-delay:calc(var(--d,0ms) + 220ms)}
+
+@media (prefers-reduced-motion:reduce){
+  .cat-anima,.cat-anima .frame,.cat-anima .lbl{opacity:1 !important; transform:none !important; filter:none !important; transition:none !important}
+}
+
+/* ---- barra do catálogo dentro da dobra de categorias ---- */
+.catalogo-barra{
+  display:flex; flex-direction:column; align-items:center; gap:var(--s3); margin-bottom:var(--s4);
+}
+.catalogo-barra .filters{margin-bottom:0}
+#voltarCategorias{align-self:center}
+@media (min-width:900px){
+  .catalogo-barra{flex-direction:row; justify-content:space-between; align-items:center; gap:var(--s3)}
+  .catalogo-barra .filters{justify-content:flex-end; flex:1}
+  #voltarCategorias{align-self:auto; flex:none}
 }
 
 /* =====================================================================
@@ -855,28 +882,24 @@ a{color:inherit}
   <section class="section section--areia" id="categorias" aria-labelledby="cat-title">
     <div class="wrap">
       <div class="sec-head sec-head--center">
-        <span class="eyebrow reveal">Coleções</span>
-        <h2 id="cat-title" class="reveal" style="--d:80ms">Encontre a peça certa para o momento certo</h2>
+        <h2 id="cat-title" class="reveal">Encontre a peça certa para o momento certo</h2>
         <hr class="rule rule-draw rule--center" aria-hidden="true">
       </div>
+
+      <!-- Vitrine das categorias -->
       <ul class="cat-grid" id="catGrid"></ul>
-    </div>
-  </section>
 
-  <!-- =================================================================
-       3b. CATÁLOGO — destino de quem clica numa categoria
-       ================================================================= -->
-  <section class="section section--marfim" id="catalogo" aria-labelledby="catalogo-title">
-    <div class="wrap">
-      <div class="sec-head sec-head--center">
-        <span class="eyebrow reveal">Catálogo</span>
-        <h2 id="catalogo-title" class="reveal" style="--d:80ms">Todas as peças</h2>
-        <hr class="rule rule-draw rule--center" aria-hidden="true">
+      <!-- Catálogo da categoria escolhida, no lugar da vitrine -->
+      <div id="catalogo" hidden>
+        <div class="catalogo-barra">
+          <button class="btn btn-ghost btn-sm" type="button" id="voltarCategorias">
+            <span aria-hidden="true">←</span> Todas as categorias
+          </button>
+          <div class="filters" id="filtrosCatalogo" role="group" aria-label="Trocar de categoria"></div>
+        </div>
+        <div class="prod-grid" id="gridCatalogo"></div>
+        <p class="sr-only" id="statusCatalogo" role="status" aria-live="polite"></p>
       </div>
-
-      <div class="filters" id="filtrosCatalogo" role="group" aria-label="Filtrar o catálogo por categoria"></div>
-      <div class="prod-grid" id="gridCatalogo"></div>
-      <p class="sr-only" id="statusCatalogo" role="status" aria-live="polite"></p>
     </div>
   </section>
 
@@ -1120,21 +1143,21 @@ a{color:inherit}
     ],
     /* As 6 categorias vêm da copy. "altura" controla a assimetria dos cards. */
     categorias: [
-      { id: 'c1', nome: 'Anéis',     eyebrow: 'Coleção', altura: 'media', imagem: '', visivel: true },
-      { id: 'c2', nome: 'Colares',   eyebrow: 'Coleção', altura: 'alta',  imagem: '', visivel: true },
-      { id: 'c3', nome: 'Brincos',   eyebrow: 'Coleção', altura: 'curta', imagem: '', visivel: true },
-      { id: 'c4', nome: 'Pulseiras', eyebrow: 'Coleção', altura: 'alta',  imagem: '', visivel: true },
-      { id: 'c5', nome: 'Broches',   eyebrow: 'Coleção', altura: 'curta', imagem: '', visivel: true },
-      { id: 'c6', nome: 'Conjuntos', eyebrow: 'Coleção', altura: 'media', imagem: '', visivel: true }
+      { id: 'c1', nome: 'Anéis',      altura: 'media', imagem: '', visivel: true },
+      { id: 'c2', nome: 'Brincos',    altura: 'alta',  imagem: '', visivel: true },
+      { id: 'c3', nome: 'Colares',    altura: 'curta', imagem: '', visivel: true },
+      { id: 'c4', nome: 'Pulseiras',  altura: 'alta',  imagem: '', visivel: true },
+      { id: 'c5', nome: 'Braceletes', altura: 'curta', imagem: '', visivel: true },
+      { id: 'c6', nome: 'Broches',    altura: 'media', imagem: '', visivel: true }
     ],
     produtos: [
-      { id: 'p1', nome: 'Conjunto Gota Esmeralda', categoria: 'c6', preco: 289, precoDe: 389, imagens: [], promocao: true,  visivel: true },
-      { id: 'p2', nome: 'Colar Ponto de Luz',      categoria: 'c2', preco: 179, precoDe: 229, imagens: [], promocao: true,  visivel: true },
-      { id: 'p3', nome: 'Brinco Ear Cuff Cristal', categoria: 'c3', preco: 129, precoDe: 0,   imagens: [], promocao: false, visivel: true },
+      { id: 'p1', nome: 'Colar Gota Esmeralda', categoria: 'c3', preco: 289, precoDe: 389, imagens: [], promocao: true,  visivel: true },
+      { id: 'p2', nome: 'Colar Ponto de Luz',      categoria: 'c3', preco: 179, precoDe: 229, imagens: [], promocao: true,  visivel: true },
+      { id: 'p3', nome: 'Brinco Ear Cuff Cristal', categoria: 'c2', preco: 129, precoDe: 0,   imagens: [], promocao: false, visivel: true },
       { id: 'p4', nome: 'Anel Solitário Zircônia', categoria: 'c1', preco: 149, precoDe: 199, imagens: [], promocao: true,  visivel: true },
-      { id: 'p5', nome: 'Pulseira Elos Dourados',  categoria: 'c4', preco: 199, precoDe: 0,   imagens: [], promocao: false, visivel: true },
-      { id: 'p6', nome: 'Broche Camélia Vintage',  categoria: 'c5', preco: 239, precoDe: 319, imagens: [], promocao: true,  visivel: true },
-      { id: 'p7', nome: 'Colar Choker Veneziana',  categoria: 'c2', preco: 159, precoDe: 0,   imagens: [], promocao: false, visivel: true },
+      { id: 'p5', nome: 'Bracelete Elos Dourados', categoria: 'c5', preco: 199, precoDe: 0,   imagens: [], promocao: false, visivel: true },
+      { id: 'p6', nome: 'Broche Camélia Vintage',  categoria: 'c6', preco: 239, precoDe: 319, imagens: [], promocao: true,  visivel: true },
+      { id: 'p7', nome: 'Colar Choker Veneziana',  categoria: 'c3', preco: 159, precoDe: 0,   imagens: [], promocao: false, visivel: true },
       { id: 'p8', nome: 'Anel Aparador Filete',    categoria: 'c1', preco: 99,  precoDe: 0,   imagens: [], promocao: false, visivel: true }
     ]
   };
@@ -1467,25 +1490,22 @@ a{color:inherit}
       var img = c.imagem || placeholder(c.id + c.nome, '');
       var qtd = store.produtos.filter(function (p) { return p.categoria === c.id && p.visivel !== false; }).length;
       return '' +
-        '<li class="reveal-scale" style="--d:' + (i * 90) + 'ms">' +
-          '<a class="cat cat--' + esc(c.altura || 'media') + '" href="#catalogo" data-cat="' + esc(c.id) + '" ' +
+        '<li class="cat-anima" style="--d:' + (i * 110) + 'ms">' +
+          '<a class="cat cat--' + esc(c.altura || 'media') + '" href="#categorias" data-cat="' + esc(c.id) + '" ' +
              'aria-label="Ver as peças da categoria ' + esc(c.nome) + ' no catálogo">' +
             '<img src="' + esc(img) + '" alt="Peças da categoria ' + esc(c.nome) + '" loading="lazy" decoding="async" width="600" height="750">' +
             '<span class="veil" aria-hidden="true"></span>' +
             '<span class="frame" aria-hidden="true"></span>' +
             (qtd ? '<span class="count">' + qtd + (qtd > 1 ? ' peças' : ' peça') + '</span>' : '') +
-            '<span class="lbl">' +
-              '<span class="eyebrow">' + esc(c.eyebrow || 'Coleção') + '</span>' +
-              '<h3>' + esc(c.nome) + '</h3>' +
-            '</span>' +
+            '<span class="lbl"><h3>' + esc(c.nome) + '</h3></span>' +
           '</a>' +
         '</li>';
     }).join('');
 
-    /* o href já rola até o catálogo; aqui só aplicamos o filtro da categoria */
     $$('.cat', grid).forEach(function (a) {
-      a.addEventListener('click', function () {
-        setFiltro('catalogo', a.getAttribute('data-cat'), true);
+      a.addEventListener('click', function (ev) {
+        ev.preventDefault();
+        abrirCatalogo(a.getAttribute('data-cat'));
       });
     });
 
@@ -1563,9 +1583,47 @@ a{color:inherit}
     }, 200);
   }
 
+  var TITULO_CATEGORIAS = '';
+
+  function abrirCatalogo(idCategoria) {
+    var painel = $('#catalogo');
+    var vitrine = $('#catGrid');
+    if (!painel) return;
+
+    if (!TITULO_CATEGORIAS) TITULO_CATEGORIAS = $('#cat-title').textContent;
+
+    vitrine.hidden = true;
+    painel.hidden = false;
+    setFiltro('catalogo', idCategoria || TODAS, true);
+    posicionarSecao();
+    /* o foco vai para o botão de volta, para quem navega por teclado */
+    var voltar = $('#voltarCategorias');
+    if (voltar) setTimeout(function () { voltar.focus({ preventScroll: true }); }, 320);
+  }
+
+  function fecharCatalogo() {
+    var painel = $('#catalogo');
+    var vitrine = $('#catGrid');
+    painel.hidden = true;
+    vitrine.hidden = false;
+    $('#cat-title').textContent = TITULO_CATEGORIAS || $('#cat-title').textContent;
+    /* os cards entram de novo, como na primeira visita */
+    $$('.cat-anima', vitrine).forEach(function (el) { el.classList.remove('is-in'); });
+    requestAnimationFrame(function () { observe(vitrine); });
+    posicionarSecao();
+  }
+
+  function posicionarSecao() {
+    var alvo = $('#categorias');
+    if (!alvo) return;
+    var topo = alvo.getBoundingClientRect().top + window.scrollY - (parseInt(getComputedStyle(document.documentElement).getPropertyValue('--header-h')) || 72) - 16;
+    window.scrollTo({ top: topo, behavior: reduceMotion ? 'auto' : 'smooth' });
+  }
+
   function tituloCatalogo() {
-    var el = $('#catalogo-title');
-    if (!el) return;
+    var el = $('#cat-title');
+    if (!el || $('#catalogo').hidden) return;
+    if (!TITULO_CATEGORIAS) TITULO_CATEGORIAS = el.textContent;
     var f = vitrines.catalogo.filtro;
     el.textContent = f === TODAS ? 'Todas as peças' : (categoriaNome(f) || 'Todas as peças');
   }
@@ -1987,7 +2045,7 @@ a{color:inherit}
   }
 
   function observe(root) {
-    var alvos = $$('.reveal,.reveal-left,.reveal-scale,.reveal-curtain,.rule-draw,.line-mask', root || document);
+    var alvos = $$('.reveal,.reveal-left,.reveal-scale,.reveal-curtain,.rule-draw,.line-mask,.cat-anima', root || document);
     alvos.forEach(function (el) {
       if (el.classList.contains('is-in')) return;
       if (io) io.observe(el); else el.classList.add('is-in');
@@ -3130,6 +3188,9 @@ a{color:inherit}
     initAdmin();
     initParallax();
     detectarAssets();
+
+    var voltar = $('#voltarCategorias');
+    if (voltar) voltar.addEventListener('click', fecharCatalogo);
 
     /* Conectado: o Supabase é a fonte do conteúdo; o cache local só evita
        a tela vazia enquanto a resposta não chega. */
