@@ -166,7 +166,10 @@ a{color:inherit}
 .rule-draw{width:0; transition:width .9s var(--ease) .2s}
 .rule-draw.is-in{width:56px}
 /* Título linha a linha */
-.line-mask{display:block; overflow:hidden}
+/* O overflow que esconde a linha antes de entrar também cortava as
+   descendentes (g, p, ç); o padding devolve o espaço e a margem negativa
+   evita que ele afaste as linhas. */
+.line-mask{display:block; overflow:hidden; padding-bottom:.2em; margin-bottom:-.2em}
 .line-mask > span{display:block; transform:translateY(115%); transition:transform 1.05s var(--ease); transition-delay:var(--d,0ms)}
 .is-in .line-mask > span,.line-mask.is-in > span{transform:none}
 
@@ -309,12 +312,9 @@ a{color:inherit}
 @keyframes dust{0%{transform:translate3d(0,0,0)} 100%{transform:translate3d(0,-40px,0)}}
 
 .hero-inner{position:relative; z-index:1; text-align:center; max-width:900px; margin:0 auto}
-.hero h1{color:#fff; font-size:clamp(2.3rem,8.2vw,4.4rem); font-weight:500; line-height:1.04; text-wrap:balance}
+.hero h1{color:#fff; font-size:clamp(2.3rem,8.2vw,4.4rem); font-weight:500; line-height:1.14; text-wrap:balance}
 .hero h1 em{font-style:italic; color:var(--champanhe); display:block}
-.hero-heart{
-  display:block; margin:var(--s4) auto; color:var(--ouro); font-size:1rem; letter-spacing:.5em;
-  font-family:"Cormorant Garamond",Georgia,serif;
-}
+.hero .rule{margin:var(--s4) auto}
 .hero-sub{
   font-family:"Cormorant Garamond",Georgia,serif; font-style:italic; font-weight:400;
   font-size:clamp(1.25rem,4.4vw,1.9rem); color:var(--champanhe); line-height:1.35;
@@ -812,7 +812,7 @@ a{color:inherit}
           <span class="line-mask"><span><em>A gente demonstra.</em></span></span>
         </h1>
 
-        <span class="hero-heart reveal" style="--d:600ms" aria-hidden="true">— ♡ —</span>
+        <hr class="rule rule--center rule-draw reveal" style="--d:600ms" aria-hidden="true">
 
         <p class="hero-sub reveal" style="--d:750ms">Pequenos detalhes. Grandes significados.</p>
 
