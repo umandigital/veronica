@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Página não encontrada — Verônica Vargas Semijoias</title>
+<meta name="robots" content="noindex">
+<style>
+  :root{
+    --roxo:#7A1A64; --ouro:#E0A020; --bordo:#5A1124;
+    --champanhe:#EBD6A4; --linha:rgba(224,160,32,.35);
+  }
+  *{box-sizing:border-box}
+  body{
+    margin:0; min-height:100svh; display:flex; align-items:center; justify-content:center;
+    padding:32px 24px; text-align:center;
+    background:radial-gradient(120% 90% at 20% 15%, #8f2a72 0%, var(--roxo) 38%, var(--bordo) 72%, #3a0b18 100%);
+    color:#fff; font-family:"Jost",system-ui,-apple-system,"Segoe UI",sans-serif; font-weight:300;
+    line-height:1.7; -webkit-font-smoothing:antialiased;
+  }
+  .caixa{max-width:34rem; display:flex; flex-direction:column; align-items:center; gap:24px}
+  svg{width:56px; height:56px}
+  .eyebrow{
+    font-size:.72rem; font-weight:500; letter-spacing:.28em; text-transform:uppercase;
+    color:var(--champanhe);
+  }
+  h1{
+    font-family:"Cormorant Garamond",Georgia,"Times New Roman",serif; font-weight:500;
+    font-size:clamp(2rem,7vw,3rem); line-height:1.05; margin:0; text-wrap:balance;
+  }
+  h1 em{font-style:italic; color:var(--champanhe); display:block}
+  p{margin:0; color:var(--champanhe); max-width:42ch}
+  hr{width:56px; height:1px; background:var(--ouro); border:0; margin:0}
+  a{
+    display:inline-flex; align-items:center; justify-content:center; min-height:48px;
+    padding:14px 30px; border-radius:999px; background:var(--ouro); color:var(--bordo);
+    text-decoration:none; font-weight:500; font-size:.82rem; letter-spacing:.14em;
+    text-transform:uppercase; transition:background .25s ease, transform .25s ease;
+  }
+  a:hover{background:#c98d16; transform:translateY(-2px)}
+  a:focus-visible{outline:3px solid var(--champanhe); outline-offset:3px}
+  @media (prefers-reduced-motion:reduce){ a{transition:none} }
+</style>
+</head>
+<body>
+  <main class="caixa">
+    <svg viewBox="0 0 100 100" aria-hidden="true" focusable="false">
+      <path d="M50 4 C57 17 59 26 50 38 C41 26 43 17 50 4 Z" fill="#E0A020"/>
+      <path d="M31 13 C31 40 37 53 50 64 C63 53 69 40 69 13 L60 13 C60 36 56 45 50 52 C44 45 40 36 40 13 Z" fill="#E0A020"/>
+      <path d="M16 26 C16 57 27 75 50 93 C73 75 84 57 84 26 L74 26 C74 53 65 67 50 81 C35 67 26 53 26 26 Z" fill="#E0A020"/>
+    </svg>
+    <span class="eyebrow">Erro 404</span>
+    <h1>Esta peça saiu da vitrine.<em>Mas o catálogo continua aqui.</em></h1>
+    <hr>
+    <p>O endereço que você abriu não existe mais — ou nunca existiu. Volte para o catálogo e escolha com calma.</p>
+    <a href="/">Ver catálogo</a>
+  </main>
+</body>
+</html>
