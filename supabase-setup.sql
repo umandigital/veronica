@@ -166,12 +166,37 @@ insert into public.config (id, valor) values (1, '{}'::jsonb)
 on conflict (id) do nothing;
 
 -- ---------------------------------------------------------------------
--- 6. PROMOVER O PRIMEIRO ADMIN
---    Rode DEPOIS de criar o usuário em Authentication → Users.
+-- 6. PERFIS DE QUEM JÁ EXISTIA
+--    O gatilho acima só age em usuários criados depois dele. Este bloco
+--    cria o perfil de quem já estava em Authentication → Users, de modo
+--    que a ordem dos passos deixa de importar.
+-- ---------------------------------------------------------------------
+insert into public.perfis (id, email, nome, papel)
+select u.id,
+       u.email,
+       coalesce(u.raw_user_meta_data->>'nome', split_part(u.email, '@', 1)),
+       coalesce(u.raw_user_meta_data->>'papel', 'editor')
+  from auth.users u
+ where not exists (select 1 from public.perfis p where p.id = u.id)
+on conflict (id) do nothing;
+
+-- ---------------------------------------------------------------------
+-- 7. PROMOVER O PRIMEIRO ADMIN
+--    Não faz nada se o usuário ainda não existir: crie-o em
+--    Authentication → Users e rode este arquivo de novo.
 -- ---------------------------------------------------------------------
 update public.perfis
    set papel = 'admin', nome = 'UMAN'
  where email = 'uman.agencia@gmail.com';
 
--- Conferência rápida:
--- select email, nome, papel from public.perfis;
+-- ---------------------------------------------------------------------
+-- CONFERÊNCIA — o resultado aparece na aba Results
+-- ---------------------------------------------------------------------
+select
+  (select count(*) from public.categorias)              as categorias,
+  (select count(*) from public.produtos)                as produtos,
+  (select count(*) from public.perfis)                  as usuarios,
+  (select count(*) from public.perfis where papel='admin') as admins,
+  (select count(*) from storage.buckets where id='midia')  as bucket_midia;
+
+-- Rodar este arquivo mais de uma vez é seguro: nada é duplicado nem perdido.
