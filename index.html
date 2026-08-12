@@ -529,6 +529,27 @@ a{color:inherit}
 .footer-links a svg{width:18px; height:18px; fill:var(--ouro); flex:none; transition:fill .25s ease}
 .footer-links a:hover{background:var(--ouro); color:var(--bordo); border-color:var(--ouro); transform:translateY(-2px)}
 .footer-links a:hover svg{fill:var(--bordo)}
+/* Assinatura do estúdio */
+.signature{margin-top:var(--s6); display:flex; flex-direction:column; align-items:center; gap:var(--s2)}
+.signature-label{font-family:"Jost",sans-serif; font-weight:400; font-size:.68rem; letter-spacing:.28em; text-transform:uppercase; color:var(--champanhe); opacity:.75}
+.signature-mark{
+  display:inline-flex; align-items:center; justify-content:center; min-height:var(--tap); padding:6px 14px;
+  border-radius:var(--r-sm); text-decoration:none; opacity:.85;
+  transition:opacity .25s ease, transform .25s var(--ease);
+}
+.signature-mark:hover{opacity:1; transform:translateY(-2px)}
+.signature-mark img{height:28px; width:auto; max-width:180px; object-fit:contain}
+/* Wordmark tipográfico usado enquanto o arquivo do logo não é enviado */
+.signature-word{
+  font-family:"Jost",sans-serif; font-weight:500; font-size:1.05rem; letter-spacing:.42em;
+  text-transform:uppercase; color:var(--champanhe); padding-left:.42em;
+}
+
+/* Logos enviados pelo painel substituem os monogramas padrão */
+.brand img.brand-logo{height:34px; width:auto; max-width:190px; object-fit:contain}
+@media (min-width:768px){ .brand img.brand-logo{height:40px; max-width:230px} }
+.site-footer img.footer-logo{height:60px; width:auto; max-width:260px; object-fit:contain; margin:0 auto var(--s2)}
+
 .footer-note{margin-top:var(--s5); padding-top:var(--s3); border-top:1px solid rgba(235,214,164,.2); font-size:.78rem; opacity:.85; display:flex; flex-direction:column; gap:var(--s1); align-items:center}
 .footer-note a{color:var(--champanhe); text-decoration:underline; text-underline-offset:3px; min-height:var(--tap); display:inline-flex; align-items:center}
 .footer-note a:hover{color:var(--ouro)}
@@ -645,8 +666,8 @@ a{color:inherit}
      =================================================================== -->
 <header class="site-header" id="siteHeader">
   <div class="wrap header-inner">
-    <a class="brand" href="#hero" aria-label="Verônica Vargas Semijoias — ir para o início">
-      <svg viewBox="0 0 100 120" aria-hidden="true" focusable="false">
+    <a class="brand" id="brandLink" href="#hero" aria-label="Verônica Vargas Semijoias — ir para o início">
+      <svg class="brand-mark" viewBox="0 0 100 120" aria-hidden="true" focusable="false">
         <path d="M50 6 L62 26 L50 44 L38 26 Z" fill="#E0A020"/>
         <path d="M20 34 Q50 44 50 78 Q50 44 80 34 L80 50 Q50 60 50 92 Q50 60 20 50 Z" fill="#E0A020"/>
         <path d="M34 52 Q50 60 50 86 Q50 60 66 52 L66 66 Q50 74 50 100 Q50 74 34 66 Z" fill="#E0A020"/>
@@ -863,7 +884,7 @@ a{color:inherit}
      7. FOOTER
      =================================================================== -->
 <footer class="site-footer on-dark">
-  <div class="wrap">
+  <div class="wrap" id="footerBrand">
     <svg class="mark" viewBox="0 0 100 120" aria-hidden="true" focusable="false">
       <path d="M50 6 L62 26 L50 44 L38 26 Z" fill="#E0A020"/>
       <path d="M20 34 Q50 44 50 78 Q50 44 80 34 L80 50 Q50 60 50 92 Q50 60 20 50 Z" fill="#E0A020"/>
@@ -882,6 +903,15 @@ a{color:inherit}
         WhatsApp
       </a>
     </nav>
+
+    <!-- Assinatura do estúdio -->
+    <div class="signature">
+      <span class="signature-label">Criado por</span>
+      <a class="signature-mark" id="linkUman" href="https://umandigital.com.br" target="_blank" rel="noopener noreferrer"
+         aria-label="Criado por UMAN — abrir site do estúdio em nova aba">
+        <img id="logoUman" src="" alt="UMAN" loading="lazy" decoding="async" height="28">
+      </a>
+    </div>
 
     <div class="footer-note">
       <span>© <span id="ano"></span> Verônica Vargas Semijoias</span>
@@ -915,6 +945,7 @@ a{color:inherit}
     <div class="admin-tabs" role="tablist" aria-label="Seções da administração" id="adminTabs" hidden>
       <button class="admin-tab" role="tab" id="tab-categorias" aria-controls="pane-categorias" aria-selected="true" type="button">Categorias</button>
       <button class="admin-tab" role="tab" id="tab-produtos" aria-controls="pane-produtos" aria-selected="false" type="button" tabindex="-1">Produtos</button>
+      <button class="admin-tab" role="tab" id="tab-usuarios" aria-controls="pane-usuarios" aria-selected="false" type="button" tabindex="-1">Usuários</button>
       <button class="admin-tab" role="tab" id="tab-config" aria-controls="pane-config" aria-selected="false" type="button" tabindex="-1">Configurações</button>
       <button class="admin-tab" role="tab" id="tab-dados" aria-controls="pane-dados" aria-selected="false" type="button" tabindex="-1">Dados</button>
     </div>
@@ -925,20 +956,22 @@ a{color:inherit}
         <span class="eyebrow">Acesso restrito</span>
         <h3 style="font-size:1.8rem;margin-top:var(--s1)">Entrar no painel</h3>
         <div class="field">
+          <label for="adminEmail">E-mail</label>
+          <input type="email" id="adminEmail" autocomplete="username" required>
+        </div>
+        <div class="field">
           <label for="adminPass">Senha</label>
           <input type="password" id="adminPass" autocomplete="current-password" required>
         </div>
-        <button class="btn btn-primary" type="submit">Entrar</button>
-        <p class="admin-hint">
-          Senha inicial: <strong>veronica2024</strong> — altere em Configurações.<br>
-          Este painel é local ao navegador (localStorage): não substitui autenticação de servidor.
-        </p>
+        <button class="btn btn-primary" type="submit" id="btnEntrar">Entrar</button>
+        <p class="admin-hint" id="loginHint"></p>
       </form>
 
       <!-- PAINÉIS -->
       <div id="adminPanes" hidden>
         <section role="tabpanel" id="pane-categorias" aria-labelledby="tab-categorias"></section>
         <section role="tabpanel" id="pane-produtos" aria-labelledby="tab-produtos" hidden></section>
+        <section role="tabpanel" id="pane-usuarios" aria-labelledby="tab-usuarios" hidden></section>
         <section role="tabpanel" id="pane-config" aria-labelledby="tab-config" hidden></section>
         <section role="tabpanel" id="pane-dados" aria-labelledby="tab-dados" hidden></section>
       </div>
@@ -973,8 +1006,25 @@ a{color:inherit}
       fotoVeronica: '',
       fotoCuidados: '',
       heroVideo: '',
-      senha: 'veronica2024'
+      heroVideoPoster: '',
+      logoMarca: '',        /* logo da Verônica — substitui o monograma no header/rodapé */
+      logoUman: '',         /* logo do estúdio na assinatura do rodapé */
+      umanUrl: 'https://umandigital.com.br',
+      /* Conexão Supabase (chave anon é pública por design; o acesso é regido por RLS) */
+      supabaseUrl: '',
+      supabaseKey: ''
     },
+    /* Usuários do modo local (sem Supabase). A senha nunca fica em texto claro:
+       guarda-se o SHA-256. Com Supabase conectado, quem manda é o Supabase Auth. */
+    usuarios: [
+      {
+        id: 'u1',
+        email: 'uman.agencia@gmail.com',
+        nome: 'UMAN',
+        papel: 'admin',
+        hash: '7114bf3dc0b8fdf55dd11295b3395bd60467529e131480d6417a449f3cf2cfc6'
+      }
+    ],
     /* As 6 categorias vêm da copy. "altura" controla a assimetria dos cards. */
     categorias: [
       { id: 'c1', nome: 'Anéis',     eyebrow: 'Coleção', altura: 'media', imagem: '', visivel: true },
@@ -1009,7 +1059,8 @@ a{color:inherit}
       return {
         config:     Object.assign(clone(SEED.config), data.config || {}),
         categorias: Array.isArray(data.categorias) ? data.categorias : clone(SEED.categorias),
-        produtos:   Array.isArray(data.produtos)   ? data.produtos   : clone(SEED.produtos)
+        produtos:   Array.isArray(data.produtos)   ? data.produtos   : clone(SEED.produtos),
+        usuarios:   Array.isArray(data.usuarios) && data.usuarios.length ? data.usuarios : clone(SEED.usuarios)
       };
     } catch (e) { return clone(SEED); }
   }
@@ -1026,6 +1077,202 @@ a{color:inherit}
 
   function clone(o) { return JSON.parse(JSON.stringify(o)); }
   function uid(p) { return (p || 'id') + Math.random().toString(36).slice(2, 9); }
+
+  /* ===================================================================
+     SUPABASE — REST, Auth e Storage via fetch (sem SDK, arquivo único)
+     A chave anon é pública por design; o que protege a escrita é o RLS
+     definido em supabase-setup.sql.
+     =================================================================== */
+  var SESSAO_KEY = 'vv_sessao_v1';
+
+  var DB = {
+    sessao: null,
+
+    ativo: function () {
+      var c = store.config;
+      return !!(c.supabaseUrl && c.supabaseKey);
+    },
+    base: function () { return String(store.config.supabaseUrl || '').replace(/\/+$/, ''); },
+
+    carregarSessao: function () {
+      try {
+        var s = JSON.parse(localStorage.getItem(SESSAO_KEY) || 'null');
+        if (s && s.expira_em && s.expira_em > Date.now()) { DB.sessao = s; return s; }
+      } catch (e) {}
+      DB.sessao = null;
+      return null;
+    },
+    guardarSessao: function (s) {
+      DB.sessao = s;
+      try {
+        if (s) localStorage.setItem(SESSAO_KEY, JSON.stringify(s));
+        else localStorage.removeItem(SESSAO_KEY);
+      } catch (e) {}
+    },
+
+    cab: function (extra) {
+      var h = Object.assign({
+        apikey: store.config.supabaseKey,
+        Authorization: 'Bearer ' + ((DB.sessao && DB.sessao.token) || store.config.supabaseKey)
+      }, extra || {});
+      return h;
+    },
+
+    req: function (caminho, opcoes) {
+      opcoes = opcoes || {};
+      return fetch(DB.base() + caminho, {
+        method: opcoes.method || 'GET',
+        headers: DB.cab(opcoes.headers),
+        body: opcoes.body
+      }).then(function (res) {
+        return res.text().then(function (txt) {
+          var dado = null;
+          try { dado = txt ? JSON.parse(txt) : null; } catch (e) { dado = txt; }
+          if (!res.ok) {
+            var msg = (dado && (dado.msg || dado.message || dado.error_description || dado.error)) || ('HTTP ' + res.status);
+            var erro = new Error(msg); erro.status = res.status; throw erro;
+          }
+          return dado;
+        });
+      });
+    },
+
+    /* ---- Auth ---- */
+    entrar: function (email, senha) {
+      return DB.req('/auth/v1/token?grant_type=password', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email: email, password: senha })
+      }).then(function (r) {
+        DB.guardarSessao({
+          token: r.access_token,
+          refresh: r.refresh_token,
+          expira_em: Date.now() + ((r.expires_in || 3600) * 1000),
+          usuario: { id: r.user && r.user.id, email: r.user && r.user.email }
+        });
+        return DB.sessao;
+      });
+    },
+
+    sair: function () {
+      var p = DB.sessao
+        ? DB.req('/auth/v1/logout', { method: 'POST' }).catch(function () {})
+        : Promise.resolve();
+      return p.then(function () { DB.guardarSessao(null); });
+    },
+
+    /* Cria o usuário pelo endpoint público de signup e mantém a sessão de quem
+       está logado — a sessão devolvida pelo signup é descartada de propósito. */
+    criarUsuario: function (email, senha, nome, papel) {
+      var atual = DB.sessao;
+      return DB.req('/auth/v1/signup', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', Authorization: 'Bearer ' + store.config.supabaseKey },
+        body: JSON.stringify({ email: email, password: senha, data: { nome: nome, papel: papel } })
+      }).then(function (r) {
+        DB.sessao = atual;
+        return r;
+      });
+    },
+
+    listarUsuarios: function () { return DB.req('/rest/v1/perfis?select=*&order=criado_em'); },
+
+    atualizarPerfil: function (id, campos) {
+      return DB.req('/rest/v1/perfis?id=eq.' + encodeURIComponent(id), {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json', Prefer: 'return=representation' },
+        body: JSON.stringify(campos)
+      });
+    },
+
+    /* ---- Storage: imagens viram arquivo, não base64 no banco ---- */
+    enviarArquivo: function (blob, nome) {
+      var caminho = 'midia/' + Date.now() + '-' + nome.replace(/[^a-zA-Z0-9.\-_]/g, '_');
+      return fetch(DB.base() + '/storage/v1/object/' + caminho, {
+        method: 'POST',
+        headers: DB.cab({ 'Content-Type': blob.type || 'image/jpeg', 'x-upsert': 'true' }),
+        body: blob
+      }).then(function (res) {
+        if (!res.ok) return res.text().then(function (t) { throw new Error('Upload falhou: ' + t); });
+        return DB.base() + '/storage/v1/object/public/' + caminho;
+      });
+    },
+
+    /* ---- Conteúdo ---- */
+    carregarConteudo: function () {
+      return Promise.all([
+        DB.req('/rest/v1/categorias?select=*&order=ordem'),
+        DB.req('/rest/v1/produtos?select=*&order=ordem'),
+        DB.req('/rest/v1/config?select=*&limit=1')
+      ]).then(function (r) {
+        return {
+          categorias: (r[0] || []).map(function (c) {
+            return { id: c.id, nome: c.nome, eyebrow: c.eyebrow, altura: c.altura, imagem: c.imagem || '', visivel: c.visivel };
+          }),
+          produtos: (r[1] || []).map(function (p) {
+            return {
+              id: p.id, nome: p.nome, categoria: p.categoria, preco: Number(p.preco),
+              precoDe: Number(p.preco_de || 0), imagens: p.imagens || [],
+              destaque: p.destaque, visivel: p.visivel
+            };
+          }),
+          config: (r[2] && r[2][0] && r[2][0].valor) || null
+        };
+      });
+    },
+
+    /* Sincroniza tudo de uma vez: upsert do estado atual e remoção do que saiu. */
+    salvarConteudo: function () {
+      var cats = store.categorias.map(function (c, i) {
+        return { id: c.id, nome: c.nome, eyebrow: c.eyebrow, altura: c.altura, imagem: c.imagem || null, visivel: c.visivel !== false, ordem: i };
+      });
+      var prods = store.produtos.map(function (p, i) {
+        return {
+          id: p.id, nome: p.nome, categoria: p.categoria || null, preco: p.preco,
+          preco_de: p.precoDe || 0, imagens: p.imagens || [], destaque: !!p.destaque,
+          visivel: p.visivel !== false, ordem: i
+        };
+      });
+      /* A conexão e as credenciais não vão para o banco */
+      var cfg = clone(store.config);
+      delete cfg.supabaseUrl; delete cfg.supabaseKey;
+
+      function upsert(tabela, linhas) {
+        if (!linhas.length) return Promise.resolve();
+        return DB.req('/rest/v1/' + tabela + '?on_conflict=id', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json', Prefer: 'resolution=merge-duplicates,return=minimal' },
+          body: JSON.stringify(linhas)
+        });
+      }
+      function limpar(tabela, ids) {
+        var lista = ids.map(function (i) { return '"' + i + '"'; }).join(',');
+        var filtro = ids.length ? '?id=not.in.(' + encodeURIComponent(lista) + ')' : '?id=neq.__nenhum__';
+        return DB.req('/rest/v1/' + tabela + filtro, { method: 'DELETE', headers: { Prefer: 'return=minimal' } });
+      }
+
+      return upsert('categorias', cats)
+        .then(function () { return upsert('produtos', prods); })
+        .then(function () { return limpar('produtos', prods.map(function (p) { return p.id; })); })
+        .then(function () { return limpar('categorias', cats.map(function (c) { return c.id; })); })
+        .then(function () {
+          return DB.req('/rest/v1/config?on_conflict=id', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json', Prefer: 'resolution=merge-duplicates,return=minimal' },
+            body: JSON.stringify([{ id: 1, valor: cfg }])
+          });
+        });
+    }
+  };
+
+  function sha256(texto) {
+    if (!(window.crypto && crypto.subtle)) return Promise.resolve(null);
+    return crypto.subtle.digest('SHA-256', new TextEncoder().encode(texto)).then(function (buf) {
+      return Array.prototype.map.call(new Uint8Array(buf), function (b) {
+        return ('00' + b.toString(16)).slice(-2);
+      }).join('');
+    });
+  }
 
   /* ===================================================================
      UTILIDADES
@@ -1256,6 +1503,7 @@ a{color:inherit}
   function aplicarConfig() {
     var c = store.config;
 
+    aplicarLogos(c);
     $('#waFloat').setAttribute('href', waHref('', 0));
     $('#linkWhatsappFooter').setAttribute('href', waHref('', 0));
     $('#linkInstagram').setAttribute('href', c.instagram || 'https://instagram.com/');
@@ -1263,18 +1511,92 @@ a{color:inherit}
     $('#fotoVeronica').setAttribute('src', c.fotoVeronica || placeholder('veronica-retrato', ''));
     $('#fotoCuidados').setAttribute('src', c.fotoCuidados || placeholder('cuidados-peca', ''));
 
+    aplicarHeroVideo(c);
+  }
+
+  /* Logo da marca no header e no rodapé; assinatura do estúdio no rodapé.
+     Sem arquivo enviado, header e rodapé mantêm o monograma do design system
+     e a assinatura usa o wordmark tipográfico. */
+  function aplicarLogos(c) {
+    var brand = $('#brandLink');
+    var brandImg = $('.brand-logo', brand);
+    if (c.logoMarca) {
+      if (!brandImg) {
+        brandImg = new Image();
+        brandImg.className = 'brand-logo';
+        brandImg.alt = 'Verônica Vargas Semijoias';
+        brand.insertBefore(brandImg, brand.firstChild);
+      }
+      if (brandImg.getAttribute('src') !== c.logoMarca) brandImg.src = c.logoMarca;
+      $('.brand-mark', brand).style.display = 'none';
+      $('.brand-name', brand).style.display = 'none';
+    } else {
+      if (brandImg) brandImg.parentNode.removeChild(brandImg);
+      $('.brand-mark', brand).style.display = '';
+      $('.brand-name', brand).style.display = '';
+    }
+
+    var rodape = $('#footerBrand');
+    var footImg = $('.footer-logo', rodape);
+    if (c.logoMarca) {
+      if (!footImg) {
+        footImg = new Image();
+        footImg.className = 'footer-logo';
+        footImg.alt = 'Verônica Vargas Semijoias';
+        footImg.loading = 'lazy';
+        rodape.insertBefore(footImg, rodape.firstChild);
+      }
+      if (footImg.getAttribute('src') !== c.logoMarca) footImg.src = c.logoMarca;
+      $('.mark', rodape).style.display = 'none';
+      $('.script', rodape).style.display = 'none';
+    } else {
+      if (footImg) footImg.parentNode.removeChild(footImg);
+      $('.mark', rodape).style.display = '';
+      $('.script', rodape).style.display = '';
+    }
+
+    var uman = $('#linkUman');
+    var umanImg = $('#logoUman');
+    var umanWord = $('.signature-word', uman);
+    uman.setAttribute('href', c.umanUrl || SEED.config.umanUrl);
+    if (c.logoUman) {
+      if (umanWord) umanWord.parentNode.removeChild(umanWord);
+      if (!umanImg) {
+        umanImg = new Image();
+        umanImg.id = 'logoUman'; umanImg.alt = 'UMAN'; umanImg.loading = 'lazy';
+        uman.appendChild(umanImg);
+      }
+      umanImg.style.display = '';
+      if (umanImg.getAttribute('src') !== c.logoUman) umanImg.src = c.logoUman;
+    } else {
+      if (umanImg) umanImg.style.display = 'none';
+      if (!umanWord) {
+        umanWord = document.createElement('span');
+        umanWord.className = 'signature-word';
+        umanWord.textContent = 'UMAN';
+        uman.appendChild(umanWord);
+      }
+    }
+  }
+
+  /* Hero em vídeo — entra por URL no painel; sem vídeo, o fundo animado da marca. */
+  function aplicarHeroVideo(c) {
     var media = $('#heroMedia');
     var vid = $('video', media);
     if (c.heroVideo) {
       if (!vid) {
         vid = document.createElement('video');
-        vid.setAttribute('autoplay', ''); vid.setAttribute('muted', ''); vid.setAttribute('loop', '');
-        vid.setAttribute('playsinline', ''); vid.setAttribute('aria-hidden', 'true');
-        vid.muted = true;
+        vid.setAttribute('loop', ''); vid.setAttribute('playsinline', '');
+        vid.setAttribute('aria-hidden', 'true'); vid.setAttribute('preload', 'metadata');
+        vid.muted = true; vid.defaultMuted = true;
         media.insertBefore(vid, media.firstChild);
       }
+      if (c.heroVideoPoster) vid.setAttribute('poster', c.heroVideoPoster);
+      else vid.removeAttribute('poster');
       if (vid.getAttribute('src') !== c.heroVideo) vid.setAttribute('src', c.heroVideo);
-      if (reduceMotion) vid.removeAttribute('autoplay');
+      /* Sob prefers-reduced-motion o vídeo fica no primeiro quadro, sem tocar em loop */
+      if (reduceMotion) { vid.removeAttribute('autoplay'); vid.pause(); }
+      else { vid.setAttribute('autoplay', ''); var pr = vid.play(); if (pr && pr.catch) pr.catch(function () {}); }
     } else if (vid) {
       vid.parentNode.removeChild(vid);
     }
@@ -1361,9 +1683,10 @@ a{color:inherit}
      ÁREA ADMINISTRATIVA
      =================================================================== */
   var admin = {
-    el: null, logado: false, ultimoFoco: null,
+    el: null, logado: false, usuario: null, ultimoFoco: null,
     catEdit: null, prodEdit: null,
-    rascunhoCat: null, rascunhoProd: null
+    rascunhoCat: null, rascunhoProd: null, rascunhoUsuario: null,
+    usuariosRemotos: null
   };
 
   function initAdmin() {
@@ -1377,15 +1700,7 @@ a{color:inherit}
 
     $('#adminLogin').addEventListener('submit', function (e) {
       e.preventDefault();
-      var v = $('#adminPass').value;
-      if (v === (store.config.senha || SEED.config.senha)) {
-        admin.logado = true;
-        $('#adminPass').value = '';
-        mostrarPainel();
-      } else {
-        toast('Senha incorreta.');
-        $('#adminPass').focus();
-      }
+      autenticar($('#adminEmail').value.trim().toLowerCase(), $('#adminPass').value);
     });
 
     $$('.admin-tab').forEach(function (t, i, arr) {
@@ -1406,6 +1721,55 @@ a{color:inherit}
     });
   }
 
+  /* Com Supabase conectado, a autenticação é do Supabase Auth (senha nunca
+     trafega nem é guardada aqui). Sem conexão, cai no modo local por SHA-256. */
+  function autenticar(email, senha) {
+    var btn = $('#btnEntrar');
+    btn.disabled = true;
+
+    function falhou(msg) {
+      btn.disabled = false;
+      toast(msg || 'E-mail ou senha incorretos.');
+      $('#adminPass').value = '';
+      $('#adminPass').focus();
+    }
+    function entrou(usuario) {
+      admin.logado = true;
+      admin.usuario = usuario;
+      btn.disabled = false;
+      $('#adminPass').value = '';
+      mostrarPainel();
+    }
+
+    if (DB.ativo()) {
+      DB.entrar(email, senha)
+        .then(function (s) {
+          return sincronizarDoServidor().catch(function () {}).then(function () {
+            entrou({ email: s.usuario.email, nome: s.usuario.email, papel: 'admin', remoto: true });
+          });
+        })
+        .catch(function (err) { falhou(err.message === 'Invalid login credentials' ? 'E-mail ou senha incorretos.' : err.message); });
+      return;
+    }
+
+    sha256(senha).then(function (h) {
+      if (!h) return falhou('Este navegador não suporta hash seguro. Use HTTPS ou conecte o Supabase.');
+      var u = (store.usuarios || []).filter(function (x) { return x.email.toLowerCase() === email; })[0];
+      if (!u || h !== u.hash) return falhou();
+      entrou(u);
+    }).catch(function () { falhou('Falha ao verificar a senha. Tente novamente.'); });
+  }
+
+  function sair() {
+    var fim = function () {
+      admin.logado = false;
+      admin.usuario = null;
+      fecharAdmin();
+      toast('Sessão encerrada.');
+    };
+    if (DB.ativo()) DB.sair().then(fim); else fim();
+  }
+
   function selTab(tab) {
     $$('.admin-tab').forEach(function (t) {
       var on = t === tab;
@@ -1422,12 +1786,23 @@ a{color:inherit}
     admin.el.hidden = false;
     admin.el.classList.add('is-open');
     document.body.style.overflow = 'hidden';
+
+    /* Sessão do Supabase ainda válida entra direto */
+    if (!admin.logado && DB.ativo() && DB.carregarSessao()) {
+      admin.logado = true;
+      admin.usuario = { email: DB.sessao.usuario.email, nome: DB.sessao.usuario.email, papel: 'admin', remoto: true };
+    }
+
     if (admin.logado) { mostrarPainel(); }
     else {
       $('#adminLogin').hidden = false;
       $('#adminPanes').hidden = true;
       $('#adminTabs').hidden = true;
-      setTimeout(function () { $('#adminPass').focus(); }, 60);
+      $('#loginHint').innerHTML = DB.ativo()
+        ? 'Conectado ao Supabase — a autenticação e os usuários são gerenciados pelo Supabase Auth.'
+        : 'Sem Supabase configurado: o painel opera neste navegador (localStorage). ' +
+          'Conecte o projeto em <strong>Configurações</strong> para autenticação real e conteúdo compartilhado.';
+      setTimeout(function () { $('#adminEmail').focus(); }, 60);
     }
   }
 
@@ -1459,15 +1834,44 @@ a{color:inherit}
   function renderAdmin() {
     renderAdminCategorias();
     renderAdminProdutos();
+    renderAdminUsuarios();
     renderAdminConfig();
     renderAdminDados();
   }
 
+  /* Salva local (cache imediato) e, se conectado, sincroniza com o Supabase. */
   function persistir(msg) {
-    if (save()) {
-      renderCategorias(); renderFiltros(); renderProdutos(); aplicarConfig();
-      if (msg) toast(msg);
+    if (!save()) return;
+    renderCategorias(); renderFiltros(); renderProdutos(); aplicarConfig();
+    if (msg) toast(msg);
+
+    if (DB.ativo() && DB.sessao) {
+      DB.salvarConteudo()
+        .catch(function (err) { toast('Salvo localmente, mas o Supabase recusou: ' + err.message); });
     }
+  }
+
+  /* Traz o conteúdo do Supabase para o estado local (o servidor é a fonte). */
+  function sincronizarDoServidor() {
+    if (!DB.ativo()) return Promise.resolve(false);
+    return DB.carregarConteudo().then(function (r) {
+      /* Banco recém-criado e ainda vazio: preserva o conteúdo local em vez de
+         zerar a home. Use "Enviar conteúdo para o servidor" para publicá-lo. */
+      if (!(r.categorias || []).length && !(r.produtos || []).length) {
+        DB.servidorVazio = true;
+        return false;
+      }
+      DB.servidorVazio = false;
+      store.categorias = r.categorias;
+      store.produtos = r.produtos;
+      if (r.config) {
+        var url = store.config.supabaseUrl, key = store.config.supabaseKey;
+        store.config = Object.assign(clone(SEED.config), r.config, { supabaseUrl: url, supabaseKey: key });
+      }
+      save();
+      renderCategorias(); renderFiltros(); renderProdutos(); aplicarConfig();
+      return true;
+    });
   }
 
   /* ---------- Compressão de imagem (evita estourar o localStorage) ---------- */
@@ -1487,6 +1891,21 @@ a{color:inherit}
         var cv = document.createElement('canvas');
         cv.width = w; cv.height = h;
         cv.getContext('2d').drawImage(img, 0, 0, w, h);
+
+        /* Com Supabase conectado, a imagem vai para o Storage e o banco guarda
+           só a URL. Sem conexão, fica como data URI no localStorage. */
+        if (DB.ativo() && DB.sessao && cv.toBlob) {
+          cv.toBlob(function (blob) {
+            if (!blob) { cb(cv.toDataURL('image/jpeg', 0.82)); return; }
+            DB.enviarArquivo(blob, file.name.replace(/\.[^.]+$/, '') + '.jpg')
+              .then(cb)
+              .catch(function (err) {
+                toast('Upload ao Storage falhou (' + err.message + '). Guardando no navegador.');
+                cb(cv.toDataURL('image/jpeg', 0.82));
+              });
+          }, 'image/jpeg', 0.82);
+          return;
+        }
         cb(cv.toDataURL('image/jpeg', 0.82));
       };
       img.onerror = function () { toast('Não foi possível ler a imagem.'); };
@@ -1798,6 +2217,167 @@ a{color:inherit}
     renderAdminProdutos();
   }
 
+  /* ---------- USUÁRIOS ---------- */
+  function renderAdminUsuarios() {
+    var pane = $('#pane-usuarios');
+    var remoto = DB.ativo();
+    var novo = admin.rascunhoUsuario;
+    var lista = remoto ? (admin.usuariosRemotos || []) : (store.usuarios || []);
+
+    pane.innerHTML = '' +
+      (novo ? formUsuario(novo, remoto) : '') +
+      '<div class="adm-toolbar">' +
+        '<div><span class="eyebrow">Usuários do painel</span>' +
+        '<p class="adm-help">' + (remoto
+          ? 'Autenticação pelo Supabase Auth. Novos usuários recebem e-mail de confirmação se a opção estiver ligada no projeto.'
+          : 'Modo local: os acessos valem neste navegador e as senhas são guardadas apenas como hash SHA-256.') +
+        '</p></div>' +
+        (novo ? '' : '<button class="btn btn-primary btn-sm" type="button" id="novoUsuario">+ Novo usuário</button>') +
+      '</div>' +
+      (remoto && !admin.usuariosRemotos
+        ? '<p class="adm-help">Carregando usuários…</p>'
+        : '<div class="adm-list">' +
+          (lista.length ? lista.map(function (u) {
+            var eu = admin.usuario && admin.usuario.email === u.email;
+            return '<div class="adm-item" style="grid-template-columns:1fr">' +
+              '<div class="info" style="grid-column:1">' +
+                '<strong>' + esc(u.nome || u.email) + '</strong>' +
+                '<span>' + esc(u.email) + ' ' +
+                '<span class="adm-badge ' + (u.papel === 'admin' ? 'adm-badge--on' : '') + '">' + esc(u.papel || 'editor') + '</span>' +
+                (eu ? ' <span class="adm-badge adm-badge--gold">você</span>' : '') + '</span>' +
+              '</div>' +
+              '<div class="acts" style="grid-column:1">' +
+                (remoto ? '' :
+                  '<button class="adm-btn" type="button" data-uact="senha" data-id="' + esc(u.id) + '">Trocar senha</button>' +
+                  '<button class="adm-btn" type="button" data-uact="papel" data-id="' + esc(u.id) + '">' +
+                    (u.papel === 'admin' ? 'Tornar editor' : 'Tornar admin') + '</button>' +
+                  (eu || lista.length < 2 ? '' :
+                    '<button class="adm-btn adm-btn--danger" type="button" data-uact="del" data-id="' + esc(u.id) + '">Excluir</button>')) +
+              '</div></div>';
+          }).join('') : '<p class="adm-help">Nenhum usuário cadastrado.</p>') +
+        '</div>') +
+      '<div class="adm-form" style="margin-top:var(--s4)">' +
+        '<h3 style="font-size:1.3rem">Sessão</h3>' +
+        '<p class="adm-help">Conectado como <strong>' + esc((admin.usuario && admin.usuario.email) || '—') + '</strong>' +
+        (remoto ? ' · Supabase Auth' : ' · modo local') + '</p>' +
+        '<div class="adm-actions"><button class="btn btn-ghost btn-sm" type="button" id="btnSair">Sair da conta</button></div>' +
+      '</div>';
+
+    if (remoto && !admin.usuariosRemotos) {
+      DB.listarUsuarios()
+        .then(function (us) { admin.usuariosRemotos = us || []; renderAdminUsuarios(); })
+        .catch(function (err) {
+          admin.usuariosRemotos = [];
+          pane.querySelector('.adm-help').textContent = 'Não foi possível listar usuários: ' + err.message;
+        });
+    }
+
+    if ($('#novoUsuario')) {
+      $('#novoUsuario').addEventListener('click', function () {
+        admin.rascunhoUsuario = { email: '', nome: '', papel: 'editor', senha: '' };
+        renderAdminUsuarios();
+      });
+    }
+    if ($('#btnSair')) $('#btnSair').addEventListener('click', sair);
+    if (novo) bindFormUsuario(remoto);
+
+    $$('[data-uact]', pane).forEach(function (b) {
+      b.addEventListener('click', function () { acaoUsuario(b.getAttribute('data-uact'), b.getAttribute('data-id')); });
+    });
+  }
+
+  function formUsuario(u, remoto) {
+    return '<form class="adm-form" id="formUsuario">' +
+      '<h3>Novo usuário</h3>' +
+      '<div class="adm-row adm-row--2">' +
+        '<div class="field"><label for="uNome">Nome</label><input id="uNome" value="' + esc(u.nome) + '"></div>' +
+        '<div class="field"><label for="uEmail">E-mail</label><input id="uEmail" type="email" required autocomplete="off" value="' + esc(u.email) + '"></div>' +
+      '</div>' +
+      '<div class="adm-row adm-row--2">' +
+        '<div class="field"><label for="uSenha">Senha</label>' +
+          '<input id="uSenha" type="password" required minlength="6" autocomplete="new-password">' +
+          '<p class="adm-help">Mínimo de 6 caracteres.</p></div>' +
+        '<div class="field"><label for="uPapel">Papel</label>' +
+          '<select id="uPapel">' +
+            '<option value="editor"' + (u.papel === 'editor' ? ' selected' : '') + '>editor</option>' +
+            '<option value="admin"' + (u.papel === 'admin' ? ' selected' : '') + '>admin</option>' +
+          '</select></div>' +
+      '</div>' +
+      (remoto ? '<p class="adm-help">O usuário é criado no Supabase Auth e seu perfil aparece na lista abaixo.</p>' : '') +
+      '<div class="adm-actions">' +
+        '<button class="btn btn-primary btn-sm" type="submit" id="uSalvar">Criar usuário</button>' +
+        '<button class="btn btn-ghost btn-sm" type="button" id="uCancel">Cancelar</button>' +
+      '</div></form>';
+  }
+
+  function bindFormUsuario(remoto) {
+    $('#uCancel').addEventListener('click', function () { admin.rascunhoUsuario = null; renderAdminUsuarios(); });
+
+    $('#formUsuario').addEventListener('submit', function (ev) {
+      ev.preventDefault();
+      var email = $('#uEmail').value.trim().toLowerCase();
+      var senha = $('#uSenha').value;
+      var nome = $('#uNome').value.trim();
+      var papel = $('#uPapel').value;
+      if (senha.length < 6) { toast('A senha precisa de ao menos 6 caracteres.'); return; }
+
+      var btn = $('#uSalvar'); btn.disabled = true;
+
+      if (remoto) {
+        DB.criarUsuario(email, senha, nome, papel)
+          .then(function () {
+            admin.rascunhoUsuario = null;
+            admin.usuariosRemotos = null;
+            toast('Usuário criado no Supabase.');
+            renderAdminUsuarios();
+          })
+          .catch(function (err) { btn.disabled = false; toast('Não foi possível criar: ' + err.message); });
+        return;
+      }
+
+      if ((store.usuarios || []).some(function (x) { return x.email.toLowerCase() === email; })) {
+        btn.disabled = false; toast('Já existe um usuário com esse e-mail.'); return;
+      }
+      sha256(senha).then(function (h) {
+        if (!h) { btn.disabled = false; toast('Este navegador não suporta hash seguro (exige HTTPS).'); return; }
+        store.usuarios.push({ id: uid('u'), email: email, nome: nome || email, papel: papel, hash: h });
+        admin.rascunhoUsuario = null;
+        persistir('Usuário criado.');
+        renderAdminUsuarios();
+      });
+    });
+  }
+
+  function acaoUsuario(act, id) {
+    var i = (store.usuarios || []).map(function (u) { return u.id; }).indexOf(id);
+    if (i < 0) return;
+    var u = store.usuarios[i];
+
+    if (act === 'papel') {
+      u.papel = u.papel === 'admin' ? 'editor' : 'admin';
+      persistir('Papel atualizado.');
+      renderAdminUsuarios();
+      return;
+    }
+    if (act === 'del') {
+      if (!confirm('Excluir o acesso de "' + u.email + '"?')) return;
+      store.usuarios.splice(i, 1);
+      persistir('Usuário removido.');
+      renderAdminUsuarios();
+      return;
+    }
+    if (act === 'senha') {
+      var nova = prompt('Nova senha para ' + u.email + ' (mínimo 6 caracteres):');
+      if (nova === null) return;
+      if (nova.length < 6) { toast('A senha precisa de ao menos 6 caracteres.'); return; }
+      sha256(nova).then(function (h) {
+        if (!h) { toast('Este navegador não suporta hash seguro (exige HTTPS).'); return; }
+        u.hash = h;
+        persistir('Senha atualizada.');
+      });
+    }
+  }
+
   /* ---------- CONFIGURAÇÕES ---------- */
   function renderAdminConfig() {
     var c = store.config;
@@ -1817,15 +2397,40 @@ a{color:inherit}
       '<div class="field"><label for="cfgMsgGeral">Mensagem do botão fixo e do rodapé</label>' +
         '<input id="cfgMsgGeral" value="' + esc(c.mensagemGeral) + '">' +
         '<p class="adm-help">Usada quando o cliente clica no WhatsApp sem escolher uma peça.</p></div>' +
-      '<div class="field"><label for="cfgVideo">Vídeo do hero (URL .mp4 — opcional)</label>' +
-        '<input id="cfgVideo" type="url" placeholder="https://…/hero.mp4" value="' + esc(c.heroVideo) + '">' +
-        '<p class="adm-help">Sem vídeo, o hero usa o fundo animado da paleta da marca.</p></div>' +
       campoImagem('cfgFotoV', c.fotoVeronica, 'Foto de Veronica (dobra "Quem é Veronica")') +
       campoImagem('cfgFotoC', c.fotoCuidados, 'Foto da dobra de cuidados') +
-      '<h3 style="margin-top:var(--s2)">Acesso</h3>' +
-      '<div class="field"><label for="cfgSenha">Senha do painel</label>' +
-        '<input id="cfgSenha" type="text" value="' + esc(c.senha) + '">' +
-        '<p class="adm-help">Proteção apenas do painel local no navegador. Para um catálogo publicado, use autenticação de servidor.</p></div>' +
+
+      '<h3 style="margin-top:var(--s2)">Hero em vídeo</h3>' +
+      '<div class="field"><label for="cfgVideo">URL do vídeo em looping (.mp4)</label>' +
+        '<input id="cfgVideo" type="url" placeholder="https://…/hero.mp4" value="' + esc(c.heroVideo) + '">' +
+        '<p class="adm-help">Entra com autoplay, mudo e em loop. Sem vídeo, o hero usa o fundo animado da paleta da marca. ' +
+        'Com Supabase conectado, o arquivo pode ficar no bucket <code>midia</code>.</p></div>' +
+      campoImagem('cfgPoster', c.heroVideoPoster, 'Imagem de espera do vídeo (poster)') +
+
+      '<h3 style="margin-top:var(--s2)">Marca e assinatura</h3>' +
+      campoImagem('cfgLogo', c.logoMarca, 'Logo da Verônica (header e rodapé)') +
+      campoImagem('cfgUman', c.logoUman, 'Logo UMAN (assinatura do rodapé)') +
+      '<div class="field"><label for="cfgUmanUrl">Link da assinatura UMAN</label>' +
+        '<input id="cfgUmanUrl" type="url" placeholder="https://…" value="' + esc(c.umanUrl) + '">' +
+        '<p class="adm-help">Sem o arquivo do logo, a assinatura usa o wordmark tipográfico “UMAN”.</p></div>' +
+
+      '<h3 style="margin-top:var(--s2)">Supabase</h3>' +
+      '<div class="adm-row adm-row--2">' +
+        '<div class="field"><label for="cfgSbUrl">URL do projeto</label>' +
+          '<input id="cfgSbUrl" type="url" placeholder="https://xxxx.supabase.co" value="' + esc(c.supabaseUrl) + '"></div>' +
+        '<div class="field"><label for="cfgSbKey">Chave anon (publishable)</label>' +
+          '<input id="cfgSbKey" type="text" placeholder="eyJhbGciOi…" value="' + esc(c.supabaseKey) + '"></div>' +
+      '</div>' +
+      '<p class="adm-help">Rode antes o <code>supabase-setup.sql</code> do repositório: ele cria as tabelas, o bucket de mídia, ' +
+      'as políticas de RLS (leitura pública, escrita só autenticada) e o gatilho de perfis. ' +
+      'A chave <strong>anon</strong> é pública por design — nunca use aqui a <code>service_role</code>.</p>' +
+      '<div class="adm-actions">' +
+        '<button class="btn btn-outline btn-sm" type="button" id="btnTestarSb">Testar conexão</button>' +
+        '<button class="btn btn-outline btn-sm" type="button" id="btnPuxarSb">Puxar conteúdo do servidor</button>' +
+        '<button class="btn btn-outline btn-sm" type="button" id="btnEnviarSb">Enviar conteúdo para o servidor</button>' +
+      '</div>' +
+      '<p class="adm-help" id="sbStatus"></p>' +
+
       '<div class="adm-actions"><button class="btn btn-primary btn-sm" type="submit">Salvar configurações</button></div>' +
     '</form>';
 
@@ -1837,6 +2442,56 @@ a{color:inherit}
     });
     if ($('#cfgFotoV-clear')) $('#cfgFotoV-clear').addEventListener('click', function () { capturaCfg(); store.config.fotoVeronica = ''; persistir('Foto removida.'); renderAdminConfig(); });
     if ($('#cfgFotoC-clear')) $('#cfgFotoC-clear').addEventListener('click', function () { capturaCfg(); store.config.fotoCuidados = ''; persistir('Foto removida.'); renderAdminConfig(); });
+
+    /* Logos, poster e demais imagens de configuração */
+    [['cfgPoster', 'heroVideoPoster'], ['cfgLogo', 'logoMarca'], ['cfgUman', 'logoUman']].forEach(function (par) {
+      var campo = $('#' + par[0] + '-file');
+      if (campo) campo.addEventListener('change', function (ev) {
+        lerImagem(ev.target.files[0], function (d) {
+          capturaCfg(); store.config[par[1]] = d; persistir('Imagem atualizada.'); renderAdminConfig();
+        });
+      });
+      var limpar = $('#' + par[0] + '-clear');
+      if (limpar) limpar.addEventListener('click', function () {
+        capturaCfg(); store.config[par[1]] = ''; persistir('Imagem removida.'); renderAdminConfig();
+      });
+    });
+
+    $('#btnTestarSb').addEventListener('click', function () {
+      capturaCfg();
+      var st = $('#sbStatus');
+      if (!DB.ativo()) { st.textContent = 'Informe a URL e a chave anon antes de testar.'; return; }
+      st.textContent = 'Testando…';
+      DB.req('/rest/v1/categorias?select=id&limit=1')
+        .then(function () { st.textContent = '✓ Conexão bem-sucedida — tabelas acessíveis.'; })
+        .catch(function (e) { st.textContent = '✕ ' + e.message + ' (rodou o supabase-setup.sql?)'; });
+    });
+
+    $('#btnPuxarSb').addEventListener('click', function () {
+      capturaCfg(); save();
+      var st = $('#sbStatus');
+      if (!DB.ativo()) { st.textContent = 'Configure a conexão primeiro.'; return; }
+      st.textContent = 'Buscando…';
+      sincronizarDoServidor()
+        .then(function (veio) {
+          st.textContent = veio
+            ? '✓ Conteúdo do servidor carregado.'
+            : 'O banco está vazio — mantido o conteúdo local. Use “Enviar conteúdo para o servidor” para publicá-lo.';
+          renderAdmin();
+        })
+        .catch(function (e) { st.textContent = '✕ ' + e.message; });
+    });
+
+    $('#btnEnviarSb').addEventListener('click', function () {
+      capturaCfg(); save();
+      var st = $('#sbStatus');
+      if (!DB.ativo()) { st.textContent = 'Configure a conexão primeiro.'; return; }
+      if (!DB.sessao) { st.textContent = 'Entre com um usuário do Supabase para poder escrever.'; return; }
+      st.textContent = 'Enviando…';
+      DB.salvarConteudo()
+        .then(function () { st.textContent = '✓ Conteúdo enviado para o Supabase.'; })
+        .catch(function (e) { st.textContent = '✕ ' + e.message; });
+    });
 
     $('#formCfg').addEventListener('submit', function (ev) {
       ev.preventDefault();
@@ -1852,7 +2507,9 @@ a{color:inherit}
     store.config.mensagem = $('#cfgMsg').value;
     store.config.mensagemGeral = $('#cfgMsgGeral').value;
     store.config.heroVideo = $('#cfgVideo').value;
-    store.config.senha = $('#cfgSenha').value || SEED.config.senha;
+    store.config.umanUrl = $('#cfgUmanUrl').value;
+    store.config.supabaseUrl = $('#cfgSbUrl').value.trim().replace(/\/+$/, '');
+    store.config.supabaseKey = $('#cfgSbKey').value.trim();
   }
 
   /* ---------- DADOS ---------- */
@@ -1929,6 +2586,15 @@ a{color:inherit}
     initHeader();
     initAdmin();
     initParallax();
+
+    /* Conectado: o Supabase é a fonte do conteúdo; o cache local só evita
+       a tela vazia enquanto a resposta não chega. */
+    if (DB.ativo()) {
+      DB.carregarSessao();
+      sincronizarDoServidor().catch(function (err) {
+        console.warn('Supabase indisponível, usando conteúdo local:', err.message);
+      });
+    }
 
     observe(document);
     // Título do hero entra logo no carregamento
