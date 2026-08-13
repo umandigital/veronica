@@ -427,6 +427,10 @@ a{color:inherit}
 .band-marca svg{display:block; width:100%; height:auto}
 .band-marca--a{right:-6%; top:2%; width:min(52vw,470px); opacity:.20}
 .band-marca--b{left:-7%; bottom:6%; width:min(34vw,300px); opacity:.13}
+/* sobre vídeo ou foto o fundo já tem textura própria; as marcas recuam */
+.band--midia .band-marca--a{opacity:.12}
+.band--midia .band-marca--b{opacity:.08}
+.band--midia .band-brilhos{opacity:.45}
 
 /* Poeira dourada, terceira velocidade */
 .band-brilhos{
@@ -917,7 +921,7 @@ a{color:inherit}
 
   <!-- ======= BANDA DE PARALAXE — CONCEITO DA MARCA ======= -->
   <section class="band on-dark" aria-labelledby="conceito-title">
-    <div class="band-bg parallax parallax-cover" data-speed="-0.14" aria-hidden="true"></div>
+    <div class="band-bg parallax parallax-cover" data-speed="-0.2" aria-hidden="true"></div>
 
     <!-- camadas com forma definida: são elas que deixam o paralaxe visível -->
     <div class="band-marca band-marca--a parallax" data-speed="-0.52" aria-hidden="true">
@@ -1183,9 +1187,9 @@ a{color:inherit}
       heroSlides: [],           /* [{ imagem, link, rotulo }] */
       heroIntervalo: 6,         /* segundos entre um slide e outro */
       /* Dobra do conceito da marca, em paralaxe */
-      bandaTipo: 'gradiente',   /* 'gradiente' | 'imagem' | 'video' */
+      bandaTipo: 'video',       /* 'gradiente' | 'imagem' | 'video' */
       bandaImagem: '',
-      bandaVideo: '',
+      bandaVideo: 'assets/video_dobra.mp4',
       logoMarca: '',        /* logo da Verônica — substitui o monograma no header/rodapé */
       logoUman: '',         /* logo do estúdio na assinatura do rodapé */
       umanTipo: 'site',     /* 'site' | 'whatsapp' */
@@ -2092,6 +2096,11 @@ a{color:inherit}
         bg.insertBefore(vid, bg.firstChild);
       }
       if (vid.getAttribute('src') !== c.bandaVideo) vid.setAttribute('src', c.bandaVideo);
+      /* arquivo ausente ou formato não suportado: o gradiente assume */
+      vid.onerror = function () {
+        if (vid.parentNode) vid.parentNode.removeChild(vid);
+        banda.classList.remove('band--midia');
+      };
       if (reduceMotion) { vid.removeAttribute('autoplay'); vid.pause(); }
       else { vid.setAttribute('autoplay', ''); var pr = vid.play(); if (pr && pr.catch) pr.catch(function () {}); }
     }
@@ -2937,7 +2946,7 @@ a{color:inherit}
         '<img class="thumb" src="' + esc(s.imagem) + '" alt="Imagem ' + (i + 1) + ' do carrossel" loading="lazy">' +
         '<div class="info">' +
           '<div class="field"><label for="slideLink' + i + '">Link ao clicar (opcional)</label>' +
-            '<input id="slideLink' + i + '" data-slide-link="' + i + '" placeholder="#catalogo" value="' + esc(s.link || '') + '"></div>' +
+            '<input id="slideLink' + i + '" type="text" data-slide-link="' + i + '" placeholder="#promocoes" value="' + esc(s.link || '') + '"></div>' +
           '<div class="field" style="margin-top:8px"><label for="slideRot' + i + '">Texto do botão</label>' +
             '<input id="slideRot' + i + '" data-slide-rotulo="' + i + '" placeholder="Ver peça" value="' + esc(s.rotulo || '') + '"></div>' +
         '</div>' +
@@ -2980,7 +2989,7 @@ a{color:inherit}
 
       '<div id="blocoHeroVideo"' + ((c.heroTipo === 'video') ? '' : ' hidden') + '>' +
         '<div class="field"><label for="cfgVideo">URL do vídeo (.mp4)</label>' +
-          '<input id="cfgVideo" type="url" placeholder="https://…/hero.mp4" value="' + esc(c.heroVideo) + '">' +
+          '<input id="cfgVideo" type="text" placeholder="assets/video.mp4 ou https://…/hero.mp4" value="' + esc(c.heroVideo) + '">' +
           '<p class="adm-help">Entra com autoplay, mudo e em loop. Com o Supabase conectado, o arquivo pode ficar no bucket <code>midia</code>.</p></div>' +
         campoImagem('cfgPoster', c.heroVideoPoster, 'Imagem de espera do vídeo (poster)') +
       '</div>' +
@@ -3012,7 +3021,7 @@ a{color:inherit}
       '</div>' +
       '<div id="blocoBandaVideo"' + ((c.bandaTipo === 'video') ? '' : ' hidden') + '>' +
         '<div class="field"><label for="cfgBandaVideo">URL do vídeo (.mp4)</label>' +
-          '<input id="cfgBandaVideo" type="url" placeholder="https://…/faixa.mp4" value="' + esc(c.bandaVideo) + '"></div>' +
+          '<input id="cfgBandaVideo" type="text" placeholder="assets/video_dobra.mp4 ou https://…" value="' + esc(c.bandaVideo) + '"></div>' +
       '</div>' +
 
       '<h3 style="margin-top:var(--s2)">Marca e assinatura</h3>' +
