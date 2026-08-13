@@ -1499,7 +1499,10 @@ a{color:inherit}
     },
 
     /* Sincroniza tudo de uma vez: upsert do estado atual e remoção do que saiu. */
+    colunasAusentes: [],
+
     salvarConteudo: function () {
+      DB.colunasAusentes = [];
       var cats = store.categorias.map(function (c, i) {
         return { id: c.id, nome: c.nome, imagem: c.imagem || null, video: c.video || null, visivel: c.visivel !== false, ordem: i };
       });
@@ -1514,12 +1517,24 @@ a{color:inherit}
       var cfg = clone(store.config);
       delete cfg.supabaseUrl; delete cfg.supabaseKey;
 
-      function upsert(tabela, linhas) {
+      /* O banco pode estar numa versão anterior do supabase-setup.sql e não
+         conhecer uma coluna nova. Em vez de perder o salvamento inteiro, a
+         coluna desconhecida é retirada e o envio segue — o que faltou é
+         relatado depois, para a pessoa saber que precisa rodar o script. */
+      function upsert(tabela, linhas, tentativa) {
         if (!linhas.length) return Promise.resolve();
+        tentativa = tentativa || 0;
         return DB.req('/rest/v1/' + tabela + '?on_conflict=id', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json', Prefer: 'resolution=merge-duplicates,return=minimal' },
           body: JSON.stringify(linhas)
+        }).catch(function (err) {
+          var m = /Could not find the '([^']+)' column/.exec(err.message || '');
+          if (!m || tentativa >= 5) throw err;
+          var coluna = m[1];
+          DB.colunasAusentes.push(tabela + '.' + coluna);
+          linhas.forEach(function (l) { delete l[coluna]; });
+          return upsert(tabela, linhas, tentativa + 1);
         });
       }
       function limpar(tabela, ids) {
@@ -2619,6 +2634,12 @@ a{color:inherit}
 
     if (DB.ativo() && DB.sessao) {
       DB.salvarConteudo()
+        .then(function () {
+          if (DB.colunasAusentes.length) {
+            toast('Salvo, mas o banco está desatualizado: falta ' + DB.colunasAusentes.join(', ') +
+                  '. Rode o supabase-setup.sql de novo para não perder esse campo.');
+          }
+        })
         .catch(function (err) { toast('Salvo localmente, mas o Supabase recusou: ' + err.message); });
     }
   }
