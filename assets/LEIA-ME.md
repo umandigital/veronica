@@ -48,3 +48,35 @@ melhor em qualquer tela e arquivo menor.
 O header e o rodapé usam o monograma em SVG inline (aproximação do símbolo
 da marca) e a assinatura usa o wordmark tipográfico `UMAN`. Nada quebra —
 os arquivos apenas substituem esses padrões quando aparecem.
+
+
+## Vídeos das categorias
+
+A vitrine de categorias mostra as peças apagadas e acende a coluna sob o
+cursor. O vídeo é o recurso principal desse estado; a imagem serve de
+reserva e é o que aparece enquanto o vídeo carrega.
+
+Suba os arquivos aqui e informe o caminho em **Categorias → editar →
+Vídeo da peça**, no painel. Um nome por categoria facilita:
+
+| Categoria | Sugestão de arquivo | Movimento indicado |
+|---|---|---|
+| Anéis | `assets/cat-aneis.mp4` | rotação 360° |
+| Brincos | `assets/cat-brincos.mp4` | rotação 360° |
+| Colares | `assets/cat-colares.mp4` | orbital 3/4 com leve parallax |
+| Pulseiras | `assets/cat-pulseiras.mp4` | orbital 3/4 com leve parallax |
+| Braceletes | `assets/cat-braceletes.mp4` | rotação 360° |
+| Broches | `assets/cat-broches.mp4` | rotação 360° |
+| Conjuntos | `assets/cat-conjuntos.mp4` | orbital 3/4 com leve parallax |
+
+Recomendações para os vídeos:
+
+- **Enquadramento vertical**, perto de 3:4 — a coluna é um retrato. A peça
+  precisa estar centralizada, porque as bordas são cortadas.
+- **Curtos**, de 2 a 4 segundos, em looping que fecha sem salto visível.
+- **Sem áudio** — ele entra mudo de qualquer forma, e a faixa só pesa.
+- **Leves**, até cerca de 1 MB. São sete vídeos; o peso soma.
+- H.264 em `.mp4` é o formato mais compatível.
+
+Cada vídeo só é baixado quando o cursor chega na coluna, então os sete não
+custam nada a quem apenas passa pela seção.

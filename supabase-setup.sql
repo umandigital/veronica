@@ -24,13 +24,16 @@
 create table if not exists public.categorias (
   id        text primary key,
   nome      text not null,
-  eyebrow   text default 'Coleção',
-  altura    text default 'media' check (altura in ('curta','media','alta')),
   imagem    text,
+  video     text,
   visivel   boolean not null default true,
   ordem     integer not null default 0,
   criado_em timestamptz not null default now()
 );
+
+-- Colunas novas para quem criou a tabela numa versão anterior
+alter table public.categorias add column if not exists video text;
+alter table public.categorias alter column nome drop not null;
 
 create table if not exists public.produtos (
   id        text primary key,
@@ -153,13 +156,14 @@ create policy "midia gestao autenticada"
 -- ---------------------------------------------------------------------
 -- 5. CATEGORIAS DE PRODUTO
 -- ---------------------------------------------------------------------
-insert into public.categorias (id, nome, altura, visivel, ordem) values
-  ('c1','Anéis',      'media', true, 0),
-  ('c2','Brincos',    'alta',  true, 1),
-  ('c3','Colares',    'curta', true, 2),
-  ('c4','Pulseiras',  'alta',  true, 3),
-  ('c5','Braceletes', 'curta', true, 4),
-  ('c6','Broches',    'media', true, 5)
+insert into public.categorias (id, nome, visivel, ordem) values
+  ('c1','Anéis',      true, 0),
+  ('c2','Brincos',    true, 1),
+  ('c3','Colares',    true, 2),
+  ('c4','Pulseiras',  true, 3),
+  ('c5','Braceletes', true, 4),
+  ('c6','Broches',    true, 5),
+  ('c7','Conjuntos',  true, 6)
 on conflict (id) do nothing;
 
 -- Quem rodou uma versão anterior deste arquivo ficou com outra lista de
@@ -170,11 +174,11 @@ on conflict (id) do nothing;
 -- deixou de ser Broches. Se você já tinha subido fotos de categoria, elas
 -- seguem presas ao id antigo e podem acabar na categoria errada — confira
 -- em Categorias, no painel, e troque as imagens que ficarem trocadas.
-update public.categorias set nome = v.nome, altura = v.altura, ordem = v.ordem
+update public.categorias set nome = v.nome, ordem = v.ordem
   from (values
-    ('c1','Anéis','media',0), ('c2','Brincos','alta',1), ('c3','Colares','curta',2),
-    ('c4','Pulseiras','alta',3), ('c5','Braceletes','curta',4), ('c6','Broches','media',5)
-  ) as v(id, nome, altura, ordem)
+    ('c1','Anéis',0), ('c2','Brincos',1), ('c3','Colares',2), ('c4','Pulseiras',3),
+    ('c5','Braceletes',4), ('c6','Broches',5), ('c7','Conjuntos',6)
+  ) as v(id, nome, ordem)
  where public.categorias.id = v.id;
 
 insert into public.config (id, valor) values (1, '{}'::jsonb)
