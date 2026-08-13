@@ -480,7 +480,7 @@ a{color:inherit}
 .vitrine-item{min-width:0}
 
 .vitrine-card{
-  position:relative; display:block; width:100%; aspect-ratio:3/4.1;
+  position:relative; display:block; width:100%; aspect-ratio:3/4.4;
   border-radius:var(--r-lg); overflow:hidden; text-decoration:none;
   background:var(--areia); box-shadow:var(--sh-sm);
 }
@@ -540,7 +540,7 @@ a{color:inherit}
   /* fila única: as sete colunas lado a lado, próximas e mais baixas */
   .vitrine{display:flex; gap:10px; justify-content:center; align-items:stretch}
   .vitrine-item{flex:1 1 0; max-width:210px}
-  .vitrine-card{aspect-ratio:3/4.15}
+  .vitrine-card{aspect-ratio:3/4.4}
 }
 
 @media (prefers-reduced-motion:reduce){
@@ -1262,15 +1262,15 @@ a{color:inherit}
         hash: '7114bf3dc0b8fdf55dd11295b3395bd60467529e131480d6417a449f3cf2cfc6'
       }
     ],
-    /* As 6 categorias vêm da copy. "altura" controla a assimetria dos cards. */
+    /* As sete categorias da copy, cada uma com o vídeo que já está em assets/. */
     categorias: [
-      { id: 'c1', nome: 'Anéis',      imagem: '', video: '', visivel: true },
-      { id: 'c2', nome: 'Brincos',    imagem: '', video: '', visivel: true },
-      { id: 'c3', nome: 'Colares',    imagem: '', video: '', visivel: true },
-      { id: 'c4', nome: 'Pulseiras',  imagem: '', video: '', visivel: true },
-      { id: 'c5', nome: 'Braceletes', imagem: '', video: '', visivel: true },
-      { id: 'c6', nome: 'Broches',    imagem: '', video: '', visivel: true },
-      { id: 'c7', nome: 'Conjuntos',  imagem: '', video: '', visivel: true }
+      { id: 'c1', nome: 'Anéis',      imagem: '', video: 'assets/anel.mp4',      visivel: true },
+      { id: 'c2', nome: 'Brincos',    imagem: '', video: 'assets/brincos.mp4',   visivel: true },
+      { id: 'c3', nome: 'Colares',    imagem: '', video: 'assets/colar.mp4',     visivel: true },
+      { id: 'c4', nome: 'Pulseiras',  imagem: '', video: 'assets/pulseiras.mp4', visivel: true },
+      { id: 'c5', nome: 'Braceletes', imagem: '', video: 'assets/bracelete.mp4', visivel: true },
+      { id: 'c6', nome: 'Broches',    imagem: '', video: 'assets/broche.mp4',    visivel: true },
+      { id: 'c7', nome: 'Conjuntos',  imagem: '', video: 'assets/conjunto.mp4',  visivel: true }
     ],
     produtos: [
       { id: 'p1', nome: 'Colar Gota Esmeralda', categoria: 'c3', preco: 289, precoDe: 389, imagens: [], promocao: true,  visivel: true },
@@ -1641,19 +1641,42 @@ a{color:inherit}
   /* ===================================================================
      RENDER — CATEGORIAS
      =================================================================== */
+  /* Os sete vídeos estão versionados em assets/. Se o registro da categoria
+     vier sem vídeo — banco antigo, sem a coluna, ou cadastro ainda em branco —
+     o arquivo correspondente ao nome assume. Cadastrar um caminho no painel
+     continua vencendo este padrão. */
+  var VIDEO_PADRAO = {
+    aneis: 'assets/anel.mp4',
+    brincos: 'assets/brincos.mp4',
+    colares: 'assets/colar.mp4',
+    pulseiras: 'assets/pulseiras.mp4',
+    braceletes: 'assets/bracelete.mp4',
+    broches: 'assets/broche.mp4',
+    conjuntos: 'assets/conjunto.mp4'
+  };
+
+  function videoDaCategoria(c) {
+    if (c.video) return c.video;
+    var chave = String(c.nome || '')
+      .normalize('NFD').replace(/[\u0300-\u036f]/g, '')
+      .toLowerCase().trim();
+    return VIDEO_PADRAO[chave] || '';
+  }
+
   function renderCategorias() {
     var grid = $('#catGrid');
     var cats = store.categorias.filter(function (c) { return c.visivel !== false; });
 
     grid.innerHTML = cats.map(function (c, i) {
       var img = c.imagem || placeholder(c.id + c.nome, '');
+      var vid = videoDaCategoria(c);
       var qtd = store.produtos.filter(function (p) { return p.categoria === c.id && p.visivel !== false; }).length;
       var rotulo = 'Ver as peças da categoria ' + c.nome + (qtd ? ' — ' + qtd + (qtd > 1 ? ' peças' : ' peça') : '');
 
       return '' +
         '<li class="vitrine-item cat-anima" style="--d:' + (i * 90) + 'ms">' +
           '<a class="vitrine-card" href="#categorias" data-cat="' + esc(c.id) + '" ' +
-             (c.video ? 'data-video="' + esc(c.video) + '" ' : '') +
+             (vid ? 'data-video="' + esc(vid) + '" ' : '') +
              'aria-label="' + esc(rotulo) + '">' +
             '<span class="vitrine-media">' +
               '<img src="' + esc(img) + '" alt="Peça da categoria ' + esc(c.nome) + '" loading="lazy" decoding="async" width="600" height="820">' +
@@ -2742,7 +2765,8 @@ a{color:inherit}
           return '<div class="adm-item">' +
             '<img class="thumb" src="' + esc(img) + '" alt="" loading="lazy">' +
             '<div class="info"><strong>' + esc(c.nome) + '</strong>' +
-              '<span>' + qtd + ' produto(s) · ' + (c.video ? 'com vídeo' : 'só imagem') + ' ' +
+              '<span>' + qtd + ' produto(s) · ' +
+              (c.video ? 'com vídeo' : (videoDaCategoria(c) ? 'vídeo padrão' : 'só imagem')) + ' ' +
               '<span class="adm-badge ' + (c.visivel !== false ? 'adm-badge--on' : '') + '">' +
               (c.visivel !== false ? 'Visível' : 'Oculta') + '</span></span></div>' +
             '<div class="acts">' +
@@ -2777,8 +2801,8 @@ a{color:inherit}
       '</div>' +
       campoImagem('cat', c.imagem, 'Imagem da peça (estado apagado e reserva do vídeo)') +
       '<div class="field"><label for="catVideo">Vídeo da peça (.mp4)</label>' +
-        '<input id="catVideo" type="text" placeholder="assets/aneis.mp4 ou https://…" value="' + esc(c.video || '') + '">' +
-        '<p class="adm-help">Toca em looping enquanto o visitante passa o mouse pela coluna. Curto, sem áudio e com a peça centralizada. Sem vídeo, a imagem acima assume — e ela também é o que aparece enquanto o vídeo carrega.</p></div>' +
+        '<input id="catVideo" type="text" placeholder="assets/anel.mp4 ou https://…" value="' + esc(c.video || '') + '">' +
+        '<p class="adm-help">Toca em looping enquanto o visitante passa o mouse pela coluna. Curto, sem áudio e com a peça centralizada. Em branco, vale o arquivo de assets/ com o nome da categoria; não havendo nenhum, a imagem acima assume — e ela também é o que aparece enquanto o vídeo carrega.</p></div>' +
       '<div class="adm-actions">' +
         '<button class="btn btn-primary btn-sm" type="submit">Salvar</button>' +
         '<button class="btn btn-ghost btn-sm" type="button" id="catCancel">Cancelar</button>' +
