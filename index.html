@@ -1699,8 +1699,12 @@ a{color:inherit}
     observe(grid);
   }
 
-  /* O vídeo da coluna só é buscado quando o cursor chega nela — sete vídeos
-     carregados de saída custariam caro e nenhum deles seria visto. */
+  /* A peça já aparece no card: o vídeo entra parado no primeiro quadro,
+     em preto e branco, e é o cursor que o coloca em cor e movimento.
+     Para isso o arquivo precisa estar carregado antes do hover — mas só o
+     bastante para render um quadro (preload de metadados, mais o salto de
+     um milissegundo que obriga o navegador a desenhá-lo), e só quando a
+     seção se aproxima da tela. Sete vídeos inteiros de saída custariam caro. */
   function prepararVitrine(card) {
     var url = card.getAttribute('data-video');
     if (!url) return;
@@ -1714,43 +1718,60 @@ a{color:inherit}
       video.muted = true; video.defaultMuted = true;
       video.setAttribute('muted', ''); video.setAttribute('loop', '');
       video.setAttribute('playsinline', ''); video.setAttribute('aria-hidden', 'true');
-      video.preload = 'auto';
-      video.src = url;
-      /* só troca a foto pelo vídeo quando há quadro pronto, para não piscar */
-      video.addEventListener('canplay', function () { card.classList.add('tem-video'); }, { once: true });
+      video.preload = 'metadata';
+      /* o fragmento faz o navegador buscar e pintar o quadro inicial em vez
+         de deixar o elemento em branco enquanto ninguém aperta play */
+      video.src = url.indexOf('#') === -1 ? url + '#t=0.001' : url;
+      video.addEventListener('loadedmetadata', function () {
+        if (video.readyState < 2) { try { video.currentTime = 0.001; } catch (e) {} }
+      });
+      /* troca a foto pelo vídeo só quando existe quadro, para não piscar */
+      function pronto() { card.classList.add('tem-video'); }
+      video.addEventListener('loadeddata', pronto);
+      video.addEventListener('seeked', pronto);
       video.addEventListener('error', function () { card.classList.remove('tem-video'); });
       $('.vitrine-media', card).appendChild(video);
       return video;
     }
 
-    function acender() {
+    function tocar() {
       var v = montar();
       if (reduceMotion) return;
       var pr = v.play();
       if (pr && pr.catch) pr.catch(function () {});
     }
 
-    function apagar() {
+    /* parar devolve o primeiro quadro; o vídeo continua à vista, apagado */
+    function parar() {
       if (!video) return;
       video.pause();
-      try { video.currentTime = 0; } catch (e) {}
-      card.classList.remove('tem-video');
+      try { video.currentTime = 0.001; } catch (e) {}
+    }
+
+    if ('IntersectionObserver' in window) {
+      new IntersectionObserver(function (es, obs) {
+        if (!es[0].isIntersecting) return;
+        montar();
+        obs.disconnect();
+      }, { rootMargin: '300px 0px' }).observe(card);
+    } else {
+      montar();
     }
 
     if (semMouse) {
-      /* sem cursor, a peça acende quando entra na tela */
+      /* sem cursor não há hover: a peça toca enquanto estiver na tela */
       if ('IntersectionObserver' in window) {
         new IntersectionObserver(function (es) {
-          es[0].isIntersecting ? acender() : apagar();
+          es[0].isIntersecting ? tocar() : parar();
         }, { threshold: 0.55 }).observe(card);
       }
       return;
     }
 
-    card.addEventListener('mouseenter', acender);
-    card.addEventListener('focus', acender);
-    card.addEventListener('mouseleave', apagar);
-    card.addEventListener('blur', apagar);
+    card.addEventListener('mouseenter', tocar);
+    card.addEventListener('focus', tocar);
+    card.addEventListener('mouseleave', parar);
+    card.addEventListener('blur', parar);
   }
 
   /* ===================================================================

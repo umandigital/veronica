@@ -52,9 +52,10 @@ os arquivos apenas substituem esses padrões quando aparecem.
 
 ## Vídeos das categorias
 
-A vitrine de categorias mostra as peças apagadas e acende a coluna sob o
-cursor. O vídeo é o recurso principal desse estado; a imagem serve de
-reserva e é o que aparece enquanto o vídeo carrega.
+A vitrine de categorias mostra os sete vídeos parados no primeiro quadro,
+em preto e branco. A coluna sob o cursor ganha cor e o vídeo roda em
+looping; ao sair, ele volta ao quadro inicial. A imagem cadastrada serve de
+reserva: é o que aparece se o vídeo faltar ou não carregar.
 
 Os sete arquivos já estão aqui, e a página os aplica sozinha: uma categoria
 sem vídeo cadastrado usa o arquivo de `assets/` correspondente ao nome dela.
@@ -85,5 +86,7 @@ Recomendações para os vídeos:
 - **Leves**, até cerca de 1 MB. São sete vídeos; o peso soma.
 - H.264 em `.mp4` é o formato mais compatível.
 
-Cada vídeo só é baixado quando o cursor chega na coluna, então os sete não
-custam nada a quem apenas passa pela seção.
+Para o quadro inicial estar à vista antes do hover, os arquivos começam a
+ser buscados quando a seção se aproxima da tela — não no carregamento da
+página, e só o suficiente para desenhar um quadro. Quem nunca rola até as
+categorias não baixa nenhum deles.
