@@ -414,7 +414,23 @@ a{color:inherit}
 /* =====================================================================
    BANDA DE PARALAXE (conceito da marca / entre dobras)
    ===================================================================== */
-.band{position:relative; overflow:hidden; background:var(--bordo); color:var(--champanhe); isolation:isolate}
+.band{position:relative; background:var(--bordo); color:var(--champanhe); isolation:isolate}
+/* Sem vídeo, a dobra se comporta como qualquer outra seção. */
+.band-trilho{position:relative}
+.band-palco{position:relative; overflow:hidden}
+
+/* Com vídeo: o trilho estica e o palco gruda na tela, de modo que a rolagem
+   percorre o vídeo em vez de arrastar a seção para fora. A rolagem não é
+   sequestrada — quem comanda continua sendo o visitante. */
+.band--scrub .band-trilho{height:var(--curso,260vh)}
+.band--scrub .band-palco{position:sticky; top:0; height:100svh; display:flex; align-items:center}
+.band--scrub .band-inner{padding:0}
+@media (max-width:700px){ .band--scrub .band-trilho{height:var(--curso-mob,215vh)} }
+
+/* Fio de progresso: mostra o quanto falta para a seção liberar a rolagem */
+.band-progresso{position:absolute; left:0; right:0; bottom:0; height:2px; z-index:2; background:rgba(235,214,164,.18); display:none}
+.band--scrub .band-progresso{display:block}
+.band-progresso i{display:block; height:100%; width:0; background:var(--ouro)}
 .band-bg{position:absolute; inset:0; z-index:-3; will-change:transform;
   background:radial-gradient(90% 80% at 70% 30%, #7A1A64 0%, #5A1124 55%, #2c0813 100%);}
 .band-bg::after{content:""; position:absolute; inset:0;
@@ -920,8 +936,10 @@ a{color:inherit}
   </section>
 
   <!-- ======= BANDA DE PARALAXE — CONCEITO DA MARCA ======= -->
-  <section class="band on-dark" aria-labelledby="conceito-title">
-    <div class="band-bg parallax parallax-cover" data-speed="-0.2" aria-hidden="true"></div>
+  <section class="band on-dark" id="conceito" aria-labelledby="conceito-title">
+    <div class="band-trilho" id="bandaTrilho">
+      <div class="band-palco" id="bandaPalco">
+        <div class="band-bg parallax parallax-cover" data-speed="-0.2" aria-hidden="true"></div>
 
     <!-- camadas com forma definida: são elas que deixam o paralaxe visível -->
     <div class="band-marca band-marca--a parallax" data-speed="-0.52" aria-hidden="true">
@@ -940,7 +958,8 @@ a{color:inherit}
     <div class="band-brilhos parallax parallax-cover" data-speed="-0.3" aria-hidden="true"></div>
 
     <div class="band-veil" aria-hidden="true"></div>
-    <div class="wrap">
+        <div class="band-progresso" aria-hidden="true"><i id="bandaProgresso"></i></div>
+        <div class="wrap">
       <div class="band-inner parallax" data-speed="0.1">
         <svg class="mark-deco reveal-scale" viewBox="0 0 100 100" aria-hidden="true" focusable="false">
           <path d="M50 4 C57 17 59 26 50 38 C41 26 43 17 50 4 Z" fill="#E0A020"/>
@@ -949,6 +968,8 @@ a{color:inherit}
         </svg>
         <h2 id="conceito-title" class="sr-only">Conceito da marca</h2>
         <p class="quote reveal" style="--d:120ms">Semi Jóias nasceu da ideia de que joia de alto padrão não precisa ser distante. Cada peça é escolhida por Verônica, para quem quer atenção de verdade — não uma vitrine automática. Aqui, comprar um presente ou se presentear é simples, direto e no seu tempo.</p>
+      </div>
+    </div>
       </div>
     </div>
   </section>
@@ -1196,6 +1217,7 @@ a{color:inherit}
       umanUrl: 'https://umandigital.com.br',
       umanWhatsapp: '',
       umanMensagem: 'Olá! Vim pelo site da Verônica Vargas Semijoias.',
+      versao: 2,            /* usado pela migração de configurações salvas */
       /* Conexão Supabase (chave anon é pública por design; o acesso é regido por RLS) */
       supabaseUrl: 'https://owxmdsofikarohhhesgx.supabase.co',
       supabaseKey: 'sb_publishable_T5bIrB3VJTEe_AQhjazxVw_9qSDCO6s'
@@ -1235,6 +1257,33 @@ a{color:inherit}
   /* ===================================================================
      STORE
      =================================================================== */
+  var CONFIG_VERSAO = 2;
+
+  /* Uma configuração já salva vence o padrão novo em toda atualização — é o
+     que se espera de algo que a administradora ajustou. Mas quando o padrão
+     muda porque o projeto mudou, o valor antigo precisa sair do caminho.
+     Cada versão lista os campos que voltam ao padrão. */
+  var configMigrada = false;
+
+  function migrarConfig(salva) {
+    salva = salva || {};
+    var v = Number(salva.versao) || 1;
+    if (v < CONFIG_VERSAO) configMigrada = true;
+
+    /* v2: a faixa do conceito passou a exibir o vídeo da marca */
+    if (v < 2) {
+      delete salva.bandaTipo;
+      delete salva.bandaVideo;
+    }
+
+    salva.versao = CONFIG_VERSAO;
+    /* campo em branco não apaga valor novo vindo do padrão */
+    Object.keys(salva).forEach(function (k) {
+      if (salva[k] === '' && SEED.config[k]) delete salva[k];
+    });
+    return salva;
+  }
+
   var store = load();
 
   function load() {
@@ -1242,12 +1291,7 @@ a{color:inherit}
       var raw = localStorage.getItem(KEY);
       if (!raw) return clone(SEED);
       var data = JSON.parse(raw);
-      /* Campos vazios no cache não devem apagar valores novos do SEED
-         (ex.: quem abriu a versão anterior, sem WhatsApp nem Supabase). */
-      var salva = data.config || {};
-      Object.keys(salva).forEach(function (k) {
-        if (salva[k] === '' && SEED.config[k]) delete salva[k];
-      });
+      var salva = migrarConfig(data.config);
 
       return {
         config:     Object.assign(clone(SEED.config), salva),
@@ -1824,6 +1868,8 @@ a{color:inherit}
 
     aplicarHero(c);
     aplicarBanda(c);
+    /* o vídeo pode ter sido recriado: religa a rolagem ao quadro */
+    if (typeof initScrub === 'function') initScrub();
   }
 
   /* Logos resolvidos em cascata:
@@ -1979,6 +2025,8 @@ a{color:inherit}
         vid = document.createElement('video');
         vid.setAttribute('loop', ''); vid.setAttribute('playsinline', '');
         vid.setAttribute('aria-hidden', 'true'); vid.setAttribute('preload', 'metadata');
+        /* o atributo é exigido por navegadores móveis para liberar o autoplay */
+        vid.setAttribute('muted', '');
         vid.muted = true; vid.defaultMuted = true;
         media.insertBefore(vid, media.firstChild);
       }
@@ -2092,6 +2140,8 @@ a{color:inherit}
         vid = document.createElement('video');
         vid.setAttribute('loop', ''); vid.setAttribute('playsinline', '');
         vid.setAttribute('aria-hidden', 'true'); vid.setAttribute('preload', 'metadata');
+        /* o atributo é exigido por navegadores móveis para liberar o autoplay */
+        vid.setAttribute('muted', '');
         vid.muted = true; vid.defaultMuted = true;
         bg.insertBefore(vid, bg.firstChild);
       }
@@ -2104,6 +2154,100 @@ a{color:inherit}
       if (reduceMotion) { vid.removeAttribute('autoplay'); vid.pause(); }
       else { vid.setAttribute('autoplay', ''); var pr = vid.play(); if (pr && pr.catch) pr.catch(function () {}); }
     }
+  }
+
+  /* ===================================================================
+     DOBRA DO CONCEITO — a rolagem percorre o vídeo
+     A seção estica e o palco gruda na tela: enquanto o visitante rola esse
+     trecho, o quadro do vídeo acompanha o dedo. A rolagem nunca é bloqueada,
+     então teclado, barra de rolagem e voltar continuam funcionando.
+     =================================================================== */
+  var scrub = { ativo: false, video: null, alvo: 0, atual: 0, rodando: false, visivel: false };
+
+  function initScrub() {
+    var secao = $('#conceito');
+    if (!secao) return;
+
+    var vid = $('.band-bg video', secao);
+    if (!vid || reduceMotion) { desligarScrub(); return; }
+
+    function ligar() {
+      if (!isFinite(vid.duration) || vid.duration <= 0) { desligarScrub(); return; }
+      scrub.ativo = true;
+      scrub.video = vid;
+      secao.classList.add('band--scrub');
+      /* o curso acompanha a duração: o suficiente para ler sem arrastar demais */
+      var curso = Math.min(320, 160 + vid.duration * 26);
+      secao.style.setProperty('--curso', curso + 'vh');
+      secao.style.setProperty('--curso-mob', Math.min(260, curso * 0.82) + 'vh');
+      vid.removeAttribute('autoplay');
+      vid.removeAttribute('loop');
+      vid.pause();
+      vid.preload = 'auto';
+      medirParallax();
+      atualizarScrub();
+      observarScrub(secao);
+    }
+
+    if (vid.readyState >= 1) ligar();
+    else {
+      vid.addEventListener('loadedmetadata', ligar, { once: true });
+      vid.addEventListener('error', desligarScrub, { once: true });
+    }
+  }
+
+  function desligarScrub() {
+    var secao = $('#conceito');
+    scrub.ativo = false;
+    if (secao) { secao.classList.remove('band--scrub'); secao.style.removeProperty('--curso'); }
+  }
+
+  /* o laço de suavização só roda com a seção à vista */
+  function observarScrub(secao) {
+    if (!('IntersectionObserver' in window)) { scrub.visivel = true; laçoScrub(); return; }
+    new IntersectionObserver(function (entradas) {
+      scrub.visivel = entradas[0].isIntersecting;
+      if (scrub.visivel) laçoScrub();
+    }, { rootMargin: '10% 0px' }).observe(secao);
+  }
+
+  function progressoScrub() {
+    var trilho = $('#bandaTrilho');
+    if (!trilho) return 0;
+    var r = trilho.getBoundingClientRect();
+    var curso = r.height - window.innerHeight;
+    if (curso <= 0) return 0;
+    return Math.max(0, Math.min(1, -r.top / curso));
+  }
+
+  function atualizarScrub() {
+    if (!scrub.ativo) return;
+    var p = progressoScrub();
+    scrub.alvo = p * (scrub.video.duration || 0);
+
+    var barra = $('#bandaProgresso');
+    if (barra) barra.style.width = (p * 100).toFixed(1) + '%';
+
+    /* o texto entra no início e sai no fim, deixando o vídeo respirar */
+    var texto = $('.band-inner');
+    if (texto) {
+      var op = p < 0.12 ? p / 0.12 : (p > 0.88 ? Math.max(0, (1 - p) / 0.12) : 1);
+      texto.style.opacity = op.toFixed(2);
+    }
+  }
+
+  function laçoScrub() {
+    if (scrub.rodando || !scrub.ativo) return;
+    scrub.rodando = true;
+    (function passo() {
+      if (!scrub.ativo || !scrub.visivel) { scrub.rodando = false; return; }
+      /* interpolação: o seek direto a cada evento de rolagem engasga */
+      scrub.atual += (scrub.alvo - scrub.atual) * 0.16;
+      if (Math.abs(scrub.alvo - scrub.atual) > 0.008 && scrub.video.readyState >= 2) {
+        try { scrub.video.currentTime = scrub.atual; } catch (e) {}
+      }
+      requestAnimationFrame(passo);
+    })();
   }
 
   /* ===================================================================
@@ -2171,6 +2315,7 @@ a{color:inherit}
         var progresso = (r.top + r.height / 2 - vh / 2);
         c.el.style.transform = 'translate3d(0,' + (progresso * c.speed).toFixed(2) + 'px,0)';
       });
+      atualizarScrub();
       ticking = false;
     });
   }
@@ -2404,7 +2549,7 @@ a{color:inherit}
       store.produtos = r.produtos;
       if (r.config) {
         var url = store.config.supabaseUrl, key = store.config.supabaseKey;
-        store.config = Object.assign(clone(SEED.config), r.config, { supabaseUrl: url, supabaseKey: key });
+        store.config = Object.assign(clone(SEED.config), migrarConfig(r.config), { supabaseUrl: url, supabaseKey: key });
       }
       save();
       renderCategorias(); renderFiltrosTodos(); renderProdutos(); aplicarConfig();
@@ -3269,6 +3414,8 @@ a{color:inherit}
      =================================================================== */
   function init() {
     $('#ano').textContent = new Date().getFullYear();
+    /* grava o resultado da migração, senão ela se repetiria a cada carga */
+    if (configMigrada) save();
 
     aplicarConfig();
     renderCategorias();
@@ -3282,6 +3429,8 @@ a{color:inherit}
 
     var voltar = $('#voltarCategorias');
     if (voltar) voltar.addEventListener('click', fecharCatalogo);
+
+    initScrub();
 
     /* Conectado: o Supabase é a fonte do conteúdo; o cache local só evita
        a tela vazia enquanto a resposta não chega. */
