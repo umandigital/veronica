@@ -56,23 +56,30 @@ A vitrine de categorias mostra as peças apagadas e acende a coluna sob o
 cursor. O vídeo é o recurso principal desse estado; a imagem serve de
 reserva e é o que aparece enquanto o vídeo carrega.
 
-Suba os arquivos aqui e informe o caminho em **Categorias → editar →
-Vídeo da peça**, no painel. Um nome por categoria facilita:
+Os sete arquivos já estão aqui, e a página os aplica sozinha: uma categoria
+sem vídeo cadastrado usa o arquivo de `assets/` correspondente ao nome dela.
+Preencher **Categorias → editar → Vídeo da peça** no painel só é necessário
+para apontar outro arquivo — o que estiver lá vence este padrão.
 
-| Categoria | Sugestão de arquivo | Movimento indicado |
+| Categoria | Arquivo | Movimento indicado |
 |---|---|---|
-| Anéis | `assets/cat-aneis.mp4` | rotação 360° |
-| Brincos | `assets/cat-brincos.mp4` | rotação 360° |
-| Colares | `assets/cat-colares.mp4` | orbital 3/4 com leve parallax |
-| Pulseiras | `assets/cat-pulseiras.mp4` | orbital 3/4 com leve parallax |
-| Braceletes | `assets/cat-braceletes.mp4` | rotação 360° |
-| Broches | `assets/cat-broches.mp4` | rotação 360° |
-| Conjuntos | `assets/cat-conjuntos.mp4` | orbital 3/4 com leve parallax |
+| Anéis | `assets/anel.mp4` | rotação 360° |
+| Brincos | `assets/brincos.mp4` | rotação 360° |
+| Colares | `assets/colar.mp4` | orbital 3/4 com leve parallax |
+| Pulseiras | `assets/pulseiras.mp4` | orbital 3/4 com leve parallax |
+| Braceletes | `assets/bracelete.mp4` | rotação 360° |
+| Broches | `assets/broche.mp4` | rotação 360° |
+| Conjuntos | `assets/conjunto.mp4` | orbital 3/4 com leve parallax |
+
+Para trocar um deles, basta commitar um arquivo novo com o mesmo nome.
 
 Recomendações para os vídeos:
 
 - **Enquadramento vertical**, perto de 3:4 — a coluna é um retrato. A peça
-  precisa estar centralizada, porque as bordas são cortadas.
+  precisa estar centralizada, porque as bordas são cortadas. Os arquivos
+  atuais são 9:16, mais estreitos que a coluna: cerca de 17% da altura fica
+  de fora, 9% em cima e 9% embaixo. Como a peça está no centro, ela aparece
+  inteira; um recorte mais próximo de 3:4 aproveitaria o quadro todo.
 - **Curtos**, de 2 a 4 segundos, em looping que fecha sem salto visível.
 - **Sem áudio** — ele entra mudo de qualquer forma, e a faixa só pesa.
 - **Leves**, até cerca de 1 MB. São sete vídeos; o peso soma.
