@@ -415,12 +415,34 @@ a{color:inherit}
    BANDA DE PARALAXE (conceito da marca / entre dobras)
    ===================================================================== */
 .band{position:relative; overflow:hidden; background:var(--bordo); color:var(--champanhe); isolation:isolate}
-.band-bg{position:absolute; inset:-18% 0 -18% 0; z-index:-2; will-change:transform;
+.band-bg{position:absolute; inset:0; z-index:-3; will-change:transform;
   background:radial-gradient(90% 80% at 70% 30%, #7A1A64 0%, #5A1124 55%, #2c0813 100%);}
 .band-bg::after{content:""; position:absolute; inset:0;
   background:radial-gradient(40% 40% at 20% 70%, rgba(224,160,32,.22), transparent 70%);}
 /* Foto ou vídeo de fundo entram dentro da camada que já recebe o paralaxe */
 .band-bg img,.band-bg video{position:absolute; inset:0; width:100%; height:100%; object-fit:cover}
+/* Monogramas em velocidades opostas: dão ao olho a referência que um
+   gradiente uniforme não oferece — sem eles o paralaxe passa despercebido. */
+.band-marca{position:absolute; z-index:-2; pointer-events:none; will-change:transform}
+.band-marca svg{display:block; width:100%; height:auto}
+.band-marca--a{right:-6%; top:2%; width:min(52vw,470px); opacity:.20}
+.band-marca--b{left:-7%; bottom:6%; width:min(34vw,300px); opacity:.13}
+
+/* Poeira dourada, terceira velocidade */
+.band-brilhos{
+  position:absolute; inset:0; z-index:-2; pointer-events:none; opacity:.7; will-change:transform;
+  background-image:
+    radial-gradient(2.5px 2.5px at 12% 22%, rgba(235,214,164,.9), transparent),
+    radial-gradient(2px 2px at 28% 68%, rgba(224,160,32,.85), transparent),
+    radial-gradient(3px 3px at 46% 14%, rgba(235,214,164,.7), transparent),
+    radial-gradient(2px 2px at 63% 82%, rgba(235,214,164,.8), transparent),
+    radial-gradient(2.5px 2.5px at 78% 38%, rgba(224,160,32,.9), transparent),
+    radial-gradient(2px 2px at 90% 72%, rgba(235,214,164,.75), transparent),
+    radial-gradient(1.5px 1.5px at 36% 44%, rgba(235,214,164,.6), transparent),
+    radial-gradient(1.5px 1.5px at 70% 56%, rgba(235,214,164,.55), transparent);
+}
+.band-inner{will-change:transform}
+
 .band-veil{position:absolute; inset:0; z-index:-1; background:linear-gradient(180deg, rgba(41,8,20,.62), rgba(41,8,20,.42))}
 .band--midia .band-veil{background:linear-gradient(180deg, rgba(41,8,20,.78), rgba(41,8,20,.62))}
 .band-inner{padding:var(--s7) 0; text-align:center; max-width:780px; margin:0 auto}
@@ -895,10 +917,27 @@ a{color:inherit}
 
   <!-- ======= BANDA DE PARALAXE — CONCEITO DA MARCA ======= -->
   <section class="band on-dark" aria-labelledby="conceito-title">
-    <div class="band-bg parallax" data-speed="-0.22" aria-hidden="true"></div>
+    <div class="band-bg parallax parallax-cover" data-speed="-0.14" aria-hidden="true"></div>
+
+    <!-- camadas com forma definida: são elas que deixam o paralaxe visível -->
+    <div class="band-marca band-marca--a parallax" data-speed="-0.52" aria-hidden="true">
+      <svg viewBox="0 0 100 100" focusable="false">
+        <path d="M50 4 C57 17 59 26 50 38 C41 26 43 17 50 4 Z" fill="#E0A020"/>
+        <path d="M31 13 C31 40 37 53 50 64 C63 53 69 40 69 13 L60 13 C60 36 56 45 50 52 C44 45 40 36 40 13 Z" fill="#E0A020"/>
+        <path d="M16 26 C16 57 27 75 50 93 C73 75 84 57 84 26 L74 26 C74 53 65 67 50 81 C35 67 26 53 26 26 Z" fill="#E0A020"/>
+      </svg>
+    </div>
+    <div class="band-marca band-marca--b parallax" data-speed="0.28" aria-hidden="true">
+      <svg viewBox="0 0 100 100" focusable="false">
+        <path d="M50 4 C57 17 59 26 50 38 C41 26 43 17 50 4 Z" fill="#EBD6A4"/>
+        <path d="M16 26 C16 57 27 75 50 93 C73 75 84 57 84 26 L74 26 C74 53 65 67 50 81 C35 67 26 53 26 26 Z" fill="#EBD6A4"/>
+      </svg>
+    </div>
+    <div class="band-brilhos parallax parallax-cover" data-speed="-0.3" aria-hidden="true"></div>
+
     <div class="band-veil" aria-hidden="true"></div>
     <div class="wrap">
-      <div class="band-inner">
+      <div class="band-inner parallax" data-speed="0.1">
         <svg class="mark-deco reveal-scale" viewBox="0 0 100 100" aria-hidden="true" focusable="false">
           <path d="M50 4 C57 17 59 26 50 38 C41 26 43 17 50 4 Z" fill="#E0A020"/>
         <path d="M31 13 C31 40 37 53 50 64 C63 53 69 40 69 13 L60 13 C60 36 56 45 50 52 C44 45 40 36 40 13 Z" fill="#E0A020"/>
@@ -2085,9 +2124,30 @@ a{color:inherit}
   function initParallax() {
     if (reduceMotion) return;
     camadas = $$('.parallax').map(function (el) {
-      return { el: el, speed: parseFloat(el.getAttribute('data-speed')) || -0.2 };
+      return {
+        el: el,
+        speed: parseFloat(el.getAttribute('data-speed')) || -0.2,
+        cobre: el.classList.contains('parallax-cover')
+      };
     });
-    if (camadas.length) { onScroll(); }
+    if (!camadas.length) return;
+    medirParallax();
+    onScroll();
+  }
+
+  /* Uma camada que cobre a seção precisa de sobra em cima e embaixo do
+     tamanho do próprio deslocamento, senão a borda aparece no meio do
+     movimento. A sobra é calculada a partir da velocidade de cada uma. */
+  function medirParallax() {
+    var vh = window.innerHeight;
+    camadas.forEach(function (c) {
+      if (!c.cobre) return;
+      var pai = c.el.parentElement;
+      var alturaSecao = (pai && pai.offsetHeight) || c.el.offsetHeight;
+      var folga = Math.ceil(((vh + alturaSecao) / 2) * Math.abs(c.speed)) + 10;
+      c.el.style.top = -folga + 'px';
+      c.el.style.bottom = -folga + 'px';
+    });
   }
 
   var ticking = false;
@@ -2098,7 +2158,7 @@ a{color:inherit}
       var vh = window.innerHeight;
       camadas.forEach(function (c) {
         var r = c.el.getBoundingClientRect();
-        if (r.bottom < -200 || r.top > vh + 200) return;
+        if (r.bottom < -300 || r.top > vh + 300) return;
         var progresso = (r.top + r.height / 2 - vh / 2);
         c.el.style.transform = 'translate3d(0,' + (progresso * c.speed).toFixed(2) + 'px,0)';
       });
@@ -3233,7 +3293,7 @@ a{color:inherit}
     });
 
     window.addEventListener('scroll', onScroll, { passive: true });
-    window.addEventListener('resize', onScroll, { passive: true });
+    window.addEventListener('resize', function () { medirParallax(); onScroll(); }, { passive: true });
   }
 
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init);
