@@ -12,7 +12,7 @@
 # disso tem senha, mas também não precisa ficar acessível pela URL.
 # ---------------------------------------------------------------------
 [[redirects]]
-  from = "/supabase-setup.sql"
+  from = "/supabase/*"
   to = "/404.html"
   status = 404
   force = true

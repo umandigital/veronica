@@ -1,0 +1,5 @@
+# Projeto Supabase da Verônica Vargas Semijoias.
+# A integração do Supabase com o GitHub lê este diretório: ao dar merge na
+# branch de produção, ela aplica as migrações de supabase/migrations que
+# ainda não estiverem registradas no banco.
+project_id = "owxmdsofikarohhhesgx"

@@ -1488,7 +1488,7 @@ a{color:inherit}
   /* ===================================================================
      SUPABASE — REST, Auth e Storage via fetch (sem SDK, arquivo único)
      A chave anon é pública por design; o que protege a escrita é o RLS
-     definido em supabase-setup.sql.
+     definido nas migrações em supabase/migrations.
      =================================================================== */
   var SESSAO_KEY = 'vv_sessao_v1';
 
@@ -1660,7 +1660,7 @@ a{color:inherit}
       var cfg = clone(store.config);
       delete cfg.supabaseUrl; delete cfg.supabaseKey;
 
-      /* O banco pode estar numa versão anterior do supabase-setup.sql e não
+      /* O banco pode estar numa versão anterior das migrações e não
          conhecer uma coluna nova. Em vez de perder o salvamento inteiro, a
          coluna desconhecida é retirada e o envio segue — o que faltou é
          relatado depois, para a pessoa saber que precisa rodar o script. */
@@ -1672,7 +1672,7 @@ a{color:inherit}
           headers: { 'Content-Type': 'application/json', Prefer: 'resolution=merge-duplicates,return=minimal' },
           body: JSON.stringify(linhas)
         }).catch(function (err) {
-          /* tabela que o supabase-setup.sql ainda não criou neste banco:
+          /* tabela que as migrações ainda não criaram neste banco:
              o resto do salvamento segue, e o que faltou é relatado depois */
           if (/Could not find the table|relation .* does not exist/i.test(err.message || '') || err.status === 404) {
             DB.tabelasAusentes.push(tabela);
@@ -3135,7 +3135,7 @@ a{color:inherit}
           var falta = DB.colunasAusentes.concat(DB.tabelasAusentes);
           if (falta.length) {
             toast('Salvo, mas o banco está desatualizado: falta ' + falta.join(', ') +
-                  '. Rode o supabase-setup.sql de novo para não perder esse conteúdo.');
+                  '. Aplique as migrações (merge em main, ou colando o arquivo de supabase/migrations no SQL Editor).');
           }
         })
         .catch(function (err) { toast('Salvo localmente, mas o Supabase recusou: ' + err.message); });
@@ -3912,7 +3912,7 @@ a{color:inherit}
         '<div class="field"><label for="cfgSbKey">Chave anon (publishable)</label>' +
           '<input id="cfgSbKey" type="text" placeholder="eyJhbGciOi…" value="' + esc(c.supabaseKey) + '"></div>' +
       '</div>' +
-      '<p class="adm-help">Rode antes o <code>supabase-setup.sql</code> do repositório: ele cria as tabelas, o bucket de mídia, ' +
+      '<p class="adm-help">Aplique antes as migrações de <code>supabase/migrations</code>: elas criam as tabelas, o bucket de mídia, ' +
       'as políticas de RLS (leitura pública, escrita só autenticada) e o gatilho de perfis. ' +
       'A chave <strong>anon</strong> é pública por design — nunca use aqui a <code>service_role</code>.</p>' +
       '<div class="adm-actions">' +
@@ -3998,7 +3998,7 @@ a{color:inherit}
       st.textContent = 'Testando…';
       DB.req('/rest/v1/categorias?select=id&limit=1')
         .then(function () { st.textContent = '✓ Conexão bem-sucedida — tabelas acessíveis.'; })
-        .catch(function (e) { st.textContent = '✕ ' + e.message + ' (rodou o supabase-setup.sql?)'; });
+        .catch(function (e) { st.textContent = '✕ ' + e.message + ' (as migrações já foram aplicadas?)'; });
     });
 
     $('#btnPuxarSb').addEventListener('click', function () {
