@@ -636,67 +636,91 @@ a{color:inherit}
 }
 
 /* =====================================================================
-   5. COMO FUNCIONA
+   5. COMO FUNCIONA — sequência em filetes, sem cartão nem ícone
    ===================================================================== */
-.steps{display:grid; gap:var(--s3); counter-reset:step; margin-top:var(--s5)}
-.step{
-  position:relative; background:#fff; border:1px solid var(--linha); border-radius:var(--r-lg);
-  padding:var(--s4) var(--s3) var(--s4) var(--s3); box-shadow:var(--sh-sm);
-  transition:box-shadow .3s ease, transform .4s var(--ease);
+.howto-grid{display:grid; gap:var(--s4); align-items:start}
+@media (min-width:900px){
+  .howto-grid{grid-template-columns:.9fr 1fr; gap:var(--s6); align-items:center}
 }
-.step:hover{box-shadow:var(--sh-md); transform:translateY(-3px)}
-.step .n{
-  font-family:"Cormorant Garamond",Georgia,serif; font-size:2.6rem; line-height:1; color:var(--ouro-txt);
-  display:block; margin-bottom:var(--s2);
-}
-.step p{font-size:1.05rem; color:var(--grafite); max-width:32ch}
-.step::after{content:""; position:absolute; left:var(--s3); bottom:0; height:2px; width:0; background:var(--ouro); transition:width .5s var(--ease)}
-.step:hover::after{width:calc(100% - var(--s3) * 2)}
-@media (min-width:768px){ .steps{grid-template-columns:repeat(3,1fr); gap:var(--s3)} }
 
-.howto-grid{display:grid; gap:var(--s5); align-items:start}
-@media (min-width:1024px){
-  .howto-grid{grid-template-columns:1fr 1fr; gap:var(--s6); align-items:center}
-  /* Lado a lado com o texto, os passos voltam a empilhar para não espremer a linha */
-  .steps{grid-template-columns:1fr; margin-top:0}
-  .step p{max-width:38ch}
+/* Os passos são uma lista, não três caixas: o filete separa e o número
+   pendura na margem, como numa página impressa. */
+.passos{list-style:none; margin:0; padding:0; border-top:1px solid var(--linha)}
+.passo{
+  position:relative; display:grid; grid-template-columns:2.2rem 1fr; align-items:baseline;
+  gap:var(--s2); padding:var(--s3) 0; border-bottom:1px solid var(--linha);
 }
+.passo .n{
+  font-family:"Cormorant Garamond",Georgia,serif; font-style:italic; font-weight:500;
+  font-size:1.5rem; line-height:1; color:var(--ouro-txt); transition:color .3s ease;
+}
+.passo p{font-size:1rem; line-height:1.65; color:var(--grafite); max-width:42ch}
+/* o filete inferior acende sob a linha inteira — nada muda de lugar */
+.passo::after{
+  content:""; position:absolute; left:0; bottom:-1px; height:1px; width:0;
+  background:var(--ouro); transition:width .55s var(--ease);
+}
+.passo:hover::after{width:100%}
+.passo:hover .n{color:var(--roxo)}
 
 /* =====================================================================
-   6. CUIDADOS — fundo escuro, cartões em grade
+   6. DÚVIDAS — perguntas em filetes sobre o vinho
    ===================================================================== */
-.section--cuidados{position:relative; overflow:hidden; background:var(--bordo); color:var(--champanhe); isolation:isolate}
-.cuidados-bg{
+.section--faq{position:relative; overflow:hidden; background:var(--bordo); color:var(--champanhe); isolation:isolate}
+.faq-bg{
   position:absolute; inset:0; z-index:-1;
   background:radial-gradient(90% 80% at 78% 12%, #7A1A64 0%, #5A1124 52%, #3a0b18 100%);
 }
-.section--cuidados h2{color:#fff}
-.section--cuidados .lead--light{color:var(--champanhe); opacity:.92}
-.section--cuidados .sec-head{margin-bottom:var(--s5)}
+.section--faq h2{color:#fff}
+.section--faq .lead--light{color:var(--champanhe); opacity:.92}
+.section--faq .sec-head{margin-bottom:var(--s4)}
 
-.care-grid{display:grid; gap:var(--s2); margin:0; padding:0; list-style:none}
-@media (min-width:700px){ .care-grid{grid-template-columns:repeat(2,1fr); gap:var(--s3)} }
-
-.care-card{
-  display:flex; flex-direction:column; gap:var(--s2); align-items:flex-start;
-  padding:var(--s4) var(--s3);
-  background:rgba(251,247,240,.06); border:1px solid var(--linha); border-radius:var(--r-lg);
-  backdrop-filter:blur(2px);
-  transition:background .3s ease, border-color .3s ease, transform .4s var(--ease);
+.faq-lista{max-width:74ch; margin-inline:auto; border-top:1px solid var(--linha)}
+.faq-item{border-bottom:1px solid var(--linha)}
+.faq-item summary{
+  list-style:none; cursor:pointer; display:grid; grid-template-columns:1fr auto;
+  align-items:center; gap:var(--s3); padding:var(--s2) 0; min-height:44px;
+  font-family:"Cormorant Garamond",Georgia,serif; font-weight:500;
+  font-size:clamp(1.1rem,2.5vw,1.32rem); line-height:1.35; color:#fff;
+  transition:color .3s ease;
 }
-.care-card:hover{background:rgba(251,247,240,.11); border-color:var(--ouro); transform:translateY(-3px)}
-.care-card p{color:#fff; font-size:1.02rem; line-height:1.6; max-width:34ch}
-.care-card .ico{
-  width:46px; height:46px; flex:none; border-radius:50%;
-  border:1px solid var(--linha); background:rgba(224,160,32,.10);
-  display:inline-flex; align-items:center; justify-content:center;
-}
-.care-card .ico svg{width:23px; height:23px; fill:none; stroke:var(--ouro); stroke-width:1.4}
+.faq-item summary::-webkit-details-marker{display:none}
+.faq-item summary::marker{content:""}
+.faq-item summary:hover{color:var(--champanhe)}
+.faq-item summary:focus-visible{outline:2px solid var(--ouro); outline-offset:4px; border-radius:var(--r-xs)}
 
-.care-close{
-  margin-top:var(--s5); text-align:center; max-width:52ch; margin-inline:auto;
-  font-family:"Cormorant Garamond",Georgia,serif; font-style:italic;
-  font-size:clamp(1.25rem,3.6vw,1.75rem); line-height:1.45; color:var(--champanhe); text-wrap:balance;
+/* Marca de abrir e fechar feita de dois filetes: o vertical some ao abrir.
+   É sinal tipográfico, não ícone — nada de pictograma na dobra. */
+.faq-sinal{position:relative; width:13px; height:13px; flex:none}
+.faq-sinal::before,.faq-sinal::after{
+  content:""; position:absolute; top:50%; left:0; right:0; height:1px;
+  background:var(--ouro); transition:transform .4s var(--ease), opacity .4s ease;
+}
+.faq-sinal::after{transform:rotate(90deg)}
+.faq-item[open] .faq-sinal::after{transform:rotate(0deg); opacity:0}
+
+.faq-corpo{padding:0 0 var(--s3); max-width:60ch}
+.faq-corpo p{color:var(--champanhe); font-size:.98rem; line-height:1.75}
+.faq-item[open] .faq-corpo{animation:faqEntra .45s var(--ease) both}
+@keyframes faqEntra{from{opacity:0; transform:translateY(-6px)} to{opacity:1; transform:none}}
+
+.faq-fecho{
+  margin-top:var(--s4); text-align:center; color:var(--champanhe);
+  font-size:.95rem; line-height:1.7;
+}
+/* fora do parágrafo, o convite vira alvo de toque de verdade */
+.faq-fecho-link{
+  display:flex; width:fit-content; margin:var(--s1) auto 0; align-items:center;
+  min-height:48px; padding:0 var(--s2);
+  color:var(--ouro); text-decoration:none; font-size:.95rem;
+  box-shadow:inset 0 -1px 0 var(--linha);
+  transition:color .3s ease, box-shadow .3s ease;
+}
+.faq-fecho-link:hover{color:#fff; box-shadow:inset 0 -1px 0 var(--ouro)}
+
+@media (prefers-reduced-motion:reduce){
+  .passo::after,.passo .n,.faq-sinal::before,.faq-sinal::after{transition:none !important}
+  .faq-item[open] .faq-corpo{animation:none !important}
 }
 
 /* =====================================================================
@@ -816,6 +840,9 @@ a{color:inherit}
 .adm-item .info strong{font-family:"Cormorant Garamond",Georgia,serif; font-size:1.2rem; font-weight:600; display:block; line-height:1.2}
 .adm-item .info > span{font-size:.76rem; color:var(--nevoa-txt); display:block}
 .adm-item .acts{display:flex; gap:6px; flex-wrap:wrap; grid-column:2}
+/* item sem miniatura — as dúvidas — ocupa a linha inteira */
+.adm-item--texto{grid-template-columns:1fr}
+.adm-item--texto .acts{grid-column:1}
 @media (max-width:520px){
   .adm-item{grid-template-columns:56px 1fr}
   .adm-item .thumb{width:56px; height:56px; grid-row:auto}
@@ -874,7 +901,7 @@ a{color:inherit}
         <li><a href="#categorias">Categorias</a></li>
         <li><a href="#promocoes">Promoções</a></li>
         <li><a href="#como-funciona">Como funciona</a></li>
-        <li><a href="#cuidados">Cuidados</a></li>
+        <li><a href="#faq">Dúvidas</a></li>
       </ul>
     </nav>
 
@@ -891,7 +918,7 @@ a{color:inherit}
       <li><a href="#categorias">Categorias</a></li>
       <li><a href="#promocoes">Promoções</a></li>
       <li><a href="#como-funciona">Como funciona</a></li>
-      <li><a href="#cuidados">Cuidados</a></li>
+      <li><a href="#faq">Dúvidas</a></li>
     </ul>
     <a class="btn btn-gold" href="#categorias">Ver catálogo</a>
   </div>
@@ -1059,48 +1086,32 @@ a{color:inherit}
           <p class="lead reveal" style="--d:160ms">Sabemos como é: o dia corre, o compromisso chega e o presente fica pra depois — ou nem sai. Por isso o atendimento aqui é direto com Verônica, sem horário comercial travando sua decisão. Você escolhe a peça no catálogo, define a quantidade e manda pelo WhatsApp — a gente resolve o resto.</p>
         </div>
 
-        <ol class="steps">
-          <li class="step reveal" style="--d:0ms"><span class="n" aria-hidden="true">01</span><p>Escolha a peça e a quantidade no catálogo</p></li>
-          <li class="step reveal" style="--d:120ms"><span class="n" aria-hidden="true">02</span><p>Envie o pedido pelo WhatsApp (mensagem já vai pronta)</p></li>
-          <li class="step reveal" style="--d:240ms"><span class="n" aria-hidden="true">03</span><p>Combine pagamento e entrega direto com Verônica</p></li>
+        <ol class="passos">
+          <li class="passo reveal" style="--d:0ms"><span class="n" aria-hidden="true">01</span><p>Escolha a peça e a quantidade no catálogo</p></li>
+          <li class="passo reveal" style="--d:100ms"><span class="n" aria-hidden="true">02</span><p>Envie o pedido pelo WhatsApp (mensagem já vai pronta)</p></li>
+          <li class="passo reveal" style="--d:200ms"><span class="n" aria-hidden="true">03</span><p>Combine pagamento e entrega direto com Verônica</p></li>
         </ol>
       </div>
     </div>
   </section>
 
   <!-- =================================================================
-       6. CUIDADOS COM A PEÇA
+       6. DÚVIDAS — perguntas e respostas administráveis
        ================================================================= -->
-  <section class="section section--cuidados on-dark" id="cuidados" aria-labelledby="cuidados-title">
-    <div class="cuidados-bg" aria-hidden="true"></div>
+  <section class="section section--faq on-dark" id="faq" aria-labelledby="faq-title">
+    <div class="faq-bg" aria-hidden="true"></div>
     <div class="wrap">
       <div class="sec-head sec-head--center">
-        <span class="eyebrow eyebrow--light reveal">Cuidados com a peça</span>
-        <h2 id="cuidados-title" class="reveal" style="--d:80ms">Para que sua semi jóia dure tanto quanto a lembrança</h2>
+        <span class="eyebrow eyebrow--light reveal">Dúvidas frequentes</span>
+        <h2 id="faq-title" class="reveal" style="--d:80ms">O que costumam perguntar antes de escolher</h2>
         <hr class="rule rule-draw rule--center" aria-hidden="true">
-        <p class="lead lead--light reveal" style="--d:160ms">Semi jóias pedem um cuidado simples, mas que faz toda diferença. Algumas dicas para manter o brilho por muito mais tempo:</p>
       </div>
 
-      <ul class="care-grid">
-        <li class="care-card reveal" style="--d:0ms">
-          <span class="ico" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M4 4l16 16M9 3h6l1 4H8l1-4zM8 7h8l1 12a2 2 0 0 1-2 2h-6a2 2 0 0 1-2-2L8 7z" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
-          <p>Evite contato com perfume, álcool e cremes diretamente na peça</p>
-        </li>
-        <li class="care-card reveal" style="--d:90ms">
-          <span class="ico" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M3 17c2 1.5 4 1.5 6 0s4-1.5 6 0 4 1.5 6 0M6 13V6a3 3 0 0 1 6 0v1M9 10h8" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
-          <p>Retire antes de nadar, tomar banho ou dormir</p>
-        </li>
-        <li class="care-card reveal" style="--d:180ms">
-          <span class="ico" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M4 8h16v11a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V8zM4 8l2-4h12l2 4M12 12v5" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
-          <p>Guarde em local seco, longe de luz e umidade — se possível, em saquinho individual</p>
-        </li>
-        <li class="care-card reveal" style="--d:270ms">
-          <span class="ico" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M12 3l1.8 4.2L18 9l-4.2 1.8L12 15l-1.8-4.2L6 9l4.2-1.8L12 3zM18 15l.9 2.1L21 18l-2.1.9L18 21l-.9-2.1L15 18l2.1-.9L18 15z" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
-          <p>Limpe com um pano seco e macio após o uso</p>
-        </li>
-      </ul>
+      <div class="faq-lista reveal" style="--d:140ms" id="faqLista"></div>
 
-      <p class="care-close reveal" style="--d:120ms">Pequenos cuidados, grandes significados — do jeito que a Semi Jóias pensa em cada detalhe.</p>
+      <p class="faq-fecho reveal" style="--d:220ms">Ficou alguma dúvida que não está aqui?</p>
+      <a class="faq-fecho-link reveal" style="--d:280ms" id="linkWhatsappFaq"
+         href="#" target="_blank" rel="noopener noreferrer">Pergunte direto a Verônica no WhatsApp</a>
     </div>
   </section>
 
@@ -1171,6 +1182,7 @@ a{color:inherit}
     <div class="admin-tabs" role="tablist" aria-label="Seções da administração" id="adminTabs" hidden>
       <button class="admin-tab" role="tab" id="tab-categorias" aria-controls="pane-categorias" aria-selected="true" type="button">Categorias</button>
       <button class="admin-tab" role="tab" id="tab-produtos" aria-controls="pane-produtos" aria-selected="false" type="button" tabindex="-1">Produtos</button>
+      <button class="admin-tab" role="tab" id="tab-faq" aria-controls="pane-faq" aria-selected="false" type="button" tabindex="-1">Dúvidas</button>
       <button class="admin-tab" role="tab" id="tab-usuarios" aria-controls="pane-usuarios" aria-selected="false" type="button" tabindex="-1">Usuários</button>
       <button class="admin-tab" role="tab" id="tab-config" aria-controls="pane-config" aria-selected="false" type="button" tabindex="-1">Configurações</button>
       <button class="admin-tab" role="tab" id="tab-dados" aria-controls="pane-dados" aria-selected="false" type="button" tabindex="-1">Dados</button>
@@ -1197,6 +1209,7 @@ a{color:inherit}
       <div id="adminPanes" hidden>
         <section role="tabpanel" id="pane-categorias" aria-labelledby="tab-categorias"></section>
         <section role="tabpanel" id="pane-produtos" aria-labelledby="tab-produtos" hidden></section>
+        <section role="tabpanel" id="pane-faq" aria-labelledby="tab-faq" hidden></section>
         <section role="tabpanel" id="pane-usuarios" aria-labelledby="tab-usuarios" hidden></section>
         <section role="tabpanel" id="pane-config" aria-labelledby="tab-config" hidden></section>
         <section role="tabpanel" id="pane-dados" aria-labelledby="tab-dados" hidden></section>
@@ -1272,6 +1285,40 @@ a{color:inherit}
       { id: 'c6', nome: 'Broches',    imagem: '', video: 'assets/broche.mp4',    visivel: true },
       { id: 'c7', nome: 'Conjuntos',  imagem: '', video: 'assets/conjunto.mp4',  visivel: true }
     ],
+    /* As perguntas nascem da dobra de cuidados e crescem para o que se
+       pergunta antes de comprar. Tudo editável no painel. */
+    faq: [
+      { id: 'f1', pergunta: 'O que é, afinal, uma semijoia?',
+        resposta: 'Uma base de metal nobre revestida por uma espessa camada de ouro ou ródio. O brilho e a presença são de joia fina; o preço é de peça para usar no dia a dia, sem medo.',
+        visivel: true },
+      { id: 'f2', pergunta: 'Quanto tempo o banho dura?',
+        resposta: 'Depende de duas coisas: a espessura da camada e o uso. Perfume, suor, cloro e produtos de limpeza são o que mais desgasta. Com os cuidados abaixo, a peça mantém o brilho por muito mais tempo.',
+        visivel: true },
+      { id: 'f3', pergunta: 'Posso dormir, nadar ou tomar banho com a peça?',
+        resposta: 'Melhor não. Água, cloro e o atrito do travesseiro desgastam o banho. Retire antes — é o hábito que mais prolonga a vida da peça.',
+        visivel: true },
+      { id: 'f4', pergunta: 'Perfume e creme estragam a semijoia?',
+        resposta: 'Em contato direto, sim: álcool, perfume e cremes atacam a camada. Coloque a peça por último, depois de tudo pronto, e ela agradece.',
+        visivel: true },
+      { id: 'f5', pergunta: 'Como devo guardar?',
+        resposta: 'Em local seco, longe de luz e umidade. Se possível, cada peça em seu saquinho individual — assim uma não risca a outra.',
+        visivel: true },
+      { id: 'f6', pergunta: 'E para limpar?',
+        resposta: 'Um pano seco e macio depois do uso, para tirar suor e resíduo. Nada de produto de limpeza, pasta de dente ou álcool.',
+        visivel: true },
+      { id: 'f7', pergunta: 'Como faço o pedido?',
+        resposta: 'Escolha a peça e a quantidade no catálogo e toque em pedir. A mensagem chega pronta no WhatsApp, com a peça já identificada — dali em diante é conversa direta com Verônica.',
+        visivel: true },
+      { id: 'f8', pergunta: 'Como combino pagamento e entrega?',
+        resposta: 'Direto com Verônica, pelo WhatsApp. Ela passa as formas de pagamento e combina entrega ou envio conforme onde você está.',
+        visivel: true },
+      { id: 'f9', pergunta: 'Não sei meu tamanho de anel. E agora?',
+        resposta: 'Chame no WhatsApp antes de fechar o pedido. Verônica explica como medir em casa, com um barbante ou uma tira de papel, e confere o tamanho com você.',
+        visivel: true },
+      { id: 'f10', pergunta: 'Dá para pedir embalagem de presente?',
+        resposta: 'Dá — é só avisar na mensagem. Diga também se é para entregar direto a quem vai receber, que Verônica prepara desse jeito.',
+        visivel: true }
+    ],
     produtos: [
       { id: 'p1', nome: 'Colar Gota Esmeralda', categoria: 'c3', preco: 289, precoDe: 389, imagens: [], promocao: true,  visivel: true },
       { id: 'p2', nome: 'Colar Ponto de Luz',      categoria: 'c3', preco: 179, precoDe: 229, imagens: [], promocao: true,  visivel: true },
@@ -1327,6 +1374,7 @@ a{color:inherit}
         config:     Object.assign(clone(SEED.config), salva),
         categorias: Array.isArray(data.categorias) ? data.categorias : clone(SEED.categorias),
         produtos:   Array.isArray(data.produtos)   ? data.produtos.map(migrarProduto) : clone(SEED.produtos),
+        faq:        Array.isArray(data.faq)        ? data.faq                          : clone(SEED.faq),
         usuarios:   Array.isArray(data.usuarios) && data.usuarios.length ? data.usuarios : clone(SEED.usuarios)
       };
     } catch (e) { return clone(SEED); }
@@ -1479,7 +1527,10 @@ a{color:inherit}
       return Promise.all([
         DB.req('/rest/v1/categorias?select=*&order=ordem'),
         DB.req('/rest/v1/produtos?select=*&order=ordem'),
-        DB.req('/rest/v1/config?select=*&limit=1')
+        DB.req('/rest/v1/config?select=*&limit=1'),
+        /* tabela recente: num banco criado por uma versão anterior do script
+           ela ainda não existe, e isso não pode derrubar a carga inteira */
+        DB.req('/rest/v1/faq?select=*&order=ordem').catch(function () { return null; })
       ]).then(function (r) {
         return {
           categorias: (r[0] || []).map(function (c) {
@@ -1493,16 +1544,22 @@ a{color:inherit}
               promocao: !!p.destaque, visivel: p.visivel
             };
           }),
-          config: (r[2] && r[2][0] && r[2][0].valor) || null
+          config: (r[2] && r[2][0] && r[2][0].valor) || null,
+          /* null = tabela ausente, que é diferente de tabela vazia */
+          faq: r[3] && (r[3] || []).map(function (f) {
+            return { id: f.id, pergunta: f.pergunta, resposta: f.resposta, visivel: f.visivel !== false };
+          })
         };
       });
     },
 
     /* Sincroniza tudo de uma vez: upsert do estado atual e remoção do que saiu. */
     colunasAusentes: [],
+    tabelasAusentes: [],
 
     salvarConteudo: function () {
       DB.colunasAusentes = [];
+      DB.tabelasAusentes = [];
       var cats = store.categorias.map(function (c, i) {
         return { id: c.id, nome: c.nome, imagem: c.imagem || null, video: c.video || null, visivel: c.visivel !== false, ordem: i };
       });
@@ -1512,6 +1569,9 @@ a{color:inherit}
           preco_de: p.precoDe || 0, imagens: p.imagens || [], destaque: emPromocao(p),
           visivel: p.visivel !== false, ordem: i
         };
+      });
+      var perguntas = store.faq.map(function (f, i) {
+        return { id: f.id, pergunta: f.pergunta, resposta: f.resposta, visivel: f.visivel !== false, ordem: i };
       });
       /* A conexão e as credenciais não vão para o banco */
       var cfg = clone(store.config);
@@ -1529,6 +1589,12 @@ a{color:inherit}
           headers: { 'Content-Type': 'application/json', Prefer: 'resolution=merge-duplicates,return=minimal' },
           body: JSON.stringify(linhas)
         }).catch(function (err) {
+          /* tabela que o supabase-setup.sql ainda não criou neste banco:
+             o resto do salvamento segue, e o que faltou é relatado depois */
+          if (/Could not find the table|relation .* does not exist/i.test(err.message || '') || err.status === 404) {
+            DB.tabelasAusentes.push(tabela);
+            return;
+          }
           var m = /Could not find the '([^']+)' column/.exec(err.message || '');
           if (!m || tentativa >= 5) throw err;
           var coluna = m[1];
@@ -1545,8 +1611,13 @@ a{color:inherit}
 
       return upsert('categorias', cats)
         .then(function () { return upsert('produtos', prods); })
+        .then(function () { return upsert('faq', perguntas); })
         .then(function () { return limpar('produtos', prods.map(function (p) { return p.id; })); })
         .then(function () { return limpar('categorias', cats.map(function (c) { return c.id; })); })
+        .then(function () {
+          if (DB.tabelasAusentes.indexOf('faq') > -1) return null;
+          return limpar('faq', perguntas.map(function (f) { return f.id; })).catch(function () {});
+        })
         .then(function () {
           return DB.req('/rest/v1/config?on_conflict=id', {
             method: 'POST',
@@ -1772,6 +1843,34 @@ a{color:inherit}
     card.addEventListener('focus', tocar);
     card.addEventListener('mouseleave', parar);
     card.addEventListener('blur', parar);
+  }
+
+  /* ===================================================================
+     RENDER — DÚVIDAS
+     =================================================================== */
+  /* <details> em vez de acordeão em JS: abre sem script, responde ao
+     teclado sozinho e o Ctrl+F do navegador encontra a resposta fechada. */
+  function renderFaq() {
+    var lista = $('#faqLista');
+    if (!lista) return;
+    var itens = store.faq.filter(function (f) { return f.visivel !== false && f.pergunta; });
+
+    lista.innerHTML = itens.map(function (f) {
+      return '<details class="faq-item">' +
+        '<summary>' + esc(f.pergunta) + '<span class="faq-sinal" aria-hidden="true"></span></summary>' +
+        '<div class="faq-corpo"><p>' + esc(f.resposta) + '</p></div>' +
+      '</details>';
+    }).join('');
+
+    /* uma resposta aberta por vez: a dobra não cresce sem controle */
+    $$('.faq-item', lista).forEach(function (d) {
+      d.addEventListener('toggle', function () {
+        if (!d.open) return;
+        $$('.faq-item', lista).forEach(function (o) { if (o !== d) o.open = false; });
+      });
+    });
+
+    lista.hidden = !itens.length;
   }
 
   /* ===================================================================
@@ -2010,6 +2109,7 @@ a{color:inherit}
     aplicarLogos(c);
     $('#waFloat').setAttribute('href', waHref('', 0));
     $('#linkWhatsappFooter').setAttribute('href', waHref('', 0));
+    if ($('#linkWhatsappFaq')) $('#linkWhatsappFaq').setAttribute('href', waHref('', 0));
     $('#linkInstagram').setAttribute('href', c.instagram || 'https://instagram.com/');
 
     $('#fotoVeronica').setAttribute('src', c.fotoVeronica || placeholder('veronica-retrato', ''));
@@ -2503,7 +2603,7 @@ a{color:inherit}
   var admin = {
     el: null, logado: false, usuario: null, ultimoFoco: null,
     catEdit: null, prodEdit: null,
-    rascunhoCat: null, rascunhoProd: null, rascunhoUsuario: null,
+    rascunhoCat: null, rascunhoProd: null, rascunhoUsuario: null, rascunhoFaq: null,
     usuariosRemotos: null
   };
 
@@ -2665,6 +2765,7 @@ a{color:inherit}
   function renderAdmin() {
     renderAdminCategorias();
     renderAdminProdutos();
+    renderAdminFaq();
     renderAdminUsuarios();
     renderAdminConfig();
     renderAdminDados();
@@ -2673,15 +2774,16 @@ a{color:inherit}
   /* Salva local (cache imediato) e, se conectado, sincroniza com o Supabase. */
   function persistir(msg) {
     if (!save()) return;
-    renderCategorias(); renderFiltrosTodos(); renderProdutos(); aplicarConfig();
+    renderCategorias(); renderFiltrosTodos(); renderProdutos(); renderFaq(); aplicarConfig();
     if (msg) toast(msg);
 
     if (DB.ativo() && DB.sessao) {
       DB.salvarConteudo()
         .then(function () {
-          if (DB.colunasAusentes.length) {
-            toast('Salvo, mas o banco está desatualizado: falta ' + DB.colunasAusentes.join(', ') +
-                  '. Rode o supabase-setup.sql de novo para não perder esse campo.');
+          var falta = DB.colunasAusentes.concat(DB.tabelasAusentes);
+          if (falta.length) {
+            toast('Salvo, mas o banco está desatualizado: falta ' + falta.join(', ') +
+                  '. Rode o supabase-setup.sql de novo para não perder esse conteúdo.');
           }
         })
         .catch(function (err) { toast('Salvo localmente, mas o Supabase recusou: ' + err.message); });
@@ -2701,12 +2803,14 @@ a{color:inherit}
       DB.servidorVazio = false;
       store.categorias = r.categorias;
       store.produtos = r.produtos;
+      /* sem a tabela no banco, o FAQ local continua valendo */
+      if (r.faq && r.faq.length) store.faq = r.faq;
       if (r.config) {
         var url = store.config.supabaseUrl, key = store.config.supabaseKey;
         store.config = Object.assign(clone(SEED.config), migrarConfig(r.config), { supabaseUrl: url, supabaseKey: key });
       }
       save();
-      renderCategorias(); renderFiltrosTodos(); renderProdutos(); aplicarConfig();
+      renderCategorias(); renderFiltrosTodos(); renderProdutos(); renderFaq(); aplicarConfig();
       return true;
     });
   }
@@ -2877,6 +2981,113 @@ a{color:inherit}
     }
     persistir('Categorias atualizadas.');
     renderAdminCategorias(); renderAdminProdutos();
+  }
+
+  /* ---------- DÚVIDAS ---------- */
+  function renderAdminFaq() {
+    var pane = $('#pane-faq');
+    if (!pane) return;
+    var e = admin.rascunhoFaq;
+
+    pane.innerHTML = '' +
+      (e ? formFaq(e) : '') +
+      '<div class="adm-toolbar">' +
+        '<div><span class="eyebrow">Perguntas frequentes</span>' +
+        '<p class="adm-help">Aparecem na dobra "Dúvidas", uma resposta aberta por vez. Comece pelo que mais chega no WhatsApp — pergunta respondida aqui é conversa que não precisa começar do zero.</p></div>' +
+        (e ? '' : '<button class="btn btn-primary btn-sm" type="button" id="novaFaq">+ Nova pergunta</button>') +
+      '</div>' +
+      '<div class="adm-list">' +
+        (store.faq.length ? store.faq.map(function (f, i) {
+          return '<div class="adm-item adm-item--texto">' +
+            '<div class="info"><strong>' + esc(f.pergunta || '(sem pergunta)') + '</strong>' +
+              '<span>' + esc(resumir(f.resposta, 90)) + ' ' +
+              '<span class="adm-badge ' + (f.visivel !== false ? 'adm-badge--on' : '') + '">' +
+              (f.visivel !== false ? 'Visível' : 'Oculta') + '</span></span></div>' +
+            '<div class="acts">' +
+              '<button class="adm-btn" type="button" data-act="edit" data-id="' + esc(f.id) + '">Editar</button>' +
+              '<button class="adm-btn" type="button" data-act="up" data-id="' + esc(f.id) + '" ' + (i === 0 ? 'disabled' : '') + ' aria-label="Mover para cima">↑</button>' +
+              '<button class="adm-btn" type="button" data-act="down" data-id="' + esc(f.id) + '" ' + (i === store.faq.length - 1 ? 'disabled' : '') + ' aria-label="Mover para baixo">↓</button>' +
+              '<button class="adm-btn" type="button" data-act="vis" data-id="' + esc(f.id) + '">' + (f.visivel !== false ? 'Ocultar' : 'Mostrar') + '</button>' +
+              '<button class="adm-btn adm-btn--danger" type="button" data-act="del" data-id="' + esc(f.id) + '">Excluir</button>' +
+            '</div></div>';
+        }).join('') : '<p class="adm-help">Nenhuma pergunta cadastrada — a dobra fica fora do ar até a primeira entrar.</p>') +
+      '</div>';
+
+    if ($('#novaFaq')) {
+      $('#novaFaq').addEventListener('click', function () {
+        admin.rascunhoFaq = { id: '', pergunta: '', resposta: '', visivel: true };
+        renderAdminFaq();
+      });
+    }
+    if (e) bindFormFaq();
+
+    $$('[data-act]', pane).forEach(function (b) {
+      b.addEventListener('click', function () { acaoFaq(b.getAttribute('data-act'), b.getAttribute('data-id')); });
+    });
+  }
+
+  function resumir(txt, n) {
+    txt = String(txt || '').trim();
+    return txt.length > n ? txt.slice(0, n - 1).replace(/\s+\S*$/, '') + '…' : (txt || 'sem resposta');
+  }
+
+  function formFaq(f) {
+    return '<form class="adm-form" id="formFaq">' +
+      '<h3>' + (f.id ? 'Editar pergunta' : 'Nova pergunta') + '</h3>' +
+      '<div class="field"><label for="faqPergunta">Pergunta</label>' +
+        '<input id="faqPergunta" required value="' + esc(f.pergunta) + '" placeholder="Posso tomar banho com a peça?"></div>' +
+      '<div class="field"><label for="faqResposta">Resposta</label>' +
+        '<textarea id="faqResposta" rows="5" required placeholder="Escreva como você responderia no WhatsApp.">' + esc(f.resposta) + '</textarea>' +
+        '<p class="adm-help">Duas ou três frases resolvem. Quem lê está decidindo, não estudando.</p></div>' +
+      '<label class="adm-check"><input type="checkbox" id="faqVis"' + (f.visivel !== false ? ' checked' : '') + '> Visível no site</label>' +
+      '<div class="adm-actions">' +
+        '<button class="btn btn-primary btn-sm" type="submit">Salvar</button>' +
+        '<button class="btn btn-ghost btn-sm" type="button" id="faqCancel">Cancelar</button>' +
+      '</div></form>';
+  }
+
+  function bindFormFaq() {
+    var r = admin.rascunhoFaq;
+    $('#faqCancel').addEventListener('click', function () { admin.rascunhoFaq = null; renderAdminFaq(); });
+
+    $('#formFaq').addEventListener('submit', function (ev) {
+      ev.preventDefault();
+      capturaFaq();
+      if (!r.pergunta.trim()) { toast('Escreva a pergunta.'); return; }
+      if (!r.resposta.trim()) { toast('Escreva a resposta.'); return; }
+      if (r.id) {
+        store.faq = store.faq.map(function (f) { return f.id === r.id ? Object.assign({}, f, r) : f; });
+      } else {
+        r.id = uid('f'); store.faq.push(clone(r));
+      }
+      admin.rascunhoFaq = null;
+      persistir('Pergunta salva.');
+      renderAdminFaq();
+    });
+  }
+
+  function capturaFaq() {
+    var r = admin.rascunhoFaq; if (!r || !$('#faqPergunta')) return;
+    r.pergunta = $('#faqPergunta').value;
+    r.resposta = $('#faqResposta').value;
+    r.visivel = $('#faqVis').checked;
+  }
+
+  function acaoFaq(act, id) {
+    var i = store.faq.map(function (f) { return f.id; }).indexOf(id);
+    if (i < 0) return;
+    var f = store.faq[i];
+
+    if (act === 'edit') { admin.rascunhoFaq = clone(f); renderAdminFaq(); $('.admin-body').scrollTop = 0; return; }
+    if (act === 'vis') { f.visivel = f.visivel === false; }
+    if (act === 'up' && i > 0) { store.faq.splice(i - 1, 0, store.faq.splice(i, 1)[0]); }
+    if (act === 'down' && i < store.faq.length - 1) { store.faq.splice(i + 1, 0, store.faq.splice(i, 1)[0]); }
+    if (act === 'del') {
+      if (!confirm('Excluir a pergunta "' + f.pergunta + '"?')) return;
+      store.faq.splice(i, 1);
+    }
+    persistir('Dúvidas atualizadas.');
+    renderAdminFaq();
   }
 
   /* ---------- PRODUTOS ---------- */
@@ -3515,7 +3726,7 @@ a{color:inherit}
     '</div>' +
     '<div class="adm-danger-zone">' +
       '<h3 style="font-size:1.3rem">Restaurar conteúdo de exemplo</h3>' +
-      '<p class="adm-help">Substitui categorias, produtos e configurações pelos dados iniciais. Não pode ser desfeito.</p>' +
+      '<p class="adm-help">Substitui categorias, produtos, dúvidas e configurações pelos dados iniciais. Não pode ser desfeito.</p>' +
       '<div class="adm-actions" style="margin-top:var(--s2)">' +
         '<button class="adm-btn adm-btn--danger" type="button" id="btnReset">Restaurar padrão</button>' +
       '</div>' +
@@ -3542,6 +3753,8 @@ a{color:inherit}
           store.categorias = d.categorias;
           store.produtos = d.produtos;
           store.config = Object.assign(clone(SEED.config), d.config || {});
+          /* backup anterior ao FAQ: mantém as perguntas que já estão no ar */
+          if (Array.isArray(d.faq)) store.faq = d.faq;
           persistir('Dados importados.');
           renderAdmin();
         } catch (e) { toast('Arquivo inválido.'); }
@@ -3569,6 +3782,7 @@ a{color:inherit}
     renderCategorias();
     renderFiltrosTodos();
     renderProdutos();
+    renderFaq();
 
     initHeader();
     initAdmin();

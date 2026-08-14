@@ -55,6 +55,16 @@ create table if not exists public.config (
   atualizado_em timestamptz not null default now()
 );
 
+-- Perguntas frequentes da dobra "Dúvidas"
+create table if not exists public.faq (
+  id        text primary key,
+  pergunta  text not null,
+  resposta  text not null default '',
+  visivel   boolean not null default true,
+  ordem     integer not null default 0,
+  criado_em timestamptz not null default now()
+);
+
 -- Perfis espelham auth.users e carregam nome e papel
 create table if not exists public.perfis (
   id        uuid primary key references auth.users(id) on delete cascade,
@@ -100,6 +110,7 @@ create trigger ao_criar_usuario
 alter table public.categorias enable row level security;
 alter table public.produtos   enable row level security;
 alter table public.config     enable row level security;
+alter table public.faq        enable row level security;
 alter table public.perfis     enable row level security;
 
 drop policy if exists "categorias leitura publica"  on public.categorias;
@@ -122,6 +133,13 @@ create policy "config leitura publica"
   on public.config for select using (true);
 create policy "config escrita autenticada"
   on public.config for all to authenticated using (true) with check (true);
+
+drop policy if exists "faq leitura publica"  on public.faq;
+drop policy if exists "faq escrita autenticada" on public.faq;
+create policy "faq leitura publica"
+  on public.faq for select using (true);
+create policy "faq escrita autenticada"
+  on public.faq for all to authenticated using (true) with check (true);
 
 -- Perfis: visíveis apenas para quem está autenticado; só admin altera papéis
 drop policy if exists "perfis leitura autenticada" on public.perfis;
@@ -185,6 +203,34 @@ insert into public.config (id, valor) values (1, '{}'::jsonb)
 on conflict (id) do nothing;
 
 -- ---------------------------------------------------------------------
+-- 5b. DÚVIDAS FREQUENTES
+--     Ponto de partida; tudo editável em Área administrativa → Dúvidas.
+--     `do nothing` para não desfazer o que já foi ajustado no painel.
+-- ---------------------------------------------------------------------
+insert into public.faq (id, pergunta, resposta, visivel, ordem) values
+  ('f1','O que é, afinal, uma semijoia?',
+        'Uma base de metal nobre revestida por uma espessa camada de ouro ou ródio. O brilho e a presença são de joia fina; o preço é de peça para usar no dia a dia, sem medo.', true, 0),
+  ('f2','Quanto tempo o banho dura?',
+        'Depende de duas coisas: a espessura da camada e o uso. Perfume, suor, cloro e produtos de limpeza são o que mais desgasta. Com os cuidados abaixo, a peça mantém o brilho por muito mais tempo.', true, 1),
+  ('f3','Posso dormir, nadar ou tomar banho com a peça?',
+        'Melhor não. Água, cloro e o atrito do travesseiro desgastam o banho. Retire antes — é o hábito que mais prolonga a vida da peça.', true, 2),
+  ('f4','Perfume e creme estragam a semijoia?',
+        'Em contato direto, sim: álcool, perfume e cremes atacam a camada. Coloque a peça por último, depois de tudo pronto, e ela agradece.', true, 3),
+  ('f5','Como devo guardar?',
+        'Em local seco, longe de luz e umidade. Se possível, cada peça em seu saquinho individual — assim uma não risca a outra.', true, 4),
+  ('f6','E para limpar?',
+        'Um pano seco e macio depois do uso, para tirar suor e resíduo. Nada de produto de limpeza, pasta de dente ou álcool.', true, 5),
+  ('f7','Como faço o pedido?',
+        'Escolha a peça e a quantidade no catálogo e toque em pedir. A mensagem chega pronta no WhatsApp, com a peça já identificada — dali em diante é conversa direta com Verônica.', true, 6),
+  ('f8','Como combino pagamento e entrega?',
+        'Direto com Verônica, pelo WhatsApp. Ela passa as formas de pagamento e combina entrega ou envio conforme onde você está.', true, 7),
+  ('f9','Não sei meu tamanho de anel. E agora?',
+        'Chame no WhatsApp antes de fechar o pedido. Verônica explica como medir em casa, com um barbante ou uma tira de papel, e confere o tamanho com você.', true, 8),
+  ('f10','Dá para pedir embalagem de presente?',
+        'Dá — é só avisar na mensagem. Diga também se é para entregar direto a quem vai receber, que Verônica prepara desse jeito.', true, 9)
+on conflict (id) do nothing;
+
+-- ---------------------------------------------------------------------
 -- 6. PERFIS DE QUEM JÁ EXISTIA
 --    O gatilho acima só age em usuários criados depois dele. Este bloco
 --    cria o perfil de quem já estava em Authentication → Users, de modo
@@ -214,6 +260,7 @@ update public.perfis
 select
   (select count(*) from public.categorias)              as categorias,
   (select count(*) from public.produtos)                as produtos,
+  (select count(*) from public.faq)                     as duvidas,
   (select count(*) from public.perfis)                  as usuarios,
   (select count(*) from public.perfis where papel='admin') as admins,
   (select count(*) from storage.buckets where id='midia')  as bucket_midia;
