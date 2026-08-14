@@ -470,12 +470,25 @@ a{color:inherit}
 }
 .about-body h2{font-size:clamp(1.8rem,5.6vw,2.7rem); margin-top:var(--s2); text-wrap:balance}
 .about-body p{margin-top:var(--s3); color:var(--nevoa-txt); max-width:60ch}
+/* a saudação é a porta de entrada dos cinco parágrafos: entra um ponto acima
+   e na cor do texto forte, para o bloco ter onde começar a ser lido */
+.about-abre{font-size:1.1rem; color:var(--grafite)}
 .about-sign{margin-top:var(--s4); font-family:"Cormorant Garamond",Georgia,serif; font-style:italic; font-size:2rem; color:var(--ouro-txt)}
-@media (min-width:768px){
-  .about-grid{grid-template-columns:5fr 6fr; gap:var(--s6)}
+/* Empilhado, a foto vira um retrato de tamanho contido: a largura inteira da
+   coluna daria um cartaz de quase mil pixels de altura. */
+/* `justify-self` em vez de margem automática: margem auto num item de grid
+   desliga o esticamento e a figura encolhe até o conteúdo. */
+.about-figure{max-width:26rem; width:100%; justify-self:center}
+
+/* Duas colunas só a partir de 1024px. Entre 768 e 1023 a coluna da foto
+   ficava com 314px e o retrato virava uma tira — estreito demais ao lado de
+   um texto que ocupa quase mil pixels de altura. */
+@media (min-width:1024px){
+  .about-grid{grid-template-columns:5fr 6fr; gap:var(--s7); align-items:stretch}
+  .about-figure{max-width:none; justify-self:stretch; display:flex; flex-direction:column; justify-content:center}
+  .about-figure .img-frame{aspect-ratio:auto; flex:1; min-height:420px; max-height:660px}
   .about-figure figcaption{left:auto; right:-16px; bottom:32px; transform:none}
 }
-@media (min-width:1024px){ .about-grid{gap:var(--s7)} }
 
 /* =====================================================================
    BANDA DE PARALAXE (conceito da marca / entre dobras)
@@ -1055,7 +1068,7 @@ a{color:inherit}
       <div class="about-grid">
         <figure class="about-figure reveal-scale">
           <div class="img-frame">
-            <img id="fotoVeronica" src="" alt="Foto de Verônica, fundadora da Semi Jóias, que escolhe pessoalmente cada peça" loading="lazy" decoding="async" width="800" height="1000">
+            <img id="fotoVeronica" src="" alt="Foto de Verônica Vargas, que escolhe pessoalmente cada peça da loja" loading="lazy" decoding="async" width="800" height="1000">
             <span class="frame-line" aria-hidden="true"></span>
           </div>
           <figcaption>Verônica Vargas</figcaption>
@@ -1065,8 +1078,12 @@ a{color:inherit}
           <span class="eyebrow reveal">Quem é Verônica</span>
           <h2 id="about-title" class="reveal" style="--d:80ms">Por trás de cada peça, uma pessoa que escolhe junto com você.</h2>
           <hr class="rule rule-draw" aria-hidden="true">
-          <p class="reveal" style="--d:160ms">Sou Verônica, e escolho cada semi jóia pensando em quem vai usar — não em vender mais uma peça. Depois de [X anos] no mercado, entendi que joia boa não é só sobre design: é sobre te atender do jeito que você precisa, no horário que você tem. Foi assim que nasceu a Semi Jóias [+ sobrenome, se for usar].</p>
-          <p class="about-sign reveal" style="--d:240ms" aria-hidden="true">Verônica Vargas</p>
+          <p class="about-abre reveal" style="--d:160ms">Muito prazer, sou a Verônica Vargas!</p>
+          <p class="reveal" style="--d:210ms">Cada semijoia que você encontra aqui não foi escolhida ao acaso ou apenas para ser “mais uma venda”. Foi pensada com carinho, de mim para você.</p>
+          <p class="reveal" style="--d:260ms">Após muitas pesquisas de mercado e, principalmente, horas de conversas sinceras ouvindo a rotina de dezenas de mulheres, percebi algo fundamental: uma semijoia incrível vai muito além do design impecável. Ela precisa se encaixar com perfeição no seu estilo de vida, unindo beleza, alta qualidade e um atendimento humanizado que respeita o seu tempo — no horário em que você precisar.</p>
+          <p class="reveal" style="--d:310ms">Foi dessa busca por um cuidado genuíno e por uma experiência sob medida que nasceu a Verônica Vargas Semijoias.</p>
+          <p class="reveal" style="--d:360ms">Aqui, cada peça é selecionada a dedo com um único propósito: realçar a sua beleza no seu ritmo, no seu tempo e do seu jeito. Seja bem-vinda!</p>
+          <p class="about-sign reveal" style="--d:420ms" aria-hidden="true">Verônica Vargas</p>
         </div>
       </div>
     </div>
@@ -2396,7 +2413,7 @@ a{color:inherit}
     return '' +
     '<article class="' + classe + '" style="--d:' + atraso + 'ms" data-p="' + esc(p.id) + '">' +
       '<div class="hero-img">' +
-        '<img class="js-main" src="' + esc(imgs[0]) + '" alt="' + esc(p.nome) + ' — semi jóia da Verônica Vargas Semijoias" loading="lazy" decoding="async" width="600" height="600">' +
+        '<img class="js-main" src="' + esc(imgs[0]) + '" alt="' + esc(p.nome) + ' — semijoia da Verônica Vargas Semijoias" loading="lazy" decoding="async" width="600" height="600">' +
         (off ? '<span class="badge">−' + off + '%</span>' : '') +
       '</div>' +
       thumbs +
