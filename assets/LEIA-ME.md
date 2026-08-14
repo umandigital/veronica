@@ -37,6 +37,13 @@ conexão, fica no navegador.
 | `logo-veronica-escuro.png` | Mesma arte em ametista `#7A1A64`, para o header quando fica sólido sobre o marfim |
 | `logo-uman.png` | Enviado, já com transparência; redimensionado para 760px |
 | `originais/logo-veronica.jpg` | Arquivo original (CMYK, 2484px, 957 KB), guardado como material-fonte |
+| `apple-touch-icon.png` | Ícone de 180px para a tela de início do iPhone — símbolo do logo sobre o ametista |
+| `../favicon.ico` | Ícone da aba, na raiz do site, com 16, 32 e 48px desenhados um a um |
+
+Os dois ícones saem do mesmo símbolo do logo, recortado do JPG original em
+alta resolução — não é uma redesenhada. Para trocá-los, mande o logo novo e
+eu regero: em 16px o símbolo precisa de mais preenchimento e menos folga
+que em 48px, senão vira um borrão na aba.
 
 O logo em ouro tem só 2:1 de contraste sobre o marfim, daí a variante em
 ametista — o site troca as duas conforme o header rola. Se tiver o logo
