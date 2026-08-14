@@ -5,55 +5,55 @@
      página própria: /categoria/<nome>. -->
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
-    <loc>https://SEU-DOMINIO/</loc>
+    <loc>https://veronicavargas.netlify.app/</loc>
     <lastmod>2026-08-14</lastmod>
     <changefreq>weekly</changefreq>
     <priority>1.0</priority>
   </url>
   <url>
-    <loc>https://SEU-DOMINIO/categoria/aneis</loc>
+    <loc>https://veronicavargas.netlify.app/categoria/aneis</loc>
     <lastmod>2026-08-14</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://SEU-DOMINIO/categoria/brincos</loc>
+    <loc>https://veronicavargas.netlify.app/categoria/brincos</loc>
     <lastmod>2026-08-14</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://SEU-DOMINIO/categoria/colares</loc>
+    <loc>https://veronicavargas.netlify.app/categoria/colares</loc>
     <lastmod>2026-08-14</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://SEU-DOMINIO/categoria/pulseiras</loc>
+    <loc>https://veronicavargas.netlify.app/categoria/pulseiras</loc>
     <lastmod>2026-08-14</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://SEU-DOMINIO/categoria/braceletes</loc>
+    <loc>https://veronicavargas.netlify.app/categoria/braceletes</loc>
     <lastmod>2026-08-14</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://SEU-DOMINIO/categoria/broches</loc>
+    <loc>https://veronicavargas.netlify.app/categoria/broches</loc>
     <lastmod>2026-08-14</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://SEU-DOMINIO/categoria/conjuntos</loc>
+    <loc>https://veronicavargas.netlify.app/categoria/conjuntos</loc>
     <lastmod>2026-08-14</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://SEU-DOMINIO/catalogo</loc>
+    <loc>https://veronicavargas.netlify.app/catalogo</loc>
     <lastmod>2026-08-14</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
