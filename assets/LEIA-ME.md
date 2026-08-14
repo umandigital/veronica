@@ -97,3 +97,36 @@ Para o quadro inicial estar à vista antes do hover, os arquivos começam a
 ser buscados quando a seção se aproxima da tela — não no carregamento da
 página, e só o suficiente para desenhar um quadro. Quem nunca rola até as
 categorias não baixa nenhum deles.
+
+
+## Tipografia
+
+As sete faces do design system saíram de dentro do `index.html` e viraram
+arquivos em `fontes/`. Antes eram 304 KB de base64 dentro do `<style>`, que
+o navegador precisava ler inteiro antes de pintar qualquer coisa; agora
+baixam em paralelo, ficam em cache por um ano e o HTML caiu de 490 KB para
+186 KB.
+
+| Arquivo | Onde é usada |
+|---|---|
+| `cormorant-500.woff2` | Títulos das seções e o H1 do topo |
+| `cormorant-400-italico.woff2` | Frase do topo e citações |
+| `cormorant-500-italico.woff2` | Números dos passos, nomes das categorias |
+| `cormorant-600.woff2` | Preços |
+| `jost-300.woff2` | Corpo de texto |
+| `jost-500.woff2` | Menu, botões e rótulos |
+| `jost-600.woff2` | Destaques curtos |
+
+As três primeiras entram com `<link rel="preload">` por desenharem a
+primeira tela. Se trocar alguma, mantenha o nome — o CSS aponta para ele.
+
+## Imagens de busca e compartilhamento
+
+| Arquivo | Onde aparece |
+|---|---|
+| `compartilhar.jpg` | Prévia do link no WhatsApp, Instagram e Facebook (1200×630) |
+| `icone-512.png` | Ícone do site instalado no celular |
+| `icone-512-mascara.png` | Mesmo ícone com recuo, para o recorte do Android |
+
+O `compartilhar.jpg` é montado a partir do logo sobre o gradiente da marca.
+Trocando o logo, vale regerar essa imagem também.

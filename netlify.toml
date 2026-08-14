@@ -42,6 +42,23 @@
   force = true
 
 # ---------------------------------------------------------------------
+# Rotas das categorias
+# Cada categoria tem endereço próprio (/categoria/aneis), mas o site é um
+# arquivo só: o servidor entrega sempre o index.html e o JavaScript abre a
+# vista certa. Precisa vir DEPOIS dos 404 acima e ANTES de qualquer coisa
+# que capture tudo, senão engoliria os arquivos reais.
+# ---------------------------------------------------------------------
+[[redirects]]
+  from = "/categoria/*"
+  to = "/index.html"
+  status = 200
+
+[[redirects]]
+  from = "/catalogo"
+  to = "/index.html"
+  status = 200
+
+# ---------------------------------------------------------------------
 # Cabeçalhos
 # ---------------------------------------------------------------------
 [[headers]]
@@ -58,8 +75,22 @@
   [headers.values]
     Cache-Control = "public, max-age=0, must-revalidate"
 
-# Logos e imagens podem ficar em cache: mudam de nome quando trocam
+# Logos, imagens e vídeos podem ficar em cache: mudam de nome quando trocam
 [[headers]]
   for = "/assets/*"
   [headers.values]
     Cache-Control = "public, max-age=31536000"
+
+# As fontes saíram de dentro do HTML para poderem ser cacheadas por um ano e
+# baixadas em paralelo. `immutable` evita até a revalidação condicional.
+[[headers]]
+  for = "/assets/fontes/*"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"
+    Access-Control-Allow-Origin = "*"
+
+[[headers]]
+  for = "/sitemap.xml"
+  [headers.values]
+    Cache-Control = "public, max-age=3600"
+    Content-Type = "application/xml; charset=utf-8"

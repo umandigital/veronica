@@ -1,0 +1,14 @@
+# Verônica Vargas Semijoias
+# Tudo é público e indexável. O que não deve aparecer em busca é o material
+# interno do repositório, que já responde 404 pelo netlify.toml.
+
+User-agent: *
+Allow: /
+Disallow: /supabase-setup.sql
+Disallow: /design-system-veronica-vargas.html
+Disallow: /copy-semi-joias.txt
+Disallow: /assets/originais/
+
+# Troque SEU-DOMINIO pelo endereço definitivo. Enquanto isso o sitemap
+# também pode ser enviado à mão no Google Search Console.
+Sitemap: https://SEU-DOMINIO/sitemap.xml
