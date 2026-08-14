@@ -4,11 +4,11 @@
 
 User-agent: *
 Allow: /
-Disallow: /supabase-setup.sql
+Disallow: /supabase/
 Disallow: /design-system-veronica-vargas.html
 Disallow: /copy-semi-joias.txt
 Disallow: /assets/originais/
 
-# Troque SEU-DOMINIO pelo endereço definitivo. Enquanto isso o sitemap
-# também pode ser enviado à mão no Google Search Console.
-Sitemap: https://SEU-DOMINIO/sitemap.xml
+# Ao registrar um domínio próprio, troque o endereço abaixo aqui e no
+# sitemap.xml — e preencha "Endereço definitivo do site" no painel.
+Sitemap: https://veronicavargas.netlify.app/sitemap.xml
