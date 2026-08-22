@@ -1592,7 +1592,13 @@ a{color:inherit}
        está logado — a sessão devolvida pelo signup é descartada de propósito. */
     criarUsuario: function (email, senha, nome, papel) {
       var atual = DB.sessao;
-      return DB.req('/auth/v1/signup', {
+      /* Para onde o link do e-mail de confirmação leva. Sem isto vale o
+         "Site URL" do painel do Supabase, que vem de fábrica apontando para
+         localhost:3000 — endereço que só existe na máquina de quem programa,
+         e que dá "conexão recusada" no celular de quem recebeu o convite.
+         O destino precisa estar na lista de Redirect URLs do projeto. */
+      var volta = '?redirect_to=' + encodeURIComponent(base() + '/#admin');
+      return DB.req('/auth/v1/signup' + volta, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json', Authorization: 'Bearer ' + store.config.supabaseKey },
         body: JSON.stringify({ email: email, password: senha, data: { nome: nome, papel: papel } })
@@ -3762,10 +3768,14 @@ a{color:inherit}
 
       if (remoto) {
         DB.criarUsuario(email, senha, nome, papel)
-          .then(function () {
+          .then(function (r) {
             admin.rascunhoUsuario = null;
             admin.usuariosRemotos = null;
-            toast('Usuário criado no Supabase.');
+            var confirmado = !!(r && (r.confirmed_at || r.email_confirmed_at ||
+                                     (r.user && (r.user.confirmed_at || r.user.email_confirmed_at))));
+            toast(confirmado
+              ? 'Usuário criado. Já pode entrar com a senha que você definiu.'
+              : 'Usuário criado. Falta ele confirmar pelo link que chegou no e-mail — depois disso, entra com a senha que você definiu.');
             renderAdminUsuarios();
           })
           .catch(function (err) { btn.disabled = false; toast('Não foi possível criar: ' + err.message); });
