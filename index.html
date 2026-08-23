@@ -555,6 +555,14 @@ a{color:inherit}
 /* =====================================================================
    3. CATEGORIAS — vitrine em colunas, mídia acende no hover
    ===================================================================== */
+/* A instrução vive entre o título e o filete, e só faz sentido enquanto as
+   categorias estiverem à vista: dentro do catálogo não há o que clicar
+   "abaixo". Por isso ela some junto com a vitrine. */
+.cat-chamada{
+  margin-top:var(--s2); color:var(--nevoa-txt); font-size:1rem; line-height:1.65;
+  max-width:46ch; margin-inline:auto; text-wrap:balance;
+}
+
 .vitrine{display:grid; grid-template-columns:repeat(2,1fr); gap:var(--s2); margin:0; padding:0; list-style:none}
 .vitrine-item{min-width:0}
 
@@ -1179,6 +1187,7 @@ a{color:inherit}
     <div class="wrap">
       <div class="sec-head sec-head--center">
         <h2 id="cat-title" class="reveal">Encontre a peça certa para o momento certo</h2>
+        <p class="cat-chamada reveal" style="--d:90ms" id="catChamada">Clique nas categorias abaixo para ver o catálogo de produtos</p>
         <hr class="rule rule-draw rule--center" aria-hidden="true">
       </div>
 
@@ -2460,6 +2469,7 @@ a{color:inherit}
 
     vitrine.hidden = true;
     painel.hidden = false;
+    if ($('#catChamada')) $('#catChamada').hidden = true;
     setFiltro('catalogo', idCategoria || TODAS, true);
 
     var cat = store.categorias.filter(function (c) { return c.id === idCategoria; })[0];
@@ -2478,6 +2488,7 @@ a{color:inherit}
     var vitrine = $('#catGrid');
     painel.hidden = true;
     vitrine.hidden = false;
+    if ($('#catChamada')) $('#catChamada').hidden = false;
     $('#cat-title').textContent = TITULO_CATEGORIAS || $('#cat-title').textContent;
     /* os cards entram de novo, como na primeira visita */
     $$('.cat-anima', vitrine).forEach(function (el) { el.classList.remove('is-in'); });
