@@ -814,6 +814,50 @@ a{color:inherit}
 }
 
 /* =====================================================================
+   6b. INSTAGRAM — mosaico de 4 colunas por 3 linhas
+   ===================================================================== */
+.section--ig{background:var(--marfim); border-top:1px solid var(--linha)}
+.ig-cabeca{display:flex; flex-direction:column; align-items:center; gap:var(--s1); text-align:center; margin-bottom:var(--s5)}
+.ig-arroba{
+  font-family:"Jost",system-ui,sans-serif; font-weight:500; font-size:.9rem; letter-spacing:.08em;
+  color:var(--roxo); text-decoration:none; display:inline-flex; align-items:center; gap:8px;
+  min-height:44px; padding:0 var(--s2); border-radius:var(--r-pill);
+  transition:background .25s ease, color .25s ease;
+}
+.ig-arroba svg{width:18px; height:18px; fill:currentColor; flex:none}
+.ig-arroba:hover{background:rgba(122,26,100,.07)}
+
+/* Quatro colunas é o desenho de referência; abaixo disso a peça ficaria
+   pequena demais para ser vista, então a grade reduz junto com a tela. */
+.ig-grade{display:grid; grid-template-columns:repeat(2,1fr); gap:6px; margin:0; padding:0; list-style:none}
+@media (min-width:600px){ .ig-grade{grid-template-columns:repeat(3,1fr); gap:8px} }
+@media (min-width:900px){ .ig-grade{grid-template-columns:repeat(4,1fr); gap:10px} }
+
+.ig-item{min-width:0}
+.ig-post{
+  position:relative; display:block; aspect-ratio:1; overflow:hidden;
+  border-radius:var(--r-md); background:var(--areia); text-decoration:none;
+}
+.ig-post img{width:100%; height:100%; object-fit:cover; transition:transform .6s var(--ease)}
+.ig-veu{
+  position:absolute; inset:0; display:flex; align-items:flex-end; padding:var(--s2);
+  background:linear-gradient(180deg, rgba(90,17,36,0) 45%, rgba(90,17,36,.88) 100%);
+  opacity:0; transition:opacity .35s ease;
+}
+.ig-veu span{
+  color:#fff; font-size:.82rem; line-height:1.45;
+  display:-webkit-box; -webkit-line-clamp:3; -webkit-box-orient:vertical; overflow:hidden;
+}
+@media (hover:hover) and (pointer:fine){
+  .ig-post:hover img{transform:scale(1.06)}
+  .ig-post:hover .ig-veu{opacity:1}
+}
+.ig-post:focus-visible{outline:3px solid var(--ouro); outline-offset:3px}
+.ig-post:focus-visible .ig-veu{opacity:1}
+.ig-fecho{margin-top:var(--s5); text-align:center}
+@media (prefers-reduced-motion:reduce){ .ig-post img,.ig-veu{transition:none !important} }
+
+/* =====================================================================
    7. FOOTER
    ===================================================================== */
 .site-footer{background:var(--bordo); color:var(--champanhe); padding:var(--s6) 0 var(--s4); text-align:center}
@@ -1213,6 +1257,28 @@ a{color:inherit}
     </div>
   </section>
 
+  <!-- =================================================================
+       6b. INSTAGRAM
+       ================================================================= -->
+  <section class="section section--ig" id="instagram" aria-labelledby="ig-title" hidden>
+    <div class="wrap">
+      <div class="ig-cabeca">
+        <span class="eyebrow reveal">No Instagram</span>
+        <h2 id="ig-title" class="reveal" style="--d:80ms">As peças do dia a dia</h2>
+        <a class="ig-arroba reveal" style="--d:140ms" id="igArroba" href="#" target="_blank" rel="noopener noreferrer">
+          <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M12 2.2c3.2 0 3.6 0 4.9.07 1.2.05 1.8.25 2.2.42.6.22 1 .48 1.4.9.4.4.7.8.9 1.4.2.4.4 1 .4 2.2.1 1.3.1 1.7.1 4.9s0 3.6-.1 4.9c0 1.2-.2 1.8-.4 2.2-.2.6-.5 1-.9 1.4-.4.4-.8.7-1.4.9-.4.2-1 .4-2.2.4-1.3.1-1.7.1-4.9.1s-3.6 0-4.9-.1c-1.2 0-1.8-.2-2.2-.4-.6-.2-1-.5-1.4-.9-.4-.4-.7-.8-.9-1.4-.2-.4-.4-1-.4-2.2C2.2 15.6 2.2 15.2 2.2 12s0-3.6.1-4.9c0-1.2.2-1.8.4-2.2.2-.6.5-1 .9-1.4.4-.4.8-.7 1.4-.9.4-.2 1-.4 2.2-.4C8.4 2.2 8.8 2.2 12 2.2zm0 3.2A6.6 6.6 0 1 0 18.6 12 6.6 6.6 0 0 0 12 5.4zm0 10.9A4.3 4.3 0 1 1 16.3 12 4.3 4.3 0 0 1 12 16.3zm6.8-11.1a1.55 1.55 0 1 0 1.55 1.55A1.55 1.55 0 0 0 18.8 5.2z"/></svg>
+          <span id="igArrobaTexto">@veronicavargas.semijoias</span>
+        </a>
+      </div>
+
+      <ul class="ig-grade reveal" style="--d:200ms" id="igGrade"></ul>
+
+      <div class="ig-fecho reveal" style="--d:260ms">
+        <a class="btn btn-outline" id="igSeguir" href="#" target="_blank" rel="noopener noreferrer">Seguir no Instagram</a>
+      </div>
+    </div>
+  </section>
+
 </main>
 
 <!-- ===================================================================
@@ -1281,6 +1347,7 @@ a{color:inherit}
       <button class="admin-tab" role="tab" id="tab-categorias" aria-controls="pane-categorias" aria-selected="true" type="button">Categorias</button>
       <button class="admin-tab" role="tab" id="tab-produtos" aria-controls="pane-produtos" aria-selected="false" type="button" tabindex="-1">Produtos</button>
       <button class="admin-tab" role="tab" id="tab-faq" aria-controls="pane-faq" aria-selected="false" type="button" tabindex="-1">Dúvidas</button>
+      <button class="admin-tab" role="tab" id="tab-instagram" aria-controls="pane-instagram" aria-selected="false" type="button" tabindex="-1">Instagram</button>
       <button class="admin-tab" role="tab" id="tab-usuarios" aria-controls="pane-usuarios" aria-selected="false" type="button" tabindex="-1">Usuários</button>
       <button class="admin-tab" role="tab" id="tab-config" aria-controls="pane-config" aria-selected="false" type="button" tabindex="-1">Configurações</button>
       <button class="admin-tab" role="tab" id="tab-dados" aria-controls="pane-dados" aria-selected="false" type="button" tabindex="-1">Dados</button>
@@ -1308,6 +1375,7 @@ a{color:inherit}
         <section role="tabpanel" id="pane-categorias" aria-labelledby="tab-categorias"></section>
         <section role="tabpanel" id="pane-produtos" aria-labelledby="tab-produtos" hidden></section>
         <section role="tabpanel" id="pane-faq" aria-labelledby="tab-faq" hidden></section>
+        <section role="tabpanel" id="pane-instagram" aria-labelledby="tab-instagram" hidden></section>
         <section role="tabpanel" id="pane-usuarios" aria-labelledby="tab-usuarios" hidden></section>
         <section role="tabpanel" id="pane-config" aria-labelledby="tab-config" hidden></section>
         <section role="tabpanel" id="pane-dados" aria-labelledby="tab-dados" hidden></section>
@@ -1342,7 +1410,13 @@ a{color:inherit}
       /* Endereço definitivo, quando houver domínio. Em branco, o site usa o
          endereço em que estiver sendo servido — nunca um domínio chutado. */
       siteUrl: '',
-      instagram: 'https://instagram.com/',
+      instagram: 'https://www.instagram.com/veronicavargas.semijoias/',
+      /* Endereço de um alimentador automático de publicações, se um dia
+         existir. Ele precisa devolver JSON no formato
+         [{ imagem, link, legenda }] e vir de um servidor que guarde o token
+         da Meta — token de rede social não pode ficar no navegador. Em
+         branco, valem as publicações cadastradas no painel. */
+      instagramFeed: '',
       mensagem: 'Olá Verônica! Quero pedir: [Nome da peça] — Quantidade: [X]. Vim pelo site 💎',
       mensagemGeral: 'Olá Verônica! Vim pelo site 💎',
       fotoVeronica: '',
@@ -1422,6 +1496,9 @@ a{color:inherit}
         resposta: 'Dá — é só avisar na mensagem. Diga também se é para entregar direto a quem vai receber, que Verônica prepara desse jeito.',
         visivel: true }
     ],
+    /* Cadastradas no painel: doze é o desenho de referência, quatro colunas
+       por três linhas. A seção some do site enquanto estiver vazia. */
+    instagram: [],
     produtos: [
       { id: 'p1', nome: 'Colar Gota Esmeralda', categoria: 'c3', preco: 289, precoDe: 389, imagens: [], promocao: true,  visivel: true },
       { id: 'p2', nome: 'Colar Ponto de Luz',      categoria: 'c3', preco: 179, precoDe: 229, imagens: [], promocao: true,  visivel: true },
@@ -1478,6 +1555,7 @@ a{color:inherit}
         categorias: Array.isArray(data.categorias) ? data.categorias : clone(SEED.categorias),
         produtos:   Array.isArray(data.produtos)   ? data.produtos.map(migrarProduto) : clone(SEED.produtos),
         faq:        Array.isArray(data.faq)        ? data.faq                          : clone(SEED.faq),
+        instagram:  Array.isArray(data.instagram)  ? data.instagram                    : clone(SEED.instagram),
         usuarios:   Array.isArray(data.usuarios) && data.usuarios.length ? data.usuarios : clone(SEED.usuarios)
       };
     } catch (e) { return clone(SEED); }
@@ -1637,9 +1715,10 @@ a{color:inherit}
         DB.req('/rest/v1/categorias?select=*&order=ordem'),
         DB.req('/rest/v1/produtos?select=*&order=ordem'),
         DB.req('/rest/v1/config?select=*&limit=1'),
-        /* tabela recente: num banco criado por uma versão anterior do script
-           ela ainda não existe, e isso não pode derrubar a carga inteira */
-        DB.req('/rest/v1/faq?select=*&order=ordem').catch(function () { return null; })
+        /* tabelas recentes: num banco criado por uma versão anterior do
+           script elas ainda não existem, e isso não pode derrubar a carga */
+        DB.req('/rest/v1/faq?select=*&order=ordem').catch(function () { return null; }),
+        DB.req('/rest/v1/instagram?select=*&order=ordem').catch(function () { return null; })
       ]).then(function (r) {
         return {
           categorias: (r[0] || []).map(function (c) {
@@ -1657,6 +1736,9 @@ a{color:inherit}
           /* null = tabela ausente, que é diferente de tabela vazia */
           faq: r[3] && (r[3] || []).map(function (f) {
             return { id: f.id, pergunta: f.pergunta, resposta: f.resposta, visivel: f.visivel !== false };
+          }),
+          instagram: r[4] && (r[4] || []).map(function (g) {
+            return { id: g.id, imagem: g.imagem || '', link: g.link || '', legenda: g.legenda || '', visivel: g.visivel !== false };
           })
         };
       });
@@ -1681,6 +1763,9 @@ a{color:inherit}
       });
       var perguntas = store.faq.map(function (f, i) {
         return { id: f.id, pergunta: f.pergunta, resposta: f.resposta, visivel: f.visivel !== false, ordem: i };
+      });
+      var posts = (store.instagram || []).map(function (g, i) {
+        return { id: g.id, imagem: g.imagem || '', link: g.link || null, legenda: g.legenda || null, visivel: g.visivel !== false, ordem: i };
       });
       /* A conexão e as credenciais não vão para o banco */
       var cfg = clone(store.config);
@@ -1721,11 +1806,16 @@ a{color:inherit}
       return upsert('categorias', cats)
         .then(function () { return upsert('produtos', prods); })
         .then(function () { return upsert('faq', perguntas); })
+        .then(function () { return upsert('instagram', posts); })
         .then(function () { return limpar('produtos', prods.map(function (p) { return p.id; })); })
         .then(function () { return limpar('categorias', cats.map(function (c) { return c.id; })); })
         .then(function () {
           if (DB.tabelasAusentes.indexOf('faq') > -1) return null;
           return limpar('faq', perguntas.map(function (f) { return f.id; })).catch(function () {});
+        })
+        .then(function () {
+          if (DB.tabelasAusentes.indexOf('instagram') > -1) return null;
+          return limpar('instagram', posts.map(function (g) { return g.id; })).catch(function () {});
         })
         .then(function () {
           return DB.req('/rest/v1/config?on_conflict=id', {
@@ -2222,6 +2312,73 @@ a{color:inherit}
   }
 
   /* ===================================================================
+     RENDER — INSTAGRAM
+     ===================================================================
+     O Instagram não entrega as publicações de um perfil para uma página
+     comum: desde 2020 é preciso app da Meta, conta comercial e um token que
+     vence a cada 60 dias — e token não pode viver no navegador, onde
+     qualquer visitante o leria. Então a fonte padrão é o cadastro do painel,
+     que funciona hoje e não depende de ninguém. Havendo um alimentador
+     próprio (config.instagramFeed), ele assume; falhando, o cadastro volta. */
+  function renderInstagram() {
+    var secao = $('#instagram');
+    var grade = $('#igGrade');
+    if (!secao || !grade) return;
+
+    var posts = (store.instagram || []).filter(function (i) {
+      return i.visivel !== false && (i.imagem || i.link);
+    }).slice(0, 12);
+
+    /* seção vazia não vira buraco na página: simplesmente não existe */
+    secao.hidden = !posts.length;
+    if (!posts.length) { grade.innerHTML = ''; return; }
+
+    var perfil = store.config.instagram || '';
+    grade.innerHTML = posts.map(function (post, i) {
+      var img = post.imagem || placeholder('ig' + i, '');
+      var alvo = post.link || perfil;
+      var legenda = post.legenda || '';
+      var rotulo = legenda
+        ? 'Publicação no Instagram: ' + legenda.slice(0, 90)
+        : 'Abrir publicação no Instagram da Verônica Vargas Semijoias';
+      return '' +
+        '<li class="ig-item">' +
+          '<a class="ig-post" href="' + esc(alvo) + '" target="_blank" rel="noopener noreferrer" ' +
+             'aria-label="' + esc(rotulo) + '">' +
+            '<img src="' + esc(img) + '" alt="" loading="lazy" decoding="async" width="400" height="400">' +
+            (legenda ? '<span class="ig-veu" aria-hidden="true"><span>' + esc(legenda) + '</span></span>' : '') +
+          '</a>' +
+        '</li>';
+    }).join('');
+
+    observe(secao);
+  }
+
+  /* Busca o alimentador automático, quando houver. Falha em silêncio: uma
+     rede social fora do ar não pode derrubar a dobra nem a página. */
+  function buscarFeedInstagram() {
+    var url = store.config.instagramFeed;
+    if (!url) return Promise.resolve(false);
+    return fetch(url, { cache: 'no-store' })
+      .then(function (r) { return r.ok ? r.json() : null; })
+      .then(function (lista) {
+        if (!Array.isArray(lista) || !lista.length) return false;
+        store.instagram = lista.slice(0, 12).map(function (x, i) {
+          return {
+            id: 'auto' + i,
+            imagem: x.imagem || x.media_url || x.thumbnail_url || '',
+            link: x.link || x.permalink || '',
+            legenda: x.legenda || x.caption || '',
+            visivel: true
+          };
+        });
+        renderInstagram();
+        return true;
+      })
+      .catch(function () { return false; });
+  }
+
+  /* ===================================================================
      RENDER — FILTROS + PRODUTOS
      =================================================================== */
   /* Duas vitrines independentes sobre o mesmo grid de cards:
@@ -2485,6 +2642,16 @@ a{color:inherit}
     $('#waFloat').setAttribute('href', waHref('', 0));
     $('#linkWhatsappFooter').setAttribute('href', waHref('', 0));
     if ($('#linkWhatsappFaq')) $('#linkWhatsappFaq').setAttribute('href', waHref('', 0));
+
+    /* o mesmo endereço no rodapé, no arroba e no botão de seguir */
+    var perfil = c.instagram || 'https://instagram.com/';
+    ['#igArroba', '#igSeguir'].forEach(function (sel) {
+      if ($(sel)) $(sel).setAttribute('href', perfil);
+    });
+    if ($('#igArrobaTexto')) {
+      var arroba = (perfil.replace(/\/+$/, '').split('/').pop() || '').trim();
+      $('#igArrobaTexto').textContent = arroba ? '@' + arroba : 'Instagram';
+    }
     $('#linkInstagram').setAttribute('href', c.instagram || 'https://instagram.com/');
 
     $('#fotoVeronica').setAttribute('src', c.fotoVeronica || placeholder('veronica-retrato', ''));
@@ -2980,7 +3147,7 @@ a{color:inherit}
   var admin = {
     el: null, logado: false, usuario: null, ultimoFoco: null,
     catEdit: null, prodEdit: null,
-    rascunhoCat: null, rascunhoProd: null, rascunhoUsuario: null, rascunhoFaq: null,
+    rascunhoCat: null, rascunhoProd: null, rascunhoUsuario: null, rascunhoFaq: null, rascunhoIg: null,
     usuariosRemotos: null
   };
 
@@ -3143,6 +3310,7 @@ a{color:inherit}
     renderAdminCategorias();
     renderAdminProdutos();
     renderAdminFaq();
+    renderAdminInstagram();
     renderAdminUsuarios();
     renderAdminConfig();
     renderAdminDados();
@@ -3151,7 +3319,7 @@ a{color:inherit}
   /* Salva local (cache imediato) e, se conectado, sincroniza com o Supabase. */
   function persistir(msg) {
     if (!save()) return;
-    renderCategorias(); renderFiltrosTodos(); renderProdutos(); renderFaq(); aplicarConfig();
+    renderCategorias(); renderFiltrosTodos(); renderProdutos(); renderFaq(); renderInstagram(); aplicarConfig();
     aplicarDadosEstruturados(categoriaAberta());
     if (msg) toast(msg);
 
@@ -3181,14 +3349,15 @@ a{color:inherit}
       DB.servidorVazio = false;
       store.categorias = r.categorias;
       store.produtos = r.produtos;
-      /* sem a tabela no banco, o FAQ local continua valendo */
+      /* sem a tabela no banco, o conteúdo local continua valendo */
       if (r.faq && r.faq.length) store.faq = r.faq;
+      if (r.instagram) store.instagram = r.instagram;
       if (r.config) {
         var url = store.config.supabaseUrl, key = store.config.supabaseKey;
         store.config = Object.assign(clone(SEED.config), migrarConfig(r.config), { supabaseUrl: url, supabaseKey: key });
       }
       save();
-      renderCategorias(); renderFiltrosTodos(); renderProdutos(); renderFaq(); aplicarConfig();
+      renderCategorias(); renderFiltrosTodos(); renderProdutos(); renderFaq(); renderInstagram(); aplicarConfig();
     aplicarDadosEstruturados(categoriaAberta());
       return true;
     });
@@ -3467,6 +3636,118 @@ a{color:inherit}
     }
     persistir('Dúvidas atualizadas.');
     renderAdminFaq();
+  }
+
+  /* ---------- INSTAGRAM ---------- */
+  function renderAdminInstagram() {
+    var pane = $('#pane-instagram');
+    if (!pane) return;
+    var e = admin.rascunhoIg;
+    var lista = store.instagram || [];
+
+    pane.innerHTML = '' +
+      (e ? formIg(e) : '') +
+      '<div class="adm-toolbar">' +
+        '<div><span class="eyebrow">Publicações do Instagram</span>' +
+        '<p class="adm-help">Doze publicações, em quatro colunas por três linhas. Suba a mesma imagem que você postou e cole o link do post — quem clicar vai direto para lá. Com menos de doze a grade se ajusta; sem nenhuma, a seção some do site.</p></div>' +
+        (e ? '' : '<button class="btn btn-primary btn-sm" type="button" id="novaIg">+ Nova publicação</button>') +
+      '</div>' +
+      '<div class="adm-list">' +
+        (lista.length ? lista.map(function (g, i) {
+          var img = g.imagem || placeholder('ig' + g.id, '');
+          return '<div class="adm-item">' +
+            '<img class="thumb" src="' + esc(img) + '" alt="" loading="lazy">' +
+            '<div class="info"><strong>' + esc(resumir(g.legenda, 46) || 'Sem legenda') + '</strong>' +
+              '<span>' + (g.link ? 'com link' : 'sem link — abre o perfil') + ' ' +
+              '<span class="adm-badge ' + (g.visivel !== false ? 'adm-badge--on' : '') + '">' +
+              (g.visivel !== false ? 'Visível' : 'Oculta') + '</span></span></div>' +
+            '<div class="acts">' +
+              '<button class="adm-btn" type="button" data-act="edit" data-id="' + esc(g.id) + '">Editar</button>' +
+              '<button class="adm-btn" type="button" data-act="up" data-id="' + esc(g.id) + '" ' + (i === 0 ? 'disabled' : '') + ' aria-label="Mover para cima">↑</button>' +
+              '<button class="adm-btn" type="button" data-act="down" data-id="' + esc(g.id) + '" ' + (i === lista.length - 1 ? 'disabled' : '') + ' aria-label="Mover para baixo">↓</button>' +
+              '<button class="adm-btn" type="button" data-act="vis" data-id="' + esc(g.id) + '">' + (g.visivel !== false ? 'Ocultar' : 'Mostrar') + '</button>' +
+              '<button class="adm-btn adm-btn--danger" type="button" data-act="del" data-id="' + esc(g.id) + '">Excluir</button>' +
+            '</div></div>';
+        }).join('') : '<p class="adm-help">Nenhuma publicação cadastrada — a seção fica fora do ar até a primeira entrar.</p>') +
+      '</div>';
+
+    if ($('#novaIg')) {
+      $('#novaIg').addEventListener('click', function () {
+        if ((store.instagram || []).length >= 12) { toast('A grade comporta doze. Exclua uma para abrir espaço.'); return; }
+        admin.rascunhoIg = { id: '', imagem: '', link: '', legenda: '', visivel: true };
+        renderAdminInstagram();
+      });
+    }
+    if (e) bindFormIg();
+
+    $$('[data-act]', pane).forEach(function (b) {
+      b.addEventListener('click', function () { acaoIg(b.getAttribute('data-act'), b.getAttribute('data-id')); });
+    });
+  }
+
+  function formIg(g) {
+    return '<form class="adm-form" id="formIg">' +
+      '<h3>' + (g.id ? 'Editar publicação' : 'Nova publicação') + '</h3>' +
+      campoImagem('ig', g.imagem, 'Imagem da publicação (quadrada fica melhor)') +
+      '<div class="field"><label for="igLink">Link do post</label>' +
+        '<input id="igLink" type="text" placeholder="https://www.instagram.com/p/…" value="' + esc(g.link || '') + '">' +
+        '<p class="adm-help">No Instagram, abra o post, toque nos três pontos e escolha "Copiar link". Em branco, o clique leva ao perfil.</p></div>' +
+      '<div class="field"><label for="igLegenda">Legenda curta</label>' +
+        '<input id="igLegenda" value="' + esc(g.legenda || '') + '" placeholder="Colar gota esmeralda">' +
+        '<p class="adm-help">Aparece quando o visitante passa o mouse, e é o que um leitor de tela anuncia.</p></div>' +
+      '<label class="adm-check"><input type="checkbox" id="igVis"' + (g.visivel !== false ? ' checked' : '') + '> Visível no site</label>' +
+      '<div class="adm-actions">' +
+        '<button class="btn btn-primary btn-sm" type="submit">Salvar</button>' +
+        '<button class="btn btn-ghost btn-sm" type="button" id="igCancel">Cancelar</button>' +
+      '</div></form>';
+  }
+
+  function bindFormIg() {
+    var r = admin.rascunhoIg;
+    $('#ig-file').addEventListener('change', function (ev) {
+      lerImagem(ev.target.files[0], function (data) { r.imagem = data; capturaIg(); renderAdminInstagram(); });
+    });
+    if ($('#ig-clear')) $('#ig-clear').addEventListener('click', function () { capturaIg(); r.imagem = ''; renderAdminInstagram(); });
+    $('#igCancel').addEventListener('click', function () { admin.rascunhoIg = null; renderAdminInstagram(); });
+
+    $('#formIg').addEventListener('submit', function (ev) {
+      ev.preventDefault();
+      capturaIg();
+      if (!r.imagem) { toast('Suba a imagem da publicação.'); return; }
+      if (r.id) {
+        store.instagram = store.instagram.map(function (g) { return g.id === r.id ? Object.assign({}, g, r) : g; });
+      } else {
+        r.id = uid('ig'); store.instagram.push(clone(r));
+      }
+      admin.rascunhoIg = null;
+      persistir('Publicação salva.');
+      renderAdminInstagram();
+    });
+  }
+
+  function capturaIg() {
+    var r = admin.rascunhoIg; if (!r || !$('#igLink')) return;
+    r.link = $('#igLink').value.trim();
+    r.legenda = $('#igLegenda').value;
+    r.visivel = $('#igVis').checked;
+  }
+
+  function acaoIg(act, id) {
+    var lista = store.instagram || [];
+    var i = lista.map(function (g) { return g.id; }).indexOf(id);
+    if (i < 0) return;
+    var g = lista[i];
+
+    if (act === 'edit') { admin.rascunhoIg = clone(g); renderAdminInstagram(); $('.admin-body').scrollTop = 0; return; }
+    if (act === 'vis') { g.visivel = g.visivel === false; }
+    if (act === 'up' && i > 0) { lista.splice(i - 1, 0, lista.splice(i, 1)[0]); }
+    if (act === 'down' && i < lista.length - 1) { lista.splice(i + 1, 0, lista.splice(i, 1)[0]); }
+    if (act === 'del') {
+      if (!confirm('Excluir esta publicação da grade?')) return;
+      lista.splice(i, 1);
+    }
+    persistir('Instagram atualizado.');
+    renderAdminInstagram();
   }
 
   /* ---------- PRODUTOS ---------- */
@@ -4142,6 +4423,7 @@ a{color:inherit}
           store.config = Object.assign(clone(SEED.config), d.config || {});
           /* backup anterior ao FAQ: mantém as perguntas que já estão no ar */
           if (Array.isArray(d.faq)) store.faq = d.faq;
+          if (Array.isArray(d.instagram)) store.instagram = d.instagram;
           persistir('Dados importados.');
           renderAdmin();
         } catch (e) { toast('Arquivo inválido.'); }
@@ -4170,6 +4452,7 @@ a{color:inherit}
     renderFiltrosTodos();
     renderProdutos();
     renderFaq();
+    renderInstagram();
 
     initHeader();
     initAdmin();
@@ -4206,6 +4489,7 @@ a{color:inherit}
       });
     }
 
+    buscarFeedInstagram();
     observe(document);
     /* a entrada do topo é animação de CSS e já rodou; aqui só se garante
        que o observador de rolagem não tente revelá-la de novo */
