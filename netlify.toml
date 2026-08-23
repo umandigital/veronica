@@ -69,9 +69,23 @@
     X-Frame-Options = "SAMEORIGIN"
     Permissions-Policy = "geolocation=(), microphone=(), camera=()"
 
-# O HTML carrega o conteúdo do Supabase, então não pode ficar em cache longo
+# O HTML carrega o conteúdo do Supabase, então não pode ficar em cache longo.
+# Precisa valer para "/" também: é esse o endereço que as pessoas abrem, e a
+# regra casa com o caminho pedido, não com o arquivo entregue. Só "/index.html"
+# deixava a home fora da regra — e uma home em cache faz a pessoa jurar que a
+# alteração não subiu.
+[[headers]]
+  for = "/"
+  [headers.values]
+    Cache-Control = "public, max-age=0, must-revalidate"
+
 [[headers]]
   for = "/index.html"
+  [headers.values]
+    Cache-Control = "public, max-age=0, must-revalidate"
+
+[[headers]]
+  for = "/categoria/*"
   [headers.values]
     Cache-Control = "public, max-age=0, must-revalidate"
 
