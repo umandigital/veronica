@@ -1934,12 +1934,34 @@ a{color:inherit}
     conjuntos: 'assets/conjunto.mp4'
   };
 
-  function videoDaCategoria(c) {
-    if (c.video) return c.video;
-    var chave = String(c.nome || '')
+  /* A capa é o primeiro quadro do vídeo, em foto. O estado de repouso das
+     colunas é ela, não o vídeo: para desenhar um quadro parado o navegador
+     baixava o arquivo inteiro — 7,2 MB por visita, mesmo sem ninguém passar
+     o mouse. As sete capas somam 215 KB e mostram exatamente a mesma coisa. */
+  var CAPA_PADRAO = {
+    aneis: 'assets/capa-anel.jpg',
+    brincos: 'assets/capa-brincos.jpg',
+    colares: 'assets/capa-colar.jpg',
+    pulseiras: 'assets/capa-pulseiras.jpg',
+    braceletes: 'assets/capa-bracelete.jpg',
+    broches: 'assets/capa-broche.jpg',
+    conjuntos: 'assets/capa-conjunto.jpg'
+  };
+
+  function chaveCategoria(c) {
+    return String(c.nome || '')
       .normalize('NFD').replace(/[\u0300-\u036f]/g, '')
       .toLowerCase().trim();
-    return VIDEO_PADRAO[chave] || '';
+  }
+
+  function capaDaCategoria(c) {
+    if (c.imagem) return c.imagem;
+    return CAPA_PADRAO[chaveCategoria(c)] || '';
+  }
+
+  function videoDaCategoria(c) {
+    if (c.video) return c.video;
+    return VIDEO_PADRAO[chaveCategoria(c)] || '';
   }
 
   function renderCategorias() {
@@ -1947,7 +1969,7 @@ a{color:inherit}
     var cats = store.categorias.filter(function (c) { return c.visivel !== false; });
 
     grid.innerHTML = cats.map(function (c, i) {
-      var img = c.imagem || placeholder(c.id + c.nome, '');
+      var img = capaDaCategoria(c) || placeholder(c.id + c.nome, '');
       var vid = videoDaCategoria(c);
       var qtd = store.produtos.filter(function (p) { return p.categoria === c.id && p.visivel !== false; }).length;
       var rotulo = 'Ver as peças da categoria ' + c.nome + (qtd ? ' — ' + qtd + (qtd > 1 ? ' peças' : ' peça') : '');
@@ -1958,7 +1980,7 @@ a{color:inherit}
              (vid ? 'data-video="' + esc(vid) + '" ' : '') +
              'aria-label="' + esc(rotulo) + '">' +
             '<span class="vitrine-media">' +
-              '<img src="' + esc(img) + '" alt="Peça da categoria ' + esc(c.nome) + '" loading="lazy" decoding="async" width="600" height="820">' +
+              '<img src="' + esc(img) + '" alt="Peça da categoria ' + esc(c.nome) + '" loading="lazy" decoding="async" width="480" height="853">' +
             '</span>' +
             '<span class="vitrine-veu" aria-hidden="true"></span>' +
             '<span class="vitrine-moldura" aria-hidden="true"></span>' +
@@ -1981,18 +2003,19 @@ a{color:inherit}
     observe(grid);
   }
 
-  /* A peça já aparece no card: o vídeo entra parado no primeiro quadro,
-     em preto e branco, e é o cursor que o coloca em cor e movimento.
-     Para isso o arquivo precisa estar carregado antes do hover — mas só o
-     bastante para render um quadro (preload de metadados, mais o salto de
-     um milissegundo que obriga o navegador a desenhá-lo), e só quando a
-     seção se aproxima da tela. Sete vídeos inteiros de saída custariam caro. */
+  /* A peça já aparece no card: a capa é o primeiro quadro do vídeo, e a CSS
+     a deixa em preto e branco. O vídeo só é buscado quando o cursor chega —
+     baixá-lo para desenhar um quadro parado custava sete megabytes por
+     visita, num arquivo que a maioria dos visitantes nunca vê rodar.
+     Sem cursor não há hover: no celular fica a capa, em cor, e nenhum vídeo
+     é baixado — o que também poupa o pacote de dados de quem está na rua. */
   function prepararVitrine(card) {
     var url = card.getAttribute('data-video');
     if (!url) return;
+    if (!window.matchMedia('(hover:hover) and (pointer:fine)').matches) return;
 
     var video = null;
-    var semMouse = !window.matchMedia('(hover:hover) and (pointer:fine)').matches;
+    var capa = $('.vitrine-media img', card);
 
     function montar() {
       if (video) return video;
@@ -2000,17 +2023,11 @@ a{color:inherit}
       video.muted = true; video.defaultMuted = true;
       video.setAttribute('muted', ''); video.setAttribute('loop', '');
       video.setAttribute('playsinline', ''); video.setAttribute('aria-hidden', 'true');
-      video.preload = 'metadata';
-      /* o fragmento faz o navegador buscar e pintar o quadro inicial em vez
-         de deixar o elemento em branco enquanto ninguém aperta play */
-      video.src = url.indexOf('#') === -1 ? url + '#t=0.001' : url;
-      video.addEventListener('loadedmetadata', function () {
-        if (video.readyState < 2) { try { video.currentTime = 0.001; } catch (e) {} }
-      });
-      /* troca a foto pelo vídeo só quando existe quadro, para não piscar */
-      function pronto() { card.classList.add('tem-video'); }
-      video.addEventListener('loadeddata', pronto);
-      video.addEventListener('seeked', pronto);
+      video.preload = 'auto';
+      /* a mesma imagem por baixo: enquanto o vídeo carrega, nada pisca */
+      if (capa) video.poster = capa.getAttribute('src');
+      video.src = url;
+      video.addEventListener('canplay', function () { card.classList.add('tem-video'); }, { once: true });
       video.addEventListener('error', function () { card.classList.remove('tem-video'); });
       $('.vitrine-media', card).appendChild(video);
       return video;
@@ -2023,31 +2040,12 @@ a{color:inherit}
       if (pr && pr.catch) pr.catch(function () {});
     }
 
-    /* parar devolve o primeiro quadro; o vídeo continua à vista, apagado */
+    /* ao sair, a capa volta ao lugar do vídeo */
     function parar() {
       if (!video) return;
       video.pause();
-      try { video.currentTime = 0.001; } catch (e) {}
-    }
-
-    if ('IntersectionObserver' in window) {
-      new IntersectionObserver(function (es, obs) {
-        if (!es[0].isIntersecting) return;
-        montar();
-        obs.disconnect();
-      }, { rootMargin: '300px 0px' }).observe(card);
-    } else {
-      montar();
-    }
-
-    if (semMouse) {
-      /* sem cursor não há hover: a peça toca enquanto estiver na tela */
-      if ('IntersectionObserver' in window) {
-        new IntersectionObserver(function (es) {
-          es[0].isIntersecting ? tocar() : parar();
-        }, { threshold: 0.55 }).observe(card);
-      }
-      return;
+      try { video.currentTime = 0; } catch (e) {}
+      card.classList.remove('tem-video');
     }
 
     card.addEventListener('mouseenter', tocar);
