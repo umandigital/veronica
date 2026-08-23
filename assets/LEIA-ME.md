@@ -93,10 +93,16 @@ Recomendações para os vídeos:
 - **Leves**, até cerca de 1 MB. São sete vídeos; o peso soma.
 - H.264 em `.mp4` é o formato mais compatível.
 
-Para o quadro inicial estar à vista antes do hover, os arquivos começam a
-ser buscados quando a seção se aproxima da tela — não no carregamento da
-página, e só o suficiente para desenhar um quadro. Quem nunca rola até as
-categorias não baixa nenhum deles.
+O quadro parado que aparece no repouso é uma **foto**, não o vídeo:
+`capa-anel.jpg`, `capa-brincos.jpg` e assim por diante, extraídas do
+primeiro quadro de cada arquivo. As sete somam 215 KB, contra 7,2 MB dos
+vídeos — e mostram exatamente a mesma imagem.
+
+O vídeo só é baixado quando o cursor chega na coluna. No celular, onde não
+existe hover, nenhum vídeo é baixado: fica a capa, em cor.
+
+Trocando um vídeo, regere a capa correspondente — senão o repouso mostra a
+peça antiga e o hover a nova.
 
 
 ## Tipografia
